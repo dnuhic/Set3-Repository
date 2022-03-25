@@ -2,11 +2,15 @@
 
 namespace SET3_Backend.Models
 {
-    public enum RoleModel
+    public class RoleModel {
+        
+        [Key]
+        public int Id { get; set; }
+        public RoleType roleType { get; set; }
+    }
+    public enum RoleType
     {
-        [Display(Name="Admin")]
         Admin = 0,
-        [Display(Name ="User")]
         User=1
     }
 }
