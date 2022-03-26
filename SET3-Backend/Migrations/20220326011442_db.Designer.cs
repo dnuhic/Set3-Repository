@@ -12,8 +12,8 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220325202538_Initial")]
-    partial class Initial
+    [Migration("20220326011442_db")]
+    partial class db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
