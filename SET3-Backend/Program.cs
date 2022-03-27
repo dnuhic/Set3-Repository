@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using SET3_Backend;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddRazorPages();
 
 // Add services to the container.
 var logger = new LoggerConfiguration()
@@ -19,6 +21,7 @@ builder.Services.AddBackendServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
 
 app.UseHttpsRedirection();
 

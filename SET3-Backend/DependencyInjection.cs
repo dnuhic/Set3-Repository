@@ -15,6 +15,16 @@ namespace SET3_Backend
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("https://localhost:3000");
+                }));
+
             //Ovdje se dodaju servisi za dependency injection
 
             return services;

@@ -7,13 +7,8 @@ export default function AllUsersComponent () {
 
 
     const getData = async () => {
-        console.log("?????");
-        const response = await fetch('/api/UserModels', {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
+        const response = await fetch('https://localhost:7194/usermodels');
+
         console.log(response);
         const data = await response.json();
         console.log("udje ovdje");
@@ -27,11 +22,10 @@ export default function AllUsersComponent () {
     return <div>
         <button onClick={getData}>ispisi</button>
         {allUsersFetched && <div>
-            {allUsers}
+            {allUsers.length}
         </div>}
         {!allUsersFetched && <div>
             Loading...
         </div>
-        }
     </div>
 }
