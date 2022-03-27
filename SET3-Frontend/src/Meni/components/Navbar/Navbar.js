@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { Nav, NavbarContainer, MenuIcon, NavMenu, NavItem, NavLinks, NavItemBtn, NavBtnLink } from './NavbarElements'
-import { Button } from '../../globalStyles';
+import { Button } from '../../../globalStyles';
 
 
 

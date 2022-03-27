@@ -5,7 +5,6 @@ export default function AllUsersComponent () {
     const [allUsers, setAllUsers] = useState([]);
     const[allUsersFetched, setAllUsersFetched] = useState(false);
 
-
     const getData = async () => {
         const response = await fetch('https://localhost:7194/usermodels');
 
@@ -26,6 +25,6 @@ export default function AllUsersComponent () {
         </div>}
         {!allUsersFetched && <div>
             Loading...
-        </div>
+        </div>}
     </div>
 }
