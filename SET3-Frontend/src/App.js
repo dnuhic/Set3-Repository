@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AllUsersComponent from './AllUsersComponent';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -47,12 +48,15 @@ export default class App extends Component {
                 <h1 id="tabelLabel" >Weather forecast</h1>
                 <p>This component demonstrates fetching data from the server.</p>
                 {contents}
+                <AllUsersComponent />
             </div>
+            
         );
     }
 
     async populateWeatherData() {
         const response = await fetch('weatherforecast');
+        console.log(response);
         const data = await response.json();
         this.setState({ forecasts: data, loading: false });
     }

@@ -19,7 +19,7 @@ namespace SET3_Backend.Database
 
             if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
             { 
-                //conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
+                conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
             }
         }
 
@@ -35,7 +35,7 @@ namespace SET3_Backend.Database
             //run the following command in Package Manager Console. (tools->NuGet Package Manager -> Packet manager console)
             //Add-Migration Initial
             //Update-Database
-            var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StoreDB;";
             optionsBuilder.UseSqlServer(dbConnString);
 
             //Da vidite gdje vam se nalazi baza:
