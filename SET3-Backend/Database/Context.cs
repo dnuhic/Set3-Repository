@@ -37,6 +37,11 @@ namespace SET3_Backend.Database
             var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
             optionsBuilder.UseSqlServer(dbConnString);
 
+            // za globalnu konekciju
+            /*var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            optionsBuilder.UseSqlServer(dbConnString);*/
+            //
+
             //Da vidite gdje vam se nalazi baza:
             //View->Sql server object explorer
             //ima baza (localdb)\Set3 StoreDB je ime lokalnaBaza
