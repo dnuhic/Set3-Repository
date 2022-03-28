@@ -80,7 +80,7 @@ namespace SET3_Backend.Controllers
 
         // POST: api/UserModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost(Name = "usermodels")]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
             _context.UserModels.Add(userModel);

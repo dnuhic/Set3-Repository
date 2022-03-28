@@ -16,10 +16,10 @@ namespace SET3_Backend.Database
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
 
-            if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
+         /*   if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
             { 
                 conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
-            }
+            }*/
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -34,12 +34,12 @@ namespace SET3_Backend.Database
             //run the following command in Package Manager Console. (tools->NuGet Package Manager -> Packet manager console)
             //Add-Migration Initial
             //Update-Database
-            var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
-            optionsBuilder.UseSqlServer(dbConnString);
+         /*   var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
+            optionsBuilder.UseSqlServer(dbConnString);*/
 
             // za globalnu konekciju
-            /*var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            optionsBuilder.UseSqlServer(dbConnString);*/
+            var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            optionsBuilder.UseSqlServer(dbConnString);
             //
 
             //Da vidite gdje vam se nalazi baza:

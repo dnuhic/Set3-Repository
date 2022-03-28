@@ -18,27 +18,29 @@ const AddAUserForm = () => {
     const newUser = () => {
         let user = {
             "Email": document.getElementById("email").value,
-            "FirstName": "Nejla",
-            "LastName": "Begovic",
-            "Password": "Sifra",
+            "FirstName": document.getElementById("ime").value,
+            "LastName": document.getElementById("prezime").value,
+            "Password": document.getElementById("password").value,
             "Question": {
                 "Question": "pitanje"
             },
             "QuestionId": 1,
-            "Answer": "odgovor",
+            "Answer": document.getElementById("answer").value,
             "Deleted": false
         }
 
         setCreatedUser(user);
     }
 
-    useEffect(() => {
-        // PUT request using fetch inside useEffect React hook
+    useEffect(async () => {
+        // POST request using fetch inside useEffect React hook
 
+
+        console.log(newUser)
         const requestOptions = {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newUser)
+            body: JSON.stringify(createdUser)
         };
         fetch('https://localhost:7194/usermodels', requestOptions)
             .then(response => response.json())
@@ -65,7 +67,7 @@ const AddAUserForm = () => {
                                     console.log("ima broj")
                                 else
                                     console.log("nema broj")
-                                 }
+                            }
                             }
                         />
                     </div>
@@ -89,21 +91,14 @@ const AddAUserForm = () => {
 
 
             <div className="mb-3">
-                <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password"></input>
-             </div>
+                <input type="password" className="form-control" id="password" placeholder="Password"></input>
+            </div>
 
             <div className="dropdown">
                 <button id="dropdownMenu" className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Choose a question
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-
-
-
-
-
-
-
                 </ul>
             </div>
 
