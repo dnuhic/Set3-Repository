@@ -16,7 +16,7 @@ builder.Logging.AddSerilog(logger);
 
 builder.Services.AddControllers();
 //Load dependency injection
-builder.Services.AddBackendServices();
+builder.Services.AddBackendServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
