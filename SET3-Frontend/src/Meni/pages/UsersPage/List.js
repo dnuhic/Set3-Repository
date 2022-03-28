@@ -8,12 +8,13 @@ function List(props) {
 
 
     useEffect(() => {
-        setSampleData(props.sampleData)
+        setSampleData(props.sampleData);
+        console.log(sampleData);
     }, [])
 
     function handleSort() {
         const sortedData = [...sampleData].sort((a, b) => {
-            return a.first > b.first ? 1: -1
+            return a.firstName > b.firstName ? 1 : -1
         })
 
         setSampleData(sortedData);  
@@ -21,14 +22,14 @@ function List(props) {
 
     function handleSort1() {
         const sortedData = [...sampleData].sort((a, b) => {
-            return a.first < b.first ? 1 : -1
+            return a.firstName < b.firstName ? 1 : -1
         })
 
         setSampleData(sortedData);
     }
 
     const listComponents = sampleData.map((object) => {
-        return <ListItem first={object.first} last={object.last} />
+        return <ListItem user={object} />
     })
 
 
