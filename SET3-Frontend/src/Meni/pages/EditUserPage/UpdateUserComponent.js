@@ -3,13 +3,12 @@ import './UpdateUserComponent.css';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React from 'react';
-import { display } from '@mui/system';
-import { useParams } from 'react-router-dom';
 
 
 class UpdateUserComponent extends React.Component {
     constructor(props) {
         super(props);
+        //this.id = this.props.match.params.id;
         this.user = null;
     }
 
@@ -63,39 +62,45 @@ class UpdateUserComponent extends React.Component {
     }
     render() {
         return (
+            <>
+                {!this.user && <div>Loading...</div>}
+                {this.user && <div className="App">
+                    <div className="main-box">
 
-            <div className="App">
-                <div className="main-box">
+                        <div className="container" >
+                            <div className="updateUser-box">
+                                <input type="text" value={this.user.firstName} disabled={this.state.disabled}></input>
+                                <input type="text" value={this.user.lastName} disabled={this.state.disabled}></input>
+                                <input type="text" value={this.user.email} disabled={this.state.disabled}></input>
+                                <Stack direction="column" spacing={2} height="30%" width="40%" margin="2%" >
+                                    <Button className="editButton" variant="outlined" onClick={this.showButton} >Edit</Button>
 
-                    <div className="container" >
-                        <div className="updateUser-box">
-                            <input type="text" value={ this.user.firstName } disabled={this.state.disabled}></input>
-                            <input type="text" value={this.user.lastName} disabled={this.state.disabled}></input>
-                            <input type="text" value={this.user.email} disabled={this.state.disabled}></input>
-                            <Stack direction="column" spacing={2} height="30%" width="40%" margin="2%" >
-                                <Button className="editButton" variant="outlined" onClick={this.showButton} >Edit</Button>
+                                    <div hidden={this.state.hidden} >
+                                        <Button className="submitButton" variant="outlined" onClick={this.handleChange}>Submit</Button>
+                                        <Button className="cancelButton" variant="outlined" onClick={this.handleChange} >Cancel</Button>
 
-                                <div hidden={this.state.hidden} >
-                                    <Button className="submitButton" variant="outlined" onClick={this.handleChange}>Submit</Button>
-                                    <Button className="cancelButton" variant="outlined" onClick={this.handleChange} >Cancel</Button>
+                                    </div>
 
-                                </div>
+                                </Stack>
+                            </div>
 
-                            </Stack>
+                            <div className="edit-role">
+                                <p>edit role </p>
+
+                            </div>
                         </div>
 
-                        <div className="edit-role">
-                            <p>edit role </p>
-
+                        <div className="updatePassword-box">
+                            <p>Ovdje će ići promjena passworda.</p>
                         </div>
                     </div>
 
-                    <div className="updatePassword-box">
-                        <p>Ovdje će ići promjena passworda.</p>
-                    </div>
-                </div>
+                </div>}
 
-            </div>
+                
+            </>
+
+            
         );
     }
 }
