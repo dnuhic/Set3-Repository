@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SET3_Backend.Models;
 using System.Diagnostics.CodeAnalysis;
 

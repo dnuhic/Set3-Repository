@@ -8,12 +8,15 @@ import { useParams } from 'react-router-dom';
 
 
 class UpdateUserComponent extends React.Component {
-    constructor() {
+    constructor(props) {
+        super(props);
         this.user = null;
     }
 
     compoentDidMount() {
         const id = this.props.match.params.id;
+        console.log("OVDJE JE " + id);
+        console.log(window.location.hash.split('/')[2], 'this is my id')
         fetch('https://localhost:7194/usermodels/' + id)
             .then(res => res.json)
             .then(json => {

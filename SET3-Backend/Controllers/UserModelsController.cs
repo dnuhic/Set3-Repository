@@ -24,7 +24,7 @@ namespace SET3_Backend.Controllers
             _context = context;
         }
 
-        // GET: api/UserModels
+        // GET: /userModels
         [HttpGet(Name = "usermodels")]
         public IEnumerable<UserModel> GetUserModels()
         {
@@ -33,8 +33,8 @@ namespace SET3_Backend.Controllers
             return data;
         }
 
-        // GET: usermodels/5
-        [HttpGet(Name = "usermodels/:id")]
+        // GET: /usermodels/5
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
             var userModel = await _context.UserModels.FindAsync(id);
