@@ -1,0 +1,112 @@
+.App {
+    box-sizing: border-box;
+    margin: 10% 10% 10% 10%;
+}
+
+
+.buttons {
+    display: inline-flex;
+}
+
+@media screen and (min-width: 800px) {
+
+
+    .main-box {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 7% 3% 7% 3%;
+        border: 5px solid;
+        border-color: lightseagreen;
+        background-color: aliceblue;
+    }
+
+
+    .container {
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 3%;
+        width: 100%;
+        background-color: aliceblue;
+    }
+
+    .updateUser-box {
+        width: 50%;
+        display: inline-grid;
+        flex-direction: row;
+        border: 2px solid;
+        border-color: black;
+    }
+
+    .edit-role {
+        display: inline;
+        float: right;
+        width: 35%;
+        border: 2px solid;
+        border-color: black;
+    }
+
+    input {
+        display: flex;
+        flex-direction: row;
+        margin: 5% 30% 5% 2%;
+    }
+
+    .updatePassword-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 5%;
+        border: 2px solid;
+        border-color: black;
+    }
+}
+
+@media only screen and (max-width: 799px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main-box {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 7% 3% 7% 3%;
+        border: 5px solid;
+        border-color: lightseagreen;
+        background-color: aliceblue;
+    }
+
+    .updateUser-box {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid;
+        border-color: black;
+        margin-bottom: 5%;
+    }
+
+    .edit-role {
+        display: flex;
+        width: 100%;
+        border: 2px solid;
+        flex-direction: row;
+        border-color: black;
+    }
+
+    input {
+        display: flex;
+        flex-direction: column;
+        margin: 5% 2% 5% 2%;
+    }
+
+    .updatePassword-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-top: 5%;
+        border: 2px solid;
+        border-color: black;
+    }
+}
