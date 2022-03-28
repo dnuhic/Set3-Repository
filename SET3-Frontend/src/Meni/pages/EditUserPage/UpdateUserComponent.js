@@ -1,12 +1,28 @@
 ﻿
-import './App.css';
+import './UpdateUserComponent.css';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React from 'react';
 import { display } from '@mui/system';
+import { useParams } from 'react-router-dom';
 
 
-class App extends React.Component {
+class UpdateUserComponent extends React.Component {
+    constructor() {
+        this.user = null;
+    }
+
+    compoentDidMount() {
+        const id = this.props.match.params.id;
+        fetch('https://localhost:7194/usermodels/' + id)
+            .then(res => res.json)
+            .then(json => {
+                this.setUser(json);
+                console.log("povucen korisnik");
+            });
+    }
+    
+
     state = {
         disabled: true,
         hidden: true
@@ -50,9 +66,9 @@ class App extends React.Component {
 
                     <div className="container" >
                         <div className="updateUser-box">
-                            <input type="text" value="John" disabled={this.state.disabled}></input>
-                            <input type="text" value="Smith" disabled={this.state.disabled}></input>
-                            <input type="text" value="johnSmith@gmail.com" disabled={this.state.disabled}></input>
+                            <input type="text" value={ this.user.firstName } disabled={this.state.disabled}></input>
+                            <input type="text" value={this.user.lastName} disabled={this.state.disabled}></input>
+                            <input type="text" value={this.user.email} disabled={this.state.disabled}></input>
                             <Stack direction="column" spacing={2} height="30%" width="40%" margin="2%" >
                                 <Button className="editButton" variant="outlined" onClick={this.showButton} >Edit</Button>
 
@@ -81,4 +97,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default UpdateUserComponent;

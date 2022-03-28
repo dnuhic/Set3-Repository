@@ -1,10 +1,11 @@
+import {NavBtnLink } from '../../components/Navbar/NavbarElements'
+
 function ListItem(props) {
-    const handleOnClick = () => {
-        
-    }
 
     return (
-        <li onClick={handleOnClick}> {`${props.user.firstName} ${props.user.lastName}`} </li>
+        <NavBtnLink to={"/user/" + props.user.id} >
+            {`${props.user.firstName} ${props.user.lastName}`}
+        </NavBtnLink>
     )
 }
 

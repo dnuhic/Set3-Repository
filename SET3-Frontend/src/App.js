@@ -7,6 +7,7 @@ import Home from './Meni/pages/HomePage/Home';
 import Settings from './Meni/pages/SettingsPage/Settings';
 import Login from './Meni/pages/LoginPage/Login';
 import Users from './Meni/pages/UsersPage/Users';
+import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 
 function App() {
 
@@ -41,6 +42,12 @@ function App() {
                
                 <Route path="/users" element={<Users />} />
                 
+            </Routes>
+
+            <Routes>
+
+                <Route path="/users/:id" element={<UpdateUserComponent />} />
+
             </Routes>
 
             
