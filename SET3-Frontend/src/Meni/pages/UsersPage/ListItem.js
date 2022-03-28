@@ -1,6 +1,10 @@
 function ListItem(props) {
+    const handleOnClick = () => {
+        
+    }
+
     return (
-        <li> {`${props.first} ${props.last}`} </li>
+        <li onClick={handleOnClick}> {`${props.user.firstName} ${props.user.lastName}`} </li>
     )
 }
 

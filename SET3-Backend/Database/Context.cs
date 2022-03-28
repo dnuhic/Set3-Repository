@@ -35,7 +35,7 @@ namespace SET3_Backend.Database
             //run the following command in Package Manager Console. (tools->NuGet Package Manager -> Packet manager console)
             //Add-Migration Initial
             //Update-Database
-            var dbConnString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;";
+            var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
             optionsBuilder.UseSqlServer(dbConnString);
 
             //Da vidite gdje vam se nalazi baza:
