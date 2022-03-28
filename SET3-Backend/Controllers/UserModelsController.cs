@@ -89,6 +89,7 @@ namespace SET3_Backend.Controllers
             return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
 
+        
         // DELETE: api/UserModels/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserModel(int id)

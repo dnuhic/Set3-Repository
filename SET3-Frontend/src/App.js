@@ -7,6 +7,7 @@ import Home from './Meni/pages/HomePage/Home';
 import Settings from './Meni/pages/SettingsPage/Settings';
 import Login from './Meni/pages/LoginPage/Login';
 import Users from './Meni/pages/UsersPage/Users';
+import AddAUserForm from './Meni/pages/UsersPage/AddAUserForm';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 
 function App() {
@@ -20,7 +21,6 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path="/" element ={<Home />} />
-
             </Routes>
 
             <Routes>
@@ -43,6 +43,13 @@ function App() {
                 <Route path="/users" element={<Users />} />
                 
             </Routes>
+
+            <Routes>
+
+                <Route path="/form" element={<AddAUserForm />} />
+
+            </Routes>
+
 
             <Routes>
 
