@@ -3,7 +3,8 @@ import './UpdateUserComponent.css';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React, { useState, useEffect } from 'react';
-import {useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import TextField from '@mui/material/TextField';
 
 const UpdateUserComponent = (props) => {
     const [user, setUser] = useState(null);
@@ -12,9 +13,11 @@ const UpdateUserComponent = (props) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-
+    ////
+    //const [nameError, setNameError] = useState("Invalid email");
     const [edit, setEdit] = useState(false);
     const { id } = useParams();
+    const [editPassword, setEditPassword] = useState(true);
 
     const getData = async () => {
         console.log(id);
@@ -85,6 +88,10 @@ const UpdateUserComponent = (props) => {
         setEmail(event.target.value);
     }
 
+
+    const handleCancelButtonClikc1 = () => {
+        setEditPassword(false);
+    }
    
     return (
         <>
@@ -94,20 +101,20 @@ const UpdateUserComponent = (props) => {
 
                     <div className="container" >
                         <div className="updateUser-box">
+                            <h1 > Edit User</h1>
                             <input id="firstName" type="text" value={firstName} disabled={!edit} onChange={handleFirstNameChange}></input>
                             <input id="lastName" type="text" value={lastName} disabled={!edit} onChange={handleLastNameChange}></input>
                             <input id="email" type="text" value={email} disabled={!edit} onChange={handleEmailChange}></input>
-                            <Stack direction="column" spacing={2} height="30%" width="40%" margin="2%" >
-                                {!edit && <Button className="editButton" variant="outlined" onClick={handleEditButtonClikc} >Edit</Button>}
+                            
+                                {!edit && <button className="editButton"  variant="contained" onClick={handleEditButtonClikc} >Edit</button>}
                                 {edit && <div>
-                                    <Button className="submitButton" variant="outlined" onClick={handleSaveButtonClikc}>Submit</Button>
-                                    <Button className="cancelButton" variant="outlined" onClick={handleCancelButtonClikc} >Cancel</Button>
+                                    <button className="submitButton" variant="contained" onClick={handleSaveButtonClikc}>Submit</button>
+                                    <button className="cancelButton" variant="contained" onClick={handleCancelButtonClikc1} >Cancel</button>
 
                                 </div>}
 
                                 
 
-                            </Stack>
                         </div>
 
                         <div className="edit-role">
@@ -117,7 +124,27 @@ const UpdateUserComponent = (props) => {
                     </div>
 
                     <div className="updatePassword-box">
-                        <p>Ovdje će ići promjena passworda.</p>
+                        <h1 >Change Password</h1>
+                        <label> Current Password:
+                        <input id="password" type="password" />
+                        </label>
+                        <label> New Password:
+                            <input id="password" type="password" />
+                        </label>
+                        <label> Re-type New Password:
+                            <input id="password" type="password" />
+                        </label>
+
+
+
+                        {!edit && <div className='buttons' >
+
+                            <button className="SubmitBtn" variant="outlined" onClick={handleSaveButtonClikc}>Submit</button>
+                            <button className="cancelButton1" variant="outlined" onClick={handleCancelButtonClikc} >Cancel</button>
+
+                        </div>}
+
+
                     </div>
                 </div>
 
