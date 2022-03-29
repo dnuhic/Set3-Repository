@@ -63,7 +63,7 @@ const UpdateUserComponent = (props) => {
             body: JSON.stringify(updatedUser)
         };
 
-        const response = await fetch('https://localhost:7194/usermodels/1', requestOptions);
+        const response = await fetch('https://localhost:7194/usermodels/' + user.id, requestOptions);
         const data = await response.json();
         console.log(data);
     }, [updatedUser])
