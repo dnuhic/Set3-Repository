@@ -1,0 +1,26 @@
+a {
+    text-decoration: none;
+    font: bold;
+    color: black;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+
+th {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+    font-size: 32px;
+}
+
+    th:nth-child(odd) {
+        background-color: #6CB4EE;
+    }
+
+    th:nth-child(even) {
+        background-color: #7CB9E8;
+    }
