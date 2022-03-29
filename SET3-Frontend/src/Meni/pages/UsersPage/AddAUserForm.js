@@ -1,3 +1,4 @@
+import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
 
 const AddAUserForm = () => {
@@ -16,6 +17,25 @@ const AddAUserForm = () => {
     useEffect(getData, [])
 
     const newUser = () => {
+
+        if (document.getElementById("ime").value == "" ||
+            document.getElementById("prezime").value == "" ||
+            document.getElementById("email").value == "" ||
+            document.getElementById("password").value == "" ||
+            document.getElementById("answer").value == "")
+        {
+            alert("All fields must not be empty!");
+            return;
+        } else if (document.getElementById("password").value.length < 8)
+        {
+            alert("Password must contain at least 8 characters!");
+            return;
+        } else if (!document.getElementById("email").value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i))
+        {
+            alert("Email must be valid!");
+            return;
+        }
+
         let user = {
             "Email": document.getElementById("email").value,
             "FirstName": document.getElementById("ime").value,
@@ -30,12 +50,17 @@ const AddAUserForm = () => {
         }
 
         setCreatedUser(user);
+
+        document.getElementById("ime").value = "";
+        document.getElementById("prezime").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("answer").value = "";
+        alert("Action completed!");        
     }
 
     useEffect(async () => {
         // POST request using fetch inside useEffect React hook
-
-
         console.log(newUser)
         const requestOptions = {
             method: 'POST',
