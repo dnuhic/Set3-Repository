@@ -54,7 +54,7 @@ namespace SET3_Backend.Controllers
 
             CookieOptions cookieOptions = new CookieOptions();
             cookieOptions.Secure = true;
-            cookieOptions.HttpOnly = true;
+            cookieOptions.HttpOnly = false;
             cookieOptions.Expires = DateTime.UtcNow.AddDays(1);
             Response.Cookies.Append("jwt", token, cookieOptions);
 
