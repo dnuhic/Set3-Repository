@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class SecurityQuestionModelsController : ControllerBase
     {
@@ -101,31 +102,54 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}")]
-        [Route("forgotPassword")] //provjeriti ovo lol
-        public async Task<ActionResult<SecurityQuestionModel>> GetSecQuestionOfUser(UserModel user) //ovo je da se nadje security pitanje usera
+        [HttpGet("{id}/forgotPassword")]//ovo radi jeej
+        public async Task<ActionResult<SecurityQuestionModel>> GetSecQuestionOfUser(int id) //ovo je da se nadje security pitanje usera
         {
-            var securityQuestion = await _context.UserModels.FindAsync(user.QuestionId);
-            if(securityQuestion == null)
+            //return await _context.SecurityQuestionModels.ToListAsync();
+            var user = await _context.UserModels.FindAsync(id);
+            if(user == null)
             {
                 return BadRequest("Nije pronađeno pitanje.");
             }
-            return Ok(securityQuestion);
+            Console.WriteLine("JE LI USLO");
+
+            var secQuestion = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
+            return secQuestion;
         
         }
 
-        [HttpGet("{answer}")]
-        [Route("checkingAnswer")] // da projeri je li se odudara odgovor sa onim u bazi
-        public async Task<bool> IsAnswerCorrect(UserModel user, string answer)
+        public class Unos
         {
-            var trazeniKorisni = await _context.UserModels.FindAsync(user);
-            if(trazeniKorisni == null)
+            public int Id { get; set; }
+            public string Answer { get; set; }
+        }
+
+        [HttpPost("checkAnswer")]// da projeri je li se odudara odgovor sa onim u bazi
+        public async Task<bool> IsAnswerCorrect()
+        {
+            string proba;
+
+            using (var reader = new StreamReader(Request.Body))
+            {
+                proba = await reader.ReadToEndAsync();
+
+                // Do something
+            } 
+
+            Unos unos = JsonSerializer.Deserialize<Unos>(proba);
+
+            Console.WriteLine(unos.Id);
+            Console.WriteLine(unos.Answer);
+
+
+            var trazeniKorisnik = await _context.UserModels.FindAsync(unos.Id);
+            if (trazeniKorisnik == null)
             {
                 BadRequest("Ne postoji traženi user");
                 return false;
             }
 
-            if (string.Equals(user.Answer, answer)) return true;
+            if (string.Equals(trazeniKorisnik.Answer, unos.Answer)) return true;
 
             return false;
         }
