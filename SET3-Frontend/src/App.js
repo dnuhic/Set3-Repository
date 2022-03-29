@@ -64,9 +64,7 @@ function App() {
 
             <Routes>
 
-               
-                <Route path="/users/:id" render={(props) => <UpdateUserComponent
-                    {...props} />} />
+                <Route path="/users/:id" element={<UpdateUserComponent />} />
             </Routes>
 
 

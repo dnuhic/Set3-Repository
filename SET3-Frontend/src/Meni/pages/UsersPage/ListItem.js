@@ -1,11 +1,11 @@
-import {NavBtnLink } from '../../components/Navbar/NavbarElements'
+import { Link } from 'react-router-dom';
 
 function ListItem(props) {
 
     return (
-        <NavBtnLink to={"/user/" + props.user.id} >
+        <Link to={`/users/${props.user.id}`} >
             {`${props.user.firstName} ${props.user.lastName}`}
-        </NavBtnLink>
+        </Link>
     )
 }
 
