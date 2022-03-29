@@ -19,7 +19,8 @@ const ForgotPassword = () => {
 
     const validEmail = () => {
         var input = document.getElementById('email');
-        if (input.textContent.trim() === '' || input.validity.typeMismatch) {
+        var string = document.getElementById('email').value;
+        if (string.trim() == '' || input.validity.typeMismatch) {
             alert("Email is not valid. Please enter your Email adress again");
         }
         else {
