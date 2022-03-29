@@ -43,7 +43,7 @@ namespace SET3_Backend.Controllers
         {
             if (userDto == null) return BadRequest("User not specified");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
-            if (user == null && userDto.Password.Equals(user.Password))
+            if (user == null || !userDto.Password.Equals(user.Password))
             {
                 return BadRequest("Incorrect email or password.");
             }
