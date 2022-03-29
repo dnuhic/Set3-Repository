@@ -1,16 +1,18 @@
 using Serilog;
 using SET3_Backend;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var logger = new LoggerConfiguration()
+Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
 
+// Add services to the container.
+
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+builder.Logging.AddSerilog();
 
 builder.Services.AddControllers();
 //Load dependency injection
