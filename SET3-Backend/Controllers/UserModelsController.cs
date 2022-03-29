@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -105,16 +106,37 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        [Route("changePassword")] //mijenja sifru usera u bazi
-        public async Task<ActionResult<UserModel>> changePassword(UserModel searchedUser, string newPassword)
+        public class ZaPromjenuSifre
         {
-            var user = await _context.UserModels.FindAsync(searchedUser.Id);
+            public int Id { get; set; }
+            public string NewPassword { get; set; }
+        }
+
+        [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
+        public async Task<ActionResult<UserModel>> changePassword()
+        {
+            string proba;
+
+            Console.WriteLine("USJE LI OVDJE??");
+
+            using (var reader = new StreamReader(Request.Body))
+            {
+                proba = await reader.ReadToEndAsync();
+
+                // Do something
+            }
+
+            ZaPromjenuSifre unos = JsonSerializer.Deserialize<ZaPromjenuSifre>(proba);
+
+            Console.WriteLine(unos.Id);
+            Console.WriteLine(unos.NewPassword);
+
+            var user = await _context.UserModels.FindAsync(unos.Id);
             if (user == null)
             {
                 return BadRequest();
             }
-            user.Password = newPassword;
+            user.Password = unos.NewPassword;
             await _context.SaveChangesAsync();
             return Ok(user);
         }
