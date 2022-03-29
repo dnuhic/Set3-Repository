@@ -124,6 +124,9 @@ const UpdateUserComponent = (props) => {
     if (newPassword === null || newPassword === "" || retypeNewPassword === null || retypeNewPassword === "") {
       setNotMatchingPasswordsAlert(true);
       setAlertText("Fields cannot be empty!");
+    } else if (newPassword !== retypeNewPassword) {
+      setNotMatchingPasswordsAlert(true);
+      setAlertText("Passwords are not matching!");
     } else {
       setNotMatchingPasswordsAlert(false);
       handleSaveButtonClikc();
