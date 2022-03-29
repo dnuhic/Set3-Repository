@@ -16,10 +16,10 @@ namespace SET3_Backend.Database
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
 
-            if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
-            { 
-                conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
-            }
+            //if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
+            //{ 
+            //    conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
