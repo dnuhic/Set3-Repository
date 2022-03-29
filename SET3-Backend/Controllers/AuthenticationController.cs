@@ -50,6 +50,11 @@ namespace SET3_Backend.Controllers
             user.Role = await _context.RoleModels.FindAsync(user.RoleId);
             user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
+            CookieOptions cookieOptions = new CookieOptions();
+            cookieOptions.Secure = true;
+            cookieOptions.HttpOnly = true;
+            cookieOptions.Expires = DateTime.UtcNow.AddDays(1);
+            Response.Cookies.Append("jwt", token, cookieOptions);
             return Ok(token);
         }
 
