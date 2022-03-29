@@ -24,6 +24,7 @@ const Users = () => {
 
 
 	return (
+		<div>
 		<div style={{
 			display: 'flex',
 			justifyContent: 'center',
@@ -32,7 +33,6 @@ const Users = () => {
 
 		}}
 		>
-
 			<div className="list">
 				<h1> Users </h1>
 				{allUsers && <List sampleData={allUsers} />}
@@ -40,7 +40,8 @@ const Users = () => {
 				
 			</div>
 
-		</div>		
+			</div>
+		</div>
 	);
 };
 
