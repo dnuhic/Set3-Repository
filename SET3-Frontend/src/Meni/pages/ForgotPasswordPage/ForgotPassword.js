@@ -8,12 +8,28 @@ import '../styleForm.css';
 const ForgotPassword = () => {
 
     const [EmailProvided, setEmailProvided] = useState(null);
+
     const ProvideEmail = () => {
         let email = {
             "ToEmail": document.getElementById("email").value
         }
 
         setEmailProvided(email);
+    }
+
+    const validEmail = () => {
+        var input = document.getElementById('email');
+        if (input.textContent.trim() === '' || input.validity.typeMismatch) {
+            alert("Email is not valid. Please enter your Email adress again");
+        }
+        else {
+            let email = {
+                "ToEmail": document.getElementById("email").value
+            }
+
+            setEmailProvided(email);
+            alert("Check you mailbox");
+        }
     }
 
 
@@ -41,7 +57,7 @@ const ForgotPassword = () => {
                         <input id="email" type="email" name="email" placeholder="E-mail Adress" required />
                     </div>
                     <div className="form-submit">
-                        <button onClick={ProvideEmail}>Send</button>
+                        <button onClick={validEmail}>Send</button>
 
                     </div>
 
