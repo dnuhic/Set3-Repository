@@ -18,10 +18,12 @@ namespace SET3_Backend.Controllers
     public class UserModelsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly ILogger<UserModelsController> _logger;
 
-        public UserModelsController(Context context)
+        public UserModelsController(Context context, ILogger<UserModelsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: /userModels
@@ -29,7 +31,6 @@ namespace SET3_Backend.Controllers
         public IEnumerable<UserModel> GetUserModels()
         {
             var data = _context.UserModels.AsNoTracking().ToArray();
-            Console.WriteLine("OVO POGLEDAJ" + data);
             return data;
         }
 
@@ -37,13 +38,14 @@ namespace SET3_Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
+            _logger.LogInformation("Fetching UserModel started");
             var userModel = await _context.UserModels.FindAsync(id);
 
             if (userModel == null)
             {
                 return NotFound();
             }
-
+            _logger.LogInformation("Fetching UserModel ended");
             return userModel;
         }
 
@@ -52,6 +54,7 @@ namespace SET3_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
+            _logger.LogInformation("Put UserModel started");
             if (id != userModel.Id)
             {
                 return BadRequest();
@@ -74,7 +77,7 @@ namespace SET3_Backend.Controllers
                     throw;
                 }
             }
-
+            _logger.LogInformation("Put UserModel ended");
             return NoContent();
         }
 
@@ -85,7 +88,7 @@ namespace SET3_Backend.Controllers
         {
             _context.UserModels.Add(userModel);
             await _context.SaveChangesAsync();
-
+            _logger.LogInformation("Succesfully added new UserModel");
             return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
 
@@ -101,7 +104,7 @@ namespace SET3_Backend.Controllers
 
             _context.UserModels.Remove(userModel);
             await _context.SaveChangesAsync();
-
+            _logger.LogInformation("Succesfully deleted UserModel");
             return NoContent();
         }
 
