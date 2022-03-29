@@ -16,5 +16,7 @@ namespace SET3_Backend.Models
 		public int QuestionId { get; set; }
 		public string Answer { get; set; }
 		public bool Deleted { get; set; }
+		public int RoleModelId { get; set; }
+		public RoleModel RoleModel { get; set; }
 	}
 }
