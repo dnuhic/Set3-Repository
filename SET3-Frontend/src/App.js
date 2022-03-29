@@ -53,7 +53,7 @@ function App() {
             </Routes>
 
             <Routes>
-                <Route path="/forgotPasswordConfirm" element={<ForgotPasswordConfirm />} />
+                <Route path="/forgotPasswordConfirm/:id" element={<ForgotPasswordConfirm />} />
 
             </Routes>
 
