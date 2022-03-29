@@ -12,6 +12,11 @@
   <ItemGroup>
     <Script Include="**" Exclude="*.esproj;**\node_modules\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Meni\pages\ForgotPasswordPage\" />
+    <Folder Include="src\Meni\pages\ForgotPasswordConfirmPage\" />
+    <Folder Include="src\Meni\pages\ResetPasswordPage\" />
+  </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

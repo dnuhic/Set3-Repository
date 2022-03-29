@@ -1,0 +1,124 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background: #d8e0e8;
+}
+
+
+.form-container {
+    display: flex;
+    height: 98vh;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+    .form-container .form-wrap {
+        border: gray;
+        border-width: 5px;
+        border-style: solid;
+        background: #d8e0e8;
+        width: 30%;
+        padding: 15px 20px;
+    }
+
+        .form-container .form-wrap h1 {
+            text-align: center;
+            margin: 0px 0px 20px;
+            font-size: 19px;
+        }
+
+        .form-container .form-wrap .form-box {
+            margin: 0px 0px 15px;
+        }
+
+            .form-container .form-wrap .form-box input[type="text"] {
+                padding: 5px 8px;
+                border-radius: 3px;
+                border: 1px solid #353535;
+                background-color: #fff;
+                width: 100%;
+            }
+
+            .form-container .form-wrap .form-box input[type="email"] {
+                padding: 5px 8px;
+                border-radius: 3px;
+                border: 1px solid #353535;
+                background-color: #fff;
+                width: 100%;
+            }
+
+            .form-container .form-wrap .form-box input[type="password"] {
+                padding: 5px 8px;
+                border-radius: 3px;
+                border: 1px solid #353535;
+                background-color: #fff;
+                width: 100%;
+            }
+
+            .form-container .form-wrap .form-box .label-style {
+                padding: 5px 8px;
+                border-radius: 2px;
+                border: 1px solid #353535;
+                width: 100%;
+            }
+
+        .form-container .form-wrap .form-submit {
+            display: flex;
+            justify-content: center;
+            padding: 5px 8px;
+        }
+
+
+            .form-container .form-wrap .form-submit input[type="submit"] {
+                padding: 4px 10px;
+                border: none;
+                border-radius: 2px;
+                background-color: #0d6efd;
+                color: white;
+                font-weight: 400;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+button {
+    padding: 4px 10px;
+    border: none;
+    border-radius: 2px;
+    background-color: #0d6efd;
+    color: white;
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+p {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    color: gray;
+}
+
+#pitanja {
+    width: 100%;
+    padding: 5px 8px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #353535;
+    color: white;
+    background-color: #0d6efd;
+    width: 100%;
+}
+
+option {
+    color: white;
+    background-color: #0d6efd;
+    width: 100%;
+}
