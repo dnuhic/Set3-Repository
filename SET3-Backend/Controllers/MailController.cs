@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 using SET3_Backend.Services;
@@ -7,6 +9,7 @@ namespace SET3_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("CorsPolicy")]
     public class MailController : ControllerBase
     {
         private readonly IMailService mailService;
@@ -18,8 +21,9 @@ namespace SET3_Backend.Controllers
             this.context = context;
         }
         [HttpPost("send")]
-        public async Task<IActionResult> SendMail([FromForm] MailRequest request)
+        public async Task<IActionResult> SendMail(MailRequest request)
         {
+           
             try
             {
                 // dodati provjeru !!!

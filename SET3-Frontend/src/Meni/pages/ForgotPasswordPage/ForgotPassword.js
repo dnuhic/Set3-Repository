@@ -1,42 +1,57 @@
-import React, { Component } from 'react';
+import { emphasize } from '@mui/material';
+import React, {
+    Component, useState, useEffect, useCallback
+} from 'react';
 import '../styleForm.css';
 
 
+const ForgotPassword = () => {
 
-export default class ForgotPassword extends Component {
-
-    state = {
-        hidden: true
-    }
-
-    handleChange = (e) => {
-        if (e.target) {
-            this.setState({
-                hidden: !this.state.hidden
-            });
+    const [EmailProvided, setEmailProvided] = useState(null);
+    const ProvideEmail = () => {
+        let email = {
+            "ToEmail": document.getElementById("email").value
         }
+
+        setEmailProvided(email);
     }
 
-    render() {
+
+    useEffect(async () => {
+
+        console.log(EmailProvided);
+        if (EmailProvided != null) {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(EmailProvided)
+            };
+
+            await fetch('https://localhost:7194/api/mail/send', requestOptions);
+        }
+            
+    }, [EmailProvided])
+
         return (
             <div className="form-container">
-                <form name="myForm" className="form-wrap" >
+                <div name="myForm" className="form-wrap" >
                     <h1>Forgot Password</h1>
                     <div className="form-box">
                         <p> Please enter the email you use to sign in.</p>
                         <input id="email" type="email" name="email" placeholder="E-mail Adress" required />
                     </div>
                     <div className="form-submit">
-                        <button onClick={this.handleChange}>Send</button>
+                        <button onClick={ProvideEmail}>Send</button>
 
                     </div>
 
 
 
 
-                </form>
+                </div>
             </div>
         );
-    }
 
-}
+};
+
+export default ForgotPassword;
