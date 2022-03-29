@@ -42,15 +42,18 @@ const UpdateUserComponent = (props) => {
         console.log("USER: " + user);
         console.log(user);
         const newUser = {
-            "Id": user.Id,
+            "Id": user.id,
             "Email": document.getElementById("email").value,
             "FirstName": document.getElementById("firstName").value,
             "LastName": document.getElementById("lastName").value,
-            "Password": user.Password,
-            "Question": user.Question,
-            "QuestionId": user.QuestionId,
-            "Answer": user.Answer,
-            "Deleted": user.Deleted
+            "Password": user.password,
+            "Question": {
+                "id": 2,
+                "Question": "pitanje"
+            },
+            "QuestionId": 2,
+            "Answer": user.answer,
+            "Deleted": user.deleted
         }
 
         setUpdatetUser(newUser);
