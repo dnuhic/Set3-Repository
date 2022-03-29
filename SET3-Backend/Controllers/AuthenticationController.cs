@@ -6,6 +6,7 @@ using SET3_Backend.Database;
 using SET3_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -38,11 +39,11 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Login(UserDto userDto) 
+        public async Task<ActionResult<string>> Login(UserDto userDto)
         {
             if (userDto == null) return BadRequest("User not specified");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
-            if(user == null && userDto.Password.Equals(user.Password))
+            if (user == null && userDto.Password.Equals(user.Password))
             {
                 return BadRequest("Incorrect email or password.");
             }
@@ -50,11 +51,13 @@ namespace SET3_Backend.Controllers
             user.Role = await _context.RoleModels.FindAsync(user.RoleId);
             user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
+
             CookieOptions cookieOptions = new CookieOptions();
             cookieOptions.Secure = true;
-            cookieOptions.HttpOnly = true;
+            cookieOptions.HttpOnly = false;
             cookieOptions.Expires = DateTime.UtcNow.AddDays(1);
             Response.Cookies.Append("jwt", token, cookieOptions);
+
             return Ok(token);
         }
 
@@ -67,7 +70,7 @@ namespace SET3_Backend.Controllers
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
@@ -78,13 +81,41 @@ namespace SET3_Backend.Controllers
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-            //kako dekodirati token:
-            //var handler = new JwtSecurityTokenHandler();
-            //var decodedToken = handler.ReadJwtToken(jwt);
-            //var Name = decodedToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
-            //var Email = decodedToken.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
-            //var Role = decodedToken.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
             return jwt;
+        }
+
+        public Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
+        {
+            //ovo bi se moglo napraviti da nekad vraca user-a, ali prvo treba vidjeti sta ce se
+            //desiti sa atributima role i security question
+            var name = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Name).Value;
+            var email = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
+            var role = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
+            return new Tuple<string, string, string>(name, email, role);
+        }
+
+        public JwtSecurityToken ValidateToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                return jwtToken;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
