@@ -17,13 +17,12 @@ export default function ForgotPasswordConfirm () {
         if (newPassword != null) {
             async function resetPass() {
                 const requestOptions = {
-                    mode: 'no-cors',
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ "id": id, "Password": newPassword })
                 };
 
-                await fetch('https://localhost:7194/rsp', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch('https://localhost:7194/api/mail/reset', requestOptions).then(res => res.json).then(json => console.log.json);
             }
             resetPass();
         }
