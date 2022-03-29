@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +14,8 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [EnableCors("CorsPolicy")]
     [Route("[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class UserModelsController : ControllerBase
     {
@@ -108,6 +110,29 @@ namespace SET3_Backend.Controllers
         private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
+        }
+
+        public string DecryptString(string encrString)
+        {
+            byte[] b;
+            string decrypted;
+            try
+            {
+                b = Convert.FromBase64String(encrString);
+                decrypted = System.Text.ASCIIEncoding.ASCII.GetString(b);
+            }
+            catch (FormatException fe)
+            {
+                decrypted = "";
+            }
+            return decrypted;
+        }
+
+        public string EnryptString(string strEncrypted)
+        {
+            byte[] b = System.Text.ASCIIEncoding.ASCII.GetBytes(strEncrypted);
+            string encrypted = Convert.ToBase64String(b);
+            return encrypted;
         }
     }
 }

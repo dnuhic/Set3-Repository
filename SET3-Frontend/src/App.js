@@ -7,6 +7,9 @@ import Home from './Meni/pages/HomePage/Home';
 import Settings from './Meni/pages/SettingsPage/Settings';
 import Login from './Meni/pages/LoginPage/Login';
 import Users from './Meni/pages/UsersPage/Users';
+import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
+import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
+import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 
 function App() {
@@ -42,6 +45,21 @@ function App() {
                
                 <Route path="/users" element={<Users />} />
                 
+            </Routes>
+
+            <Routes>
+                <Route path="/forgotPassword" element={<ForgotPassword />} />
+
+            </Routes>
+
+            <Routes>
+                <Route path="/forgotPasswordConfirm/:id" element={<ForgotPasswordConfirm />} />
+
+            </Routes>
+
+            <Routes>
+                <Route path="/resetPassword" element={<ResetPassword />} />
+
             </Routes>
 
             <Routes>
