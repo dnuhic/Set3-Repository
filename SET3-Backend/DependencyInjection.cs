@@ -10,7 +10,7 @@ namespace SET3_Backend
             services.AddDbContext<Context>(options =>
             {
                 //Treba dodati connection string na bazu umjesto 'dbConnString'
-                var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StoreDB;";
+                var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
                 options.UseSqlServer(dbConnString,
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });

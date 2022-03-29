@@ -105,6 +105,20 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        [Route("changePassword")] //mijenja sifru usera u bazi
+        public async Task<ActionResult<UserModel>> changePassword(UserModel searchedUser, string newPassword)
+        {
+            var user = await _context.UserModels.FindAsync(searchedUser.Id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            user.Password = newPassword;
+            await _context.SaveChangesAsync();
+            return Ok(user);
+        }
+
         private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
