@@ -52,10 +52,7 @@ const Navbar = () => {
                             <NavItem>
                                 <NavLinks to='/users'> Users </NavLinks>
                             </NavItem>
-
-                            <NavItem>
-                                <NavLinks to='/form'> Add user</NavLinks>
-                            </NavItem>
+                            
 
                             <NavItemBtn>
 

@@ -12,10 +12,6 @@
   <ItemGroup>
     <Script Include="**" Exclude="*.esproj;**\node_modules\**" />
   </ItemGroup>
-  <ItemGroup>
-    <Script Remove="src\Meni\pages\UsersPage\file.js" />
-    <Script Remove="src\Meni\pages\UsersPage\Users - Copy.js" />
-  </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
