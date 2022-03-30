@@ -29,11 +29,10 @@ const Users = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			height: '90vh'
-
 		}}
 		>
 
-			<div className="list">
+			<div className="list" style={{width:500}}>
 				<h1> Users </h1>
 				{allUsers && <List sampleData={allUsers} />}
 				{!allUsers && <div>Loading...</div>}
