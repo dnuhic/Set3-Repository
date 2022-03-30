@@ -2,15 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
+using SET3_Backend.Controllers;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -19,47 +22,62 @@ namespace SET3_Backend.Controllers
     [ApiController]
     public class UserModelsController : ControllerBase
     {
-        private readonly Context _context;
-        private readonly ILogger<UserModelsController> _logger;
 
-        public UserModelsController(Context context, ILogger<UserModelsController> logger)
+        private readonly Context _context;
+        private readonly IConfiguration _configuration;
+
+        public UserModelsController(Context context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
-            _logger = logger;
         }
 
         // GET: /userModels
         [HttpGet(Name = "usermodels")]
-        //[HttpGet(Name = "usermodels"), Authorize(Roles = "Admin")]
         public IEnumerable<UserModel> GetUserModels()
         {
-            var data = _context.UserModels.AsNoTracking().ToArray();
-            return data;
+            //treba uzet token i pozvati ValidateToken, ako je validan nastaviti, a ako ne samo nek preskoci da vrati bad result
+            try
+            {
+                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+
+                if (token != null)
+                {
+                    if (ValidateToken(token) != null)
+                    {
+                        var data = _context.UserModels.AsNoTracking().ToArray();
+                        Console.WriteLine("OVO POGLEDAJ" + data);
+                        return data;
+                    }
+                    else
+                        return Enumerable.Empty<UserModel>();
+                }
+            }
+            catch (Exception ex) { 
+                return Enumerable.Empty<UserModel>();
+            }
+            return Enumerable.Empty<UserModel>();
         }
 
         // GET: /usermodels/5
         [HttpGet("{id}")]
-        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
-            _logger.LogInformation("Fetching UserModel started");
             var userModel = await _context.UserModels.FindAsync(id);
 
             if (userModel == null)
             {
                 return NotFound();
             }
-            _logger.LogInformation("Fetching UserModel ended");
+
             return userModel;
         }
 
         // PUT: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
-            _logger.LogInformation("Put UserModel started");
             if (id != userModel.Id)
             {
                 return BadRequest();
@@ -82,25 +100,23 @@ namespace SET3_Backend.Controllers
                     throw;
                 }
             }
-            _logger.LogInformation("Put UserModel ended");
+
             return NoContent();
         }
 
         // POST: api/UserModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        //[HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
             _context.UserModels.Add(userModel);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Succesfully added new UserModel");
+
             return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
 
         // DELETE: api/UserModels/5
         [HttpDelete("{id}")]
-        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUserModel(int id)
         {
             var userModel = await _context.UserModels.FindAsync(id);
@@ -111,49 +127,36 @@ namespace SET3_Backend.Controllers
 
             _context.UserModels.Remove(userModel);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Succesfully deleted UserModel");
+
             return NoContent();
-        }
-
-        public class ZaPromjenuSifre
-        {
-            public int Id { get; set; }
-            public string NewPassword { get; set; }
-        }
-
-        [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
-        //[HttpGet("{id}"), Authorize(Roles = "Admin, User")]
-        public async Task<ActionResult<UserModel>> changePassword()
-        {
-            string proba;
-
-            Console.WriteLine("USJE LI OVDJE??");
-
-            using (var reader = new StreamReader(Request.Body))
-            {
-                proba = await reader.ReadToEndAsync();
-
-                // Do something
-            }
-
-            ZaPromjenuSifre unos = JsonSerializer.Deserialize<ZaPromjenuSifre>(proba);
-
-            Console.WriteLine(unos.Id);
-            Console.WriteLine(unos.NewPassword);
-
-            var user = await _context.UserModels.FindAsync(unos.Id);
-            if (user == null)
-            {
-                return BadRequest();
-            }
-            user.Password = unos.NewPassword;
-            await _context.SaveChangesAsync();
-            return Ok(user);
         }
 
         private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
+        }
+        public JwtSecurityToken ValidateToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                return jwtToken;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
