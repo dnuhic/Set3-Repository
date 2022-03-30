@@ -28,8 +28,7 @@ namespace SET3_Backend.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<UserModelsController> _logger;
 
-        public UserModelsController(Context context, IConfiguration configuration)
-        public UserModelsController(Context context, ILogger<UserModelsController> logger)
+        public UserModelsController(Context context, IConfiguration configuration, ILogger<UserModelsController> logger)
         {
             _configuration = configuration;
             _context = context;
@@ -40,27 +39,32 @@ namespace SET3_Backend.Controllers
         [HttpGet(Name = "usermodels")]
         public IEnumerable<UserModel> GetUserModels()
         {
-            //treba uzet token i pozvati ValidateToken, ako je validan nastaviti, a ako ne samo nek preskoci da vrati bad result
-            try
-            {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
-
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
-                    {
-                        var data = _context.UserModels.AsNoTracking().ToArray();
+            //Console.WriteLine("inside get usermodels");
+            ////treba uzet token i pozvati ValidateToken, ako je validan nastaviti, a ako ne samo nek preskoci da vrati bad result
+            //try
+            //{
+            String token = Request.Cookies.Where(c => c.Key == "jwt").FirstOrDefault().Value;
+            if(token == null)
+                Console.WriteLine("token:" + " " + null);
+            else
+                Console.WriteLine("token:" + " " + token);
+            //    if (token != null)
+            //    {
+            //if (ValidateToken(token) != null)
+            //{
+            var data = _context.UserModels.AsNoTracking().ToArray();
                         Console.WriteLine("OVO POGLEDAJ" + data);
                         return data;
-                    }
-                    else
-                        return Enumerable.Empty<UserModel>();
-                }
-            }
-            catch (Exception ex) { 
-                return Enumerable.Empty<UserModel>();
-            }
-            return Enumerable.Empty<UserModel>();
+            ////        }
+            //        else
+            //            return Enumerable.Empty<UserModel>();
+            //    }
+            //}
+            //catch (Exception ex) { 
+            //    return Enumerable.Empty<UserModel>();
+            //}
+            //Console.WriteLine("test");
+            //return Enumerable.Empty<UserModel>();
         }
 
         // GET: /usermodels/5
