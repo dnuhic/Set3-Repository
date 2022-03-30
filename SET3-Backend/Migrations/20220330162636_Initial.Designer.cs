@@ -12,7 +12,11 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
+<<<<<<<< HEAD:SET3-Backend/Migrations/20220330162636_Initial.Designer.cs
     [Migration("20220330162636_Initial")]
+========
+    [Migration("20220330150207_Initial")]
+>>>>>>>> development:SET3-Backend/Migrations/20220330150207_Initial.Designer.cs
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +81,7 @@ namespace SET3_Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("roleType")
+                    b.Property<int>("RoleType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -136,9 +140,14 @@ namespace SET3_Backend.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("UserModels");
                 });
@@ -170,7 +179,15 @@ namespace SET3_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SET3_Backend.Models.RoleModel", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Question");
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

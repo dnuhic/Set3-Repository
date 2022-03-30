@@ -12,9 +12,28 @@ namespace SET3_Backend.Models
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string Password { get; set; }
+		public RoleModel Role { get; set; }
+		public int RoleId { get; set; }
 		public SecurityQuestionModel Question { get; set; }
 		public int QuestionId { get; set; }
 		public string Answer { get; set; }
 		public bool Deleted { get; set; }
-	}
+
+        public UserModel() { }
+
+        public UserModel(string email, string firstName, string lastName, string password, 
+            RoleModel role, int roleId, SecurityQuestionModel question, int questionId, string answer, bool deleted)
+        {
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+            Password = password;
+            Role = role;
+            RoleId = roleId;
+            Question = question;
+            QuestionId = questionId;
+            Answer = answer;
+            Deleted = deleted;
+        }
+    }
 }
