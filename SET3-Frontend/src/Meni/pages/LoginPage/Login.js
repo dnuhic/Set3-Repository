@@ -68,6 +68,7 @@ const Login = () => {
                 />
 
                 <button className="button-block">Log in</button>
+                <a className="button-block forgotpwd" href="/forgotpassword">Forgot password?</a>
 
             </form>
         </div>
