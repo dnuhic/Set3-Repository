@@ -23,6 +23,8 @@ export default function ForgotPasswordConfirm () {
                 };
 
                 await fetch('https://localhost:7194/api/mail/reset', requestOptions).then(res => res.json).then(json => console.log.json);
+                alert("You changed your password successfully");
+                
             }
             resetPass();
         }
