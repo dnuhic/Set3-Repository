@@ -17,7 +17,6 @@ function App() {
     
 
     return (
-
         <Router>
             <GlobalStyle />
             <Navbar />
@@ -71,8 +70,7 @@ function App() {
 
             
 
-         </Router>
-        
+            </Router>
 
     );
 }
