@@ -1,5 +1,6 @@
 import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
+import "bootstrap/dist/css/bootstrap.css";
 
 const AddAUserForm = () => {
     
