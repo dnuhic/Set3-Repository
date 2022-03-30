@@ -1,19 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SET3_Backend.Database;
-using SET3_Backend.Settings;
-using SET3_Backend.Services;
 
 namespace SET3_Backend
 {
     public static class DependencyInjection
     {
-
-        public static IServiceCollection AddBackendServices(this IServiceCollection services, IConfiguration Configuration)
+        public static IServiceCollection AddBackendServices(this IServiceCollection services)
         {
             services.AddDbContext<Context>(options =>
             {
                 //Treba dodati connection string na bazu umjesto 'dbConnString'
-                var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
+                var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=StoreDB;";
                 options.UseSqlServer(dbConnString,
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
@@ -28,8 +25,6 @@ namespace SET3_Backend
                     .WithOrigins("https://localhost:3000");
                 }));
 
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddTransient<IMailService, Services.MailService>();
             //Ovdje se dodaju servisi za dependency injection
 
             return services;

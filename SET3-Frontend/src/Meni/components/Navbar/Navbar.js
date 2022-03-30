@@ -3,7 +3,6 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { Nav, NavbarContainer, MenuIcon, NavMenu, NavItem, NavLinks, NavItemBtn, NavBtnLink } from './NavbarElements'
 import { Button } from '../../../globalStyles';
-import LogOutButton from './LogOutButton';
 
 
 
@@ -52,7 +51,10 @@ const Navbar = () => {
                             <NavItem>
                                 <NavLinks to='/users'> Users </NavLinks>
                             </NavItem>
-                            
+
+                            <NavItem>
+                                <NavLinks to='/form'> Add user</NavLinks>
+                            </NavItem>
 
                             <NavItemBtn>
 
@@ -73,8 +75,21 @@ const Navbar = () => {
               
 
                             </NavItemBtn>
-                            <LogOutButton button={button}></LogOutButton>
-                            
+
+                            <NavItemBtn>
+                            {button ? (
+                                <NavBtnLink to="/home">
+                                    <Button primary> LogOut </Button>
+
+                                </NavBtnLink>
+                            ) : (
+                                <NavBtnLink to="/home">
+                                    <Button fontBig primary>
+                                        LogOut
+                                    </Button>
+                                </NavBtnLink>
+                            )}
+                        </NavItemBtn>
                         </NavMenu>
 
 

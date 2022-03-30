@@ -154,19 +154,4 @@ background: #061C35;
 
 
 `;
-export const NavBtn = styled.a`
-display: flex;
-justify-content: center;
-align-items: center;
-text-decoration: none;
-padding: 8px 16px;
-height: 100%;
-width: 100%;
-border: none;
-outline: none;
-background: #061C35;
-
-
-
-`;
 

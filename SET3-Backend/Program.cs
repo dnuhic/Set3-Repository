@@ -2,23 +2,21 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using SET3_Backend;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
-Log.Logger = new LoggerConfiguration()
+// Add services to the container.
+var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
     .CreateLogger();
 
-// Add services to the container.
-
 builder.Logging.ClearProviders();
-builder.Logging.AddSerilog();
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddControllers();
 //Load dependency injection
-builder.Services.AddBackendServices(builder.Configuration);
+builder.Services.AddBackendServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

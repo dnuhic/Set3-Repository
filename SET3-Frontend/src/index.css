@@ -11,3 +11,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#dropdownMenu{
+    width: 100%;
+}
+
+html{
+    height: 100%;
+    width: 100%;
+}
+
+form {
+    padding: 150px 0 0 0;
+    width: 450px;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    justify-content: space-between;
+}
