@@ -1,66 +1,151 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import '../styleForm.css';
 
 
 
-export default class ResetPassword extends Component {
+export default function ResetPassword() {
 
-    state = {
-        hidden: true
+    const { id } = useParams();
+    const [userFetched, setUserFetched] = useState(null);
+    const [qFetched, setqFetched] = useState(null);
+    const [vidljivo, setVidljivo] = useState(null);
+    const [questions, setQuestions] = useState(null);
+    const [newPassword, setNewPassword] = useState(null);
+
+    const getData = async () => {
+        //console.log(id);
+        const response = await fetch('https://localhost:7194/usermodels/'+id);
+        //console.log(response);
+        const data = await response.json();
+        //console.log(data);        
+        setUserFetched(data);
     }
+    useEffect(getData, []);
+    useEffect(async () => {
+        const question = await fetch('https://localhost:7194/SecurityQuestionModels/' + id + '/forgotPassword');
+        const data = await question.json();
+        //console.log(question);
+        //console.log(data);
+        //console.log(data.question);
+        setqFetched(data.question);
+    }, [userFetched]);
 
-    handleChange = (e) => {
-        if (e.target) {
-            this.setState({
-                hidden: !this.state.hidden
-            });
+    //const getQuestions = async () => {
+    //    const pitanjaResponse = await fetch('https://localhost:7194/SecurityQuestionModels')
+    //    const pitanja = await pitanjaResponse.json();
+
+    //    setQuestions(pitanja);
+    //}
+
+    //useEffect(getQuestions, []);
+    useEffect(async () => {
+        const pitanjaResponse = await fetch('https://localhost:7194/SecurityQuestionModels')
+        const pitanja = await pitanjaResponse.json();
+
+        console.log(pitanja);
+       
+        const nizPitanja = []
+        for (const k of pitanja) {
+            nizPitanja.push(k.question);
+        }
+        setQuestions(nizPitanja);
+        console.log('ovo se smijesta u setter');
+        console.log(nizPitanja);
+    }, []);
+
+    useEffect(() => {
+        if (newPassword != null) {
+            async function resetPass() {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "Id": Number(id), "NewPassword": newPassword })
+                };
+                const pom = { "Id": Number(id), "NewPassword": newPassword };
+                console.log("ID I NOVA SIFRA");
+                console.log(pom);
+
+                await fetch('https://localhost:7194/UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
+            }
+            resetPass();
+        }
+    }, [newPassword])
+
+
+
+    const handleChange = () => {
+        //console.log(document.getElementById('odgovor').value.trim());
+        //console.log(userFetched.answer);
+        if (document.getElementById('odgovor').value.trim() == userFetched.answer) {
+            setVidljivo(true);
+            //console.log(state.hidden);
+        }
+        else {
+            setVidljivo(false);
+            alert("Answer is not correct!");
         }
     }
 
-    render() {
+    const handleOnClick = () => {
+        if (document.getElementById('novaSifra1').value.trim() == document.getElementById('novaSifra2').value.trim()) {
+            console.log('Nova sifra glas' + document.getElementById('novaSifra1').value.trim())
+                    setNewPassword(document.getElementById('novaSifra1').value);
+                }
+                else {
+                    alert("Passwords are not matching");
+                }
+    }
+        
+   
+
+
         return (
             <div class="form-container">
-                <form action="#" class="form-wrap">
+                <div action="#" class="form-wrap">
                     <h1>Reset Password</h1>
 
                     <div class="form-box">
-                        <p> Sequrity Question: Dodati iz baze pitanje       </p>
-                        <input type="text" placeholder="Your Answer" required />
+                        {qFetched && <div>{qFetched} </div>}
+                        {!qFetched && <p> Loading... </p>}
+                        <input type="text" id = "odgovor" placeholder="Your Answer" required />
                     </div>
                     <div className="form-submit">
-                        <button onClick={this.handleChange}>Confirm</button>
+                        <button onClick={handleChange}>Confirm</button>
                     </div>
 
-                    <div class="form-click" hidden={this.state.hidden}>
+
+                    {vidljivo && <div class="form-click">
 
                         <div class="form-box" >
 
-                            <p>Choose new sequrity question</p>
+                            <p>Choose new security question</p>
                             <select name="pitanja" id="pitanja">
-                                <option value="rigatoni">Defaultno pitanje iz baze</option>
-                                <option value="dave">Dave</option>
-                                <option value="pumpernickel">Pumpernickel</option>
-                                <option value="reeses">Reeses</option>
+                                {questions && questions.length &&
+                                   questions.map( q => <option>{q}</option>)
+
+                                }
                             </select>
 
 
 
-                            <input type="password" placeholder="Current Password" required />
+                            <input placeholder="New Answer" required />
                         </div>
                         <div class="form-box">
-                            <input type="password" placeholder="New Password" required />
+                            <p>Choose new password</p>
+                            <input type="password" id = 'novaSifra1' placeholder="New Password" required />
                         </div>
                         <div class="form-box">
-                            <input type="password" placeholder="Confirm New Password" required />
+                            <input type="password" id = 'novaSifra2' placeholder="Confirm New Password" required />
                         </div>
 
                         <div class="form-submit">
-                            <input type="submit" value="Reset Password" />
+                            <button onClick={handleOnClick} >Change Password</button>
                         </div>
-                    </div>
-                </form>
+                    </div>}
+                </div>
             </div>
         );
-    }
+    
 
 }
