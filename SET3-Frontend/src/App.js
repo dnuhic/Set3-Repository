@@ -26,7 +26,7 @@ function App() {
             </Routes>
 
             <Routes>
-                <Route path="/settings" element={<Settings />} />
+                <Route path="/settings/:id" element={<Settings />} />
 
             </Routes>
 
@@ -57,7 +57,7 @@ function App() {
             </Routes>
 
             <Routes>
-                <Route path="/resetPassword" element={<ResetPassword />} />
+                <Route path="/resetPassword/:id" element={<ResetPassword />} />
 
             </Routes>
 

@@ -29,11 +29,13 @@ namespace SET3_Backend.Controllers
             try
             {
                 // dodati provjeru !!!
-                var korisnik = context.UserModels.Select(x => x.Email == request.ToEmail);
-                if (korisnik != null) { 
+                var user = context.UserModels.Where(u => u.Email == request.ToEmail).FirstOrDefault();
+                if (user != null)
+                {
                     await mailService.SendEmailAsync(request);
+                    return Ok();
                 }
-                return Ok();
+                else return BadRequest();
             }
             catch (Exception ex)
             {
