@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navbar } from './Meni/components';
 import { Link } from 'react-router-dom';
 import Home from './Meni/pages/HomePage/Home';
+import AddUser from './Meni/pages/AddAUserPage/AddAUserForm';
 import Settings from './Meni/pages/SettingsPage/Settings';
 import Login from './Meni/pages/LoginPage/Login';
 import Users from './Meni/pages/UsersPage/Users';
@@ -76,6 +77,12 @@ function App() {
                     <Route path="/users" element={<Users />} />}
 
                 
+            </Routes>
+
+            <Routes>
+
+                <Route path="/form" element={<AddUser />} />
+
             </Routes>
 
             <Routes>

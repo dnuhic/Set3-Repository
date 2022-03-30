@@ -25,6 +25,9 @@ namespace SET3_Backend.Controllers
 
         private readonly Context _context;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<UserModelsController> _logger;
+
+        public UserModelsController(Context context, IConfiguration configuration, ILogger<UserModelsController> logger)
 
         public UserModelsController(Context context, IConfiguration configuration)
         {

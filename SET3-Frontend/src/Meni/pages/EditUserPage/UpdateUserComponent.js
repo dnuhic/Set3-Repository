@@ -58,6 +58,10 @@ const UpdateUserComponent = (props) => {
       Question: {
         id: 2,
         Question: "pitanje",
+        },
+      Role: {
+          id: 1,
+          roleType: 0,
       },
       QuestionId: 2,
       Answer: user.answer,
