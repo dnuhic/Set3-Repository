@@ -3,70 +3,6 @@
     margin: 10% 10% 10% 10%;
 }
 
-h1 {
-    margin: 4%;
-}
-
-.editButton {
-    width: 40%;
-    height: 90%;
-    margin-bottom: 5%;
-    margin-right: 5%;
-    margin-left: 2%;
-}
-.cancelButton {
-    width: 40%;
-    height: 70%;
-    margin-bottom: 5%;
-    margin-right: 5%;
-    margin-left: 2%;
-}
-.submitButton {
-    width: 40%;
-    height: 70%;
-    margin-bottom: 5%;
-    margin-right: 5%;
-    margin-left: 2%;
-}
-.SubmitBtn {
-    margin-bottom: 4%;
-    padding: 5%;
-
-}
-
-.cancelButton1 {
-    padding-top: 5%;
-    padding-bottom: 5%;
-    padding-right: 5%;
-    /* width: 114%; */
-    /* height: 73%; */
-    padding-left: 5%;
-    margin-bottom: 5%;
-    /* margin-right: 9%; */
-    margin-left: 10%;
-}
-.buttons {
-    margin-bottom: 5%;
-    margin-top: 5%;
-    margin-left: 15%;
-}
-error{
-    color:red;
-}
-label {
-    float: left;
-}
-
-.passwordInput {
-    width: 25%;
-    padding-top: 2%;
-}
-
-
-.updatePassword-box {
-    justify-content: center;
-    align-items: center;
-}
 
 .buttons {
     display: inline-flex;
@@ -174,4 +110,3 @@ label {
         border-color: black;
     }
 }
-

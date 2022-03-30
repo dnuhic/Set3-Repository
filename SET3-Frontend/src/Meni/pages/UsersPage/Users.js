@@ -24,22 +24,24 @@ const Users = () => {
 
 
 	return (
+		<div>
 		<div style={{
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
 			height: '90vh'
+
 		}}
 		>
-
-			<div className="list" style={{width:500}}>
+			<div className="list">
 				<h1> Users </h1>
 				{allUsers && <List sampleData={allUsers} />}
 				{!allUsers && <div>Loading...</div>}
 				
 			</div>
 
-		</div>		
+			</div>
+		</div>
 	);
 };
 
