@@ -28,7 +28,7 @@ namespace SET3_Backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    roleType = table.Column<int>(type: "int", nullable: false)
+                    RoleType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,6 +58,7 @@ namespace SET3_Backend.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false)
@@ -65,6 +66,12 @@ namespace SET3_Backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserModels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserModels_RoleModels_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "RoleModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserModels_SecurityQuestionModels_QuestionId",
                         column: x => x.QuestionId,
@@ -115,6 +122,11 @@ namespace SET3_Backend.Migrations
                 name: "IX_UserModels_QuestionId",
                 table: "UserModels",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserModels_RoleId",
+                table: "UserModels",
+                column: "RoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -123,13 +135,13 @@ namespace SET3_Backend.Migrations
                 name: "LoggingModels");
 
             migrationBuilder.DropTable(
-                name: "RoleModels");
-
-            migrationBuilder.DropTable(
                 name: "ActionModels");
 
             migrationBuilder.DropTable(
                 name: "UserModels");
+
+            migrationBuilder.DropTable(
+                name: "RoleModels");
 
             migrationBuilder.DropTable(
                 name: "SecurityQuestionModels");

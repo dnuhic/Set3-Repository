@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SET3_Backend.Controllers
@@ -18,7 +19,7 @@ namespace SET3_Backend.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet(Name = "GetWeatherForecast"), Authorize(Roles = "Admin")]
         public IEnumerable<WeatherForecast> Get()
         {
 

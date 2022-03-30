@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SET3_Backend.Database;
 
@@ -12,14 +11,9 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
-<<<<<<<< HEAD:SET3-Backend/Migrations/20220330094523_Initial.Designer.cs
-    [Migration("20220330094523_Initial")]
-========
-    [Migration("20220330093535_Initial")]
->>>>>>>> development:SET3-Backend/Migrations/20220330093535_Initial.Designer.cs
-    partial class Initial
+    partial class ContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +75,7 @@ namespace SET3_Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("roleType")
+                    b.Property<int>("RoleType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -140,9 +134,14 @@ namespace SET3_Backend.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("UserModels");
                 });
@@ -174,7 +173,15 @@ namespace SET3_Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SET3_Backend.Models.RoleModel", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Question");
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }
