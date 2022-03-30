@@ -31,6 +31,7 @@ namespace SET3_Backend.Controllers
         [HttpGet(Name = "usermodels")]
         public IEnumerable<UserModel> GetUserModels()
         {
+            _logger.LogInformation("Fetching User Models");
             var data = _context.UserModels.AsNoTracking().ToArray();
             return data;
         }
@@ -120,7 +121,7 @@ namespace SET3_Backend.Controllers
         {
             string proba;
 
-            Console.WriteLine("USJE LI OVDJE??");
+            _logger.LogInformation("Started change password");
 
             using (var reader = new StreamReader(Request.Body))
             {

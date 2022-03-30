@@ -19,16 +19,19 @@ namespace SET3_Backend.Controllers
     public class SecurityQuestionModelsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly ILogger<SecurityQuestionModelsController> _logger;
 
-        public SecurityQuestionModelsController(Context context)
+        public SecurityQuestionModelsController(Context context, ILogger<SecurityQuestionModelsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: api/SecurityQuestionModels // ovo ce se koristiti u check list-i da onaj ko pravi racun izabere security pitanje
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SecurityQuestionModel>>> GetSecurityQuestionModels()
         {
+            _logger.LogInformation("Fetching Security Questions");
             return await _context.SecurityQuestionModels.ToListAsync();
         }
 
@@ -36,6 +39,7 @@ namespace SET3_Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SecurityQuestionModel>> GetSecurityQuestionModel(int id)
         {
+            _logger.LogInformation("Fetching Security Questions for model");
             var securityQuestionModel = await _context.SecurityQuestionModels.FindAsync(id);
 
             if (securityQuestionModel == null)
@@ -51,6 +55,7 @@ namespace SET3_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSecurityQuestionModel(int id, SecurityQuestionModel securityQuestionModel)
         {
+            _logger.LogInformation("Putting Security Question model");
             if (id != securityQuestionModel.Id)
             {
                 return BadRequest();
@@ -82,6 +87,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<SecurityQuestionModel>> PostSecurityQuestionModel(SecurityQuestionModel securityQuestionModel)
         {
+            _logger.LogInformation("posting Security Question model");
             _context.SecurityQuestionModels.Add(securityQuestionModel);
             await _context.SaveChangesAsync();
 
@@ -92,6 +98,7 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSecurityQuestionModel(int id)
         {
+            _logger.LogInformation("Deleting Security Question with id:"+id);
             var securityQuestionModel = await _context.SecurityQuestionModels.FindAsync(id);
             if (securityQuestionModel == null)
             {
@@ -107,6 +114,7 @@ namespace SET3_Backend.Controllers
         [HttpGet("{id}/forgotPassword")]//ovo radi jeej
         public async Task<ActionResult<SecurityQuestionModel>> GetSecQuestionOfUser(int id) //ovo je da se nadje security pitanje usera
         {
+            _logger.LogInformation("Fetching Security Question for user with id:"+id);
             //return await _context.SecurityQuestionModels.ToListAsync();
             var user = await _context.UserModels.FindAsync(id);
             if(user == null)
@@ -129,6 +137,7 @@ namespace SET3_Backend.Controllers
         [HttpPost("checkAnswer")]// da projeri je li se odudara odgovor sa onim u bazi
         public async Task<bool> IsAnswerCorrect()
         {
+            _logger.LogInformation("Checking answer");
             string proba;
 
             using (var reader = new StreamReader(Request.Body))

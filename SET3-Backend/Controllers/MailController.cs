@@ -15,11 +15,13 @@ namespace SET3_Backend.Controllers
     {
         private readonly IMailService mailService;
         private readonly Context context;
+        private readonly ILogger<MailController> logger;
 
-        public MailController(IMailService mailService, Context context)
+        public MailController(IMailService mailService, Context context, ILogger<MailController> logger)
         {
             this.mailService = mailService;
             this.context = context;
+            this.logger = logger;
         }
 
         [HttpPost("send")]
@@ -28,6 +30,7 @@ namespace SET3_Backend.Controllers
            
             try
             {
+                logger.LogInformation("Sending Email Started");
                 // dodati provjeru !!!
                 var user = context.UserModels.Where(u => u.Email == request.ToEmail).FirstOrDefault();
                 if (user != null)
@@ -42,11 +45,14 @@ namespace SET3_Backend.Controllers
                 throw;
             }
 
+            logger.LogInformation("Sending Email Finished");
+
         }
 
         [HttpPost("reset")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel obj)
         {
+            logger.LogInformation("Reset Password Started");
             var email = DecryptString(obj.id);
 
             var user = context.UserModels.Where(u => u.Email == email).First();
@@ -56,6 +62,7 @@ namespace SET3_Backend.Controllers
                 context.Update(user);
                 await context.SaveChangesAsync();
 
+                logger.LogInformation("Reset Password Done");
                 return Ok();
             }
             return BadRequest();
