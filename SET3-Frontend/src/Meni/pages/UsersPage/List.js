@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 function List(props) {
 
     const [sampleData, setSampleData] = useState([])
+    const [user, setToDelete] = useState(null);
+    const [deletedUser, setDeletedUser] = useState(null);
 
 
     useEffect(() => {
@@ -31,13 +33,56 @@ function List(props) {
     }
 
     function deleteUser(object) {
-        const data = sampleData.filter(e => e.id != object.id);
-        setSampleData(data);
-        //TODO Treba pozvati async function za remove u backendu.
+        console.log(object);
+        setToDelete(object);      
     }
 
+    useEffect(() => {
+        if (user != null) {
+            const newUser = {
+                "Id": user.id,
+                "Email": user.email,
+                "FirstName": user.firstName,
+                "LastName": user.lastName,
+                "Password": user.password,
+                "Question": {
+                    "id": 2,
+                    "Question": "pitanje"
+                },
+                "QuestionId": user.questionId,
+                "Answer": user.answer,
+                "Deleted": true
+            }
+
+            setDeletedUser(newUser);
+        }
+
+        
+    }, [user])
+
+    useEffect(async () => {
+        console.log(deletedUser);
+        if (deletedUser != null) {
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(deletedUser)
+            };
+
+            const response = await fetch('https://localhost:7194/usermodels/' + user.id, requestOptions);
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+
+            const index = sampleData.indexOf(user, 0);
+            const sampleDataCopy = sampleData;
+            sampleDataCopy[index] = deletedUser;
+            setSampleData(sampleDataCopy);
+        }
+    }, [deletedUser])
+
     const listComponents = sampleData.map((object) => {
-        return <ListItem user={object} deleteAction={() => { deleteUser(object) }}/>
+        return <ListItem user={object} deleteAction={deleteUser}/>
     })
 
 
