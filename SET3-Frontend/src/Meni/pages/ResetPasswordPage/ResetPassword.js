@@ -1,41 +1,81 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import '../styleForm.css';
 
 
 
-export default class ResetPassword extends Component {
+export default function ResetPassword() {
 
-    state = {
-        hidden: true
+    const { id } = useParams();
+    const [userFetched, setUserFetched] = useState(null);
+    const [qFetched, setqFetched] = useState(null);
+    const [vidljivo, setVidljivo] = useState(null);
+    const getData = async () => {
+
+        //console.log(id);
+        const response = await fetch('https://localhost:7194/usermodels/'+id);
+
+        
+
+
+        //console.log(response);
+        const data = await response.json();
+        //console.log(data);
+        
+        setUserFetched(data);
+
+
+
     }
 
-    handleChange = (e) => {
-        if (e.target) {
-            this.setState({
-                hidden: !this.state.hidden
-            });
+    useEffect(getData, []);
+    useEffect(async () => {
+        const question = await fetch('https://localhost:7194/SecurityQuestionModels/' + id + '/forgotPassword');
+        const data = await question.json();
+        //console.log(question);
+        //console.log(data);
+        //console.log(data.question);
+        setqFetched(data.question);
+    }, [userFetched]);
+
+
+
+    const handleChange = () => {
+        //console.log(document.getElementById('odgovor').value.trim());
+        //console.log(userFetched.answer);
+        if (document.getElementById('odgovor').value.trim() == userFetched.answer) {
+
+            setVidljivo(true);
+            //console.log(state.hidden);
+
+        }
+        else {
+            setVidljivo(false);
+            alert("Answer is not correct!");
         }
     }
 
-    render() {
+
         return (
             <div class="form-container">
-                <form action="#" class="form-wrap">
+                <div action="#" class="form-wrap">
                     <h1>Reset Password</h1>
 
                     <div class="form-box">
-                        <p> Sequrity Question: Dodati iz baze pitanje       </p>
-                        <input type="text" placeholder="Your Answer" required />
+                        {qFetched && <div>{qFetched} </div>}
+                        {!qFetched && <p> Loading... </p>}
+                        <input type="text" id = "odgovor" placeholder="Your Answer" required />
                     </div>
                     <div className="form-submit">
-                        <button onClick={this.handleChange}>Confirm</button>
+                        <button onClick={handleChange}>Confirm</button>
                     </div>
 
-                    <div class="form-click" hidden={this.state.hidden}>
+
+                    {vidljivo && <div class="form-click">
 
                         <div class="form-box" >
 
-                            <p>Choose new sequrity question</p>
+                            <p>Choose new security question</p>
                             <select name="pitanja" id="pitanja">
                                 <option value="rigatoni">Defaultno pitanje iz baze</option>
                                 <option value="dave">Dave</option>
@@ -57,10 +97,10 @@ export default class ResetPassword extends Component {
                         <div class="form-submit">
                             <input type="submit" value="Reset Password" />
                         </div>
-                    </div>
-                </form>
+                    </div>}
+                </div>
             </div>
         );
-    }
+    
 
 }
