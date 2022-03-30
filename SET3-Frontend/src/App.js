@@ -11,10 +11,16 @@ import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
 import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
 import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
+import Login from './Login/Login'
+import useToken from './Meni/components/App/useToken';
 
 function App() {
 
-    
+    const { token, setToken } = useToken();
+
+    if (!token) {
+        return <Login setToken={setToken} />
+    }
 
     return (
         <Router>

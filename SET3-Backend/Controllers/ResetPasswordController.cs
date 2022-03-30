@@ -21,6 +21,7 @@ namespace SET3_Backend.Controllers
 
         // GET: api/<ResetPasswordController>
         [HttpGet]
+        //[HttpGet, Authorize(Roles = "Admin, User")]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
@@ -28,6 +29,7 @@ namespace SET3_Backend.Controllers
 
         // GET api/<ResetPasswordController>/5
         [HttpGet("{id}")]
+        //[HttpGet("{id}"), Authorize(Roles = "Admin, User")]
         public string Get(int id)
         {
             return "value";
@@ -36,12 +38,14 @@ namespace SET3_Backend.Controllers
 
         // PUT api/<ResetPasswordController>/5
         [HttpPut("{id}")]
+        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<ResetPasswordController>/5
         [HttpDelete("{id}")]
+        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public void Delete(int id)
         {
         }

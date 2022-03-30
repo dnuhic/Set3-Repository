@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace SET3_Backend.Controllers
 
         // GET: /userModels
         [HttpGet(Name = "usermodels")]
+        //[HttpGet(Name = "usermodels"), Authorize(Roles = "Admin")]
         public IEnumerable<UserModel> GetUserModels()
         {
             var data = _context.UserModels.AsNoTracking().ToArray();
@@ -37,6 +39,7 @@ namespace SET3_Backend.Controllers
 
         // GET: /usermodels/5
         [HttpGet("{id}")]
+        //[HttpGet("{id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
             _logger.LogInformation("Fetching UserModel started");
@@ -53,6 +56,7 @@ namespace SET3_Backend.Controllers
         // PUT: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        //[HttpPut("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
             _logger.LogInformation("Put UserModel started");
@@ -85,6 +89,7 @@ namespace SET3_Backend.Controllers
         // POST: api/UserModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        //[HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
             _context.UserModels.Add(userModel);
@@ -95,6 +100,7 @@ namespace SET3_Backend.Controllers
 
         // DELETE: api/UserModels/5
         [HttpDelete("{id}")]
+        //[HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUserModel(int id)
         {
             var userModel = await _context.UserModels.FindAsync(id);
@@ -116,6 +122,7 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
+        //[HttpGet("{id}"), Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<UserModel>> changePassword()
         {
             string proba;
