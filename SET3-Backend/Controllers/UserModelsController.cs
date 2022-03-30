@@ -7,8 +7,13 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
+using SET3_Backend.Controllers;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -17,10 +22,13 @@ namespace SET3_Backend.Controllers
     [ApiController]
     public class UserModelsController : ControllerBase
     {
-        private readonly Context _context;
 
-        public UserModelsController(Context context)
+        private readonly Context _context;
+        private readonly IConfiguration _configuration;
+
+        public UserModelsController(Context context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
         }
 
@@ -28,9 +36,27 @@ namespace SET3_Backend.Controllers
         [HttpGet(Name = "usermodels")]
         public IEnumerable<UserModel> GetUserModels()
         {
-            var data = _context.UserModels.AsNoTracking().ToArray();
-            Console.WriteLine("OVO POGLEDAJ" + data);
-            return data;
+            //treba uzet token i pozvati ValidateToken, ako je validan nastaviti, a ako ne samo nek preskoci da vrati bad result
+            try
+            {
+                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+
+                if (token != null)
+                {
+                    if (ValidateToken(token) != null)
+                    {
+                        var data = _context.UserModels.AsNoTracking().ToArray();
+                        Console.WriteLine("OVO POGLEDAJ" + data);
+                        return data;
+                    }
+                    else
+                        return Enumerable.Empty<UserModel>();
+                }
+            }
+            catch (Exception ex) { 
+                return Enumerable.Empty<UserModel>();
+            }
+            return Enumerable.Empty<UserModel>();
         }
 
         // GET: /usermodels/5
@@ -108,6 +134,29 @@ namespace SET3_Backend.Controllers
         private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
+        }
+        public JwtSecurityToken ValidateToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                return jwtToken;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
