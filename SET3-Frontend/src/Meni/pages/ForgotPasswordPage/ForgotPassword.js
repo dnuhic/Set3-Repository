@@ -29,7 +29,6 @@ const ForgotPassword = () => {
             }
 
             setEmailProvided(email);
-            alert("Check you mailbox");
         }
     }
 
@@ -43,8 +42,15 @@ const ForgotPassword = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(EmailProvided)
             };
-
-            await fetch('https://localhost:7194/api/mail/send', requestOptions);
+            try {
+                await fetch('https://localhost:7194/api/mail/send', requestOptions).then(res => {
+                    if (res.status == 400)
+                        alert("Wrong email address provided!");
+                    else alert("Check your inbox!");
+                });
+            } catch (BadRequestException) {
+                alert("Your email address is wrong!");
+            }
         }
             
     }, [EmailProvided])
