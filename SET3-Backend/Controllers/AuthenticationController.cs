@@ -10,6 +10,7 @@ using System.Text;
 
 namespace SET3_Backend.Controllers
 {
+    
     [Route("[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -27,6 +28,7 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
+            Console.WriteLine("inside get");
             RoleModel role = new RoleModel(RoleType.Admin);
             _context.RoleModels.Add(role);
             SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
@@ -38,12 +40,15 @@ namespace SET3_Backend.Controllers
             return user;
         }
 
+        [EnableCors]
         [HttpPost]
-        public async Task<ActionResult<string>> Login(UserDto userDto)
+        public async Task<ActionResult<string>> Login([FromBody] UserDto userDto)
         {
+
+            Console.WriteLine("inside post");
             if (userDto == null) return BadRequest("User not specified");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
-            if (user == null && userDto.Password.Equals(user.Password))
+            if (user == null || !userDto.Password.Equals(user.Password))
             {
                 return BadRequest("Incorrect email or password.");
             }
