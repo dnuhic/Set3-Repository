@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -14,8 +13,8 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("[controller]")]
     [EnableCors("CorsPolicy")]
+    [Route("[controller]")]
     [ApiController]
     public class UserModelsController : ControllerBase
     {
@@ -110,32 +109,44 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
+        public class ZaPromjenuSifre
+        {
+            public int Id { get; set; }
+            public string NewPassword { get; set; }
+        }
+
+        [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
+        public async Task<ActionResult<UserModel>> changePassword()
+        {
+            string proba;
+
+            Console.WriteLine("USJE LI OVDJE??");
+
+            using (var reader = new StreamReader(Request.Body))
+            {
+                proba = await reader.ReadToEndAsync();
+
+                // Do something
+            }
+
+            ZaPromjenuSifre unos = JsonSerializer.Deserialize<ZaPromjenuSifre>(proba);
+
+            Console.WriteLine(unos.Id);
+            Console.WriteLine(unos.NewPassword);
+
+            var user = await _context.UserModels.FindAsync(unos.Id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            user.Password = unos.NewPassword;
+            await _context.SaveChangesAsync();
+            return Ok(user);
+        }
+
         private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
-        }
-
-        public string DecryptString(string encrString)
-        {
-            byte[] b;
-            string decrypted;
-            try
-            {
-                b = Convert.FromBase64String(encrString);
-                decrypted = System.Text.ASCIIEncoding.ASCII.GetString(b);
-            }
-            catch (FormatException fe)
-            {
-                decrypted = "";
-            }
-            return decrypted;
-        }
-
-        public string EnryptString(string strEncrypted)
-        {
-            byte[] b = System.Text.ASCIIEncoding.ASCII.GetBytes(strEncrypted);
-            string encrypted = Convert.ToBase64String(b);
-            return encrypted;
         }
     }
 }
