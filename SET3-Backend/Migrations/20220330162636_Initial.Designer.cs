@@ -12,11 +12,7 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
-<<<<<<<< HEAD:SET3-Backend/Migrations/20220330094523_Initial.Designer.cs
-    [Migration("20220330094523_Initial")]
-========
-    [Migration("20220330093535_Initial")]
->>>>>>>> development:SET3-Backend/Migrations/20220330093535_Initial.Designer.cs
+    [Migration("20220330162636_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
