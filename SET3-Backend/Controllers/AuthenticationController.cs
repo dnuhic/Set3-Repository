@@ -107,24 +107,17 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpGet(Name = "getusertoken")]
-        public async Task<ActionResult<string>> GetUserToken()
+        public async Task<ActionResult<UserToken>> GetUserToken()
         {
 
-            string jsonToken;
-            using (var reader = new StreamReader(Request.Body))
-            {
-                jsonToken = await reader.ReadToEndAsync();
+            String jsontoken = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
 
-            }
-
-            JwtSecurityToken token = JsonSerializer.Deserialize<JwtSecurityToken>(jsonToken);
+            JwtSecurityToken token = JsonSerializer.Deserialize<JwtSecurityToken>(jsontoken);
             var tokenUser = GetUserFromToken(token);
             UserToken userToken = new UserToken(tokenUser.Item3);
 
-            string jsonStringToken = JsonSerializer.Serialize(userToken);
-            //JsonDocument tokenUserJSON = JsonDocument.Parse(jsonString);
-            //return tokenUserJSON;
-            return jsonStringToken;
+ 
+            return userToken;
         }
 
         public JwtSecurityToken ValidateToken(string token)
