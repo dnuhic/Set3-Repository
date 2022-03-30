@@ -7,6 +7,8 @@ using SET3_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SET3_Backend.Controllers
 {
@@ -17,6 +19,16 @@ namespace SET3_Backend.Controllers
         private readonly Context _context;
         private readonly IConfiguration _configuration;
 
+        public class UserToken
+        {
+            public string Role { get; set; }
+
+            public UserToken(string role)
+            {
+                Role = role;
+            }
+
+        }
         public AuthenticationController(Context context, IConfiguration configuration)
         {
             _configuration = configuration;
@@ -92,6 +104,27 @@ namespace SET3_Backend.Controllers
             var email = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Email).Value;
             var role = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
             return new Tuple<string, string, string>(name, email, role);
+        }
+
+        [HttpGet(Name = "getusertoken")]
+        public async Task<ActionResult<string>> GetUserToken()
+        {
+
+            string jsonToken;
+            using (var reader = new StreamReader(Request.Body))
+            {
+                jsonToken = await reader.ReadToEndAsync();
+
+            }
+
+            JwtSecurityToken token = JsonSerializer.Deserialize<JwtSecurityToken>(jsonToken);
+            var tokenUser = GetUserFromToken(token);
+            UserToken userToken = new UserToken(tokenUser.Item3);
+
+            string jsonStringToken = JsonSerializer.Serialize(userToken);
+            //JsonDocument tokenUserJSON = JsonDocument.Parse(jsonString);
+            //return tokenUserJSON;
+            return jsonStringToken;
         }
 
         public JwtSecurityToken ValidateToken(string token)

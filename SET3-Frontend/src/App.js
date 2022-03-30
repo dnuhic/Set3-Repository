@@ -13,14 +13,39 @@ import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 import Login from './Login/Login'
 import useToken from './Meni/components/App/useToken';
+import { useEffect } from 'react'
 
 function App() {
 
     const { token, setToken } = useToken();
+    const { userRole, setUserRole } = useState(null);
 
     if (!token) {
         return <Login setToken={setToken} />
     }
+    else {
+        useEffect(async () => {
+
+            const requestOptions = {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(token)
+            };
+            
+            await fetch('https://localhost:7194/api/controller/getusertoken', requestOptions).then(res => {
+                if (res.status == 400)
+                    alert("Wrong token!");
+                else {
+                    console.log(res.role);
+                    setUserRole(res.role);
+                        
+                }
+            });
+            
+        }, [])
+    }
+
+
 
     return (
         <Router>
@@ -47,8 +72,9 @@ function App() {
             </Routes>
 
             <Routes>
-               
-                <Route path="/users" element={<Users />} />
+                {userRole == 0 &&
+                    <Route path="/users" element={<Users />} />}
+
                 
             </Routes>
 

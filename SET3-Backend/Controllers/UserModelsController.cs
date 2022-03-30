@@ -63,32 +63,14 @@ namespace SET3_Backend.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
-            try
+            var userModel = await _context.UserModels.FindAsync(id);
+
+            if (userModel == null)
             {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
-
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
-                    {
-                        var userModel = await _context.UserModels.FindAsync(id);
-                        if (userModel == null)
-                        {
-                            return NotFound();
-                        }
-
-                        return userModel;
-                    }
-                    else
-                        return NoContent();
-                }
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
-            return NoContent();
 
+            return userModel;
         }
 
         // PUT: api/UserModels/5
@@ -96,44 +78,29 @@ namespace SET3_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
+            if (id != userModel.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(userModel).State = EntityState.Modified;
+
             try
             {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
-
-                if (token != null)
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserModelExists(id))
                 {
-                    if (ValidateToken(token) != null)
-                    {
-                        if (id != userModel.Id)
-                        {
-                            return BadRequest();
-                        }
-
-                        _context.Entry(userModel).State = EntityState.Modified;
-
-                        try
-                        {
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!UserModelExists(id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                    }
-                    else return NoContent();
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
+
             return NoContent();
         }
 
@@ -142,64 +109,26 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
-            try
-            {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+            _context.UserModels.Add(userModel);
+            await _context.SaveChangesAsync();
 
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
-                    {
-                        _context.UserModels.Add(userModel);
-                        await _context.SaveChangesAsync();
-                        return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
-                    }
-                    else
-                        return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
-            return NoContent();
+            return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
-
 
         // DELETE: api/UserModels/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserModel(int id)
         {
-            try
+            var userModel = await _context.UserModels.FindAsync(id);
+            if (userModel == null)
             {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
-
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
-                    { 
-                        var userModel = await _context.UserModels.FindAsync(id);
-                        if (userModel == null)
-                        {
-                            return NotFound();
-                        }
-
-                        _context.UserModels.Remove(userModel);
-                        await _context.SaveChangesAsync();
-
-                        return NoContent();
-                    }
-                    else
-                        return NoContent();
-                }
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
+
+            _context.UserModels.Remove(userModel);
+            await _context.SaveChangesAsync();
+
             return NoContent();
-
-
         }
 
         private bool UserModelExists(int id)
