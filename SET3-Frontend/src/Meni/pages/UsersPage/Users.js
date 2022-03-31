@@ -7,8 +7,22 @@ const Users = () => {
 	const [allUsers, setAllUsers] = useState(null);
 	const [allUsersFetched, setAllUsersFetched] = useState(false);
 
+	function getCookie(key) {
+		var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+		return b ? b.pop() : "";
+	}
+
 	const getData = async () => {
-		const response = await fetch('https://localhost:7194/usermodels');
+
+		console.log(getCookie("jwt"));
+
+		const requestOptions = {
+			method: 'GET',
+			headers: { "Authorization": "bearer " + getCookie("jwt") ,"Access-Control-Allow-Credentials": true },
+			credentials: 'same-origin'
+		};
+
+		const response = await fetch('https://localhost:7194/usermodels', requestOptions);
 
 		console.log(response);
 		const data = await response.json();

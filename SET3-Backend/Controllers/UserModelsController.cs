@@ -14,6 +14,7 @@ using SET3_Backend.Controllers;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SET3_Backend.Controllers
 {
@@ -27,7 +28,7 @@ namespace SET3_Backend.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<UserModelsController> _logger;
 
-        public UserModelsController(Context context, IConfiguration configuration, ILogger<UserModelsController> logger)
+        //public UserModelsController(Context context, IConfiguration configuration, ILogger<UserModelsController> logger)
 
         public UserModelsController(Context context, IConfiguration configuration)
         {
@@ -36,10 +37,30 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /userModels
-        [HttpGet(Name = "usermodels")]
+        [HttpGet(Name = "usermodels"), Authorize(Roles = "Admin, User")]
         public IEnumerable<UserModel> GetUserModels()
         {
+
             //treba uzet token i pozvati ValidateToken, ako je validan nastaviti, a ako ne samo nek preskoci da vrati bad result
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ")+1);
+
+            if (ValidateToken(token) != null)
+            {
+                var data = _context.UserModels.AsNoTracking().ToArray();
+                Console.WriteLine("OVO POGLEDAJ" + data);
+                return data;
+            }
+            
+            return Enumerable.Empty<UserModel>();
+            
+            
+        }
+
+        // GET: /usermodels/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserModel>> GetUserModel(int id)
+        {
             try
             {
                 String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
@@ -48,32 +69,24 @@ namespace SET3_Backend.Controllers
                 {
                     if (ValidateToken(token) != null)
                     {
-                        var data = _context.UserModels.AsNoTracking().ToArray();
-                        Console.WriteLine("OVO POGLEDAJ" + data);
-                        return data;
+                        var userModel = await _context.UserModels.FindAsync(id);
+                        if (userModel == null)
+                        {
+                            return NotFound();
+                        }
+
+                            return userModel;
                     }
                     else
-                        return Enumerable.Empty<UserModel>();
+                        return NoContent();
                 }
             }
-            catch (Exception ex) { 
-                return Enumerable.Empty<UserModel>();
-            }
-            return Enumerable.Empty<UserModel>();
-        }
-
-        // GET: /usermodels/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserModel>> GetUserModel(int id)
-        {
-            var userModel = await _context.UserModels.FindAsync(id);
-
-            if (userModel == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return NoContent();
             }
+            return NoContent();
 
-            return userModel;
         }
 
         // PUT: api/UserModels/5
@@ -81,29 +94,48 @@ namespace SET3_Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
-            if (id != userModel.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(userModel).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserModelExists(id))
+                
+                    String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+
+                if (token != null)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    if (ValidateToken(token) != null)
+                    {
+                        if (id != userModel.Id)
+                        {
+                            return BadRequest();
+                        }
+
+                        _context.Entry(userModel).State = EntityState.Modified;
+
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!UserModelExists(id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                    else return NoContent();
                 }
             }
 
+            catch (Exception ex)
+            {
+                return NoContent();
+            }
             return NoContent();
         }
 
@@ -112,29 +144,70 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
-            _context.UserModels.Add(userModel);
-            await _context.SaveChangesAsync();
+            
+            try
+            {
+                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
 
-            return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
+                if (token != null)
+                {
+                    if (ValidateToken(token) != null)
+                    {
+                        _context.UserModels.Add(userModel);
+                        await _context.SaveChangesAsync();
+                        return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
+                    }
+                    else
+                        return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                return NoContent();
+            }
+            return NoContent();
         }
 
         // DELETE: api/UserModels/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserModel(int id)
         {
-            var userModel = await _context.UserModels.FindAsync(id);
-            if (userModel == null)
-            {
-                return NotFound();
+            
+                try
+                {
+                 
+                    String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+
+                if (token != null)
+                {
+                    if (ValidateToken(token) != null)
+                    {
+                        var userModel = await _context.UserModels.FindAsync(id);
+                        if (userModel == null)
+                        {
+                            return NotFound();
+                        }
+
+                    
+                        _context.UserModels.Remove(userModel);
+                        await _context.SaveChangesAsync();
+
+                        return NoContent();
+                    }
+                else
+                    return NoContent();
+                }
             }
-
-            _context.UserModels.Remove(userModel);
-            await _context.SaveChangesAsync();
-
+            catch (Exception ex)
+            {
+                return NoContent();
+            }
             return NoContent();
-        }
 
-        private bool UserModelExists(int id)
+
+}
+
+private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
         }

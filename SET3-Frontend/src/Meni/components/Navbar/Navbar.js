@@ -12,6 +12,7 @@ const Navbar = () => {
 
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
+    const [role, setRole] = useState(null);
 
     const handleClick = () => setClick(!click);
     const showButton = () => {
@@ -21,9 +22,33 @@ const Navbar = () => {
         else setButton(true);
     }
 
+    useEffect(async () => {
+
+        var cookie = document.cookie;
+        console.log(cookie);
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain', "Access-Control-Allow-Credentials": true },
+            credentials: 'include',
+            body: cookie
+        };
+
+        const response = await fetch('https://localhost:7194/authentication/getusertoken', requestOptions);
+
+        const data = await response.json();
+
+        setRole(data.role);
+
+
+    }, [])
+
+    
+
     useEffect(
         () => {
             showButton();
+            
         }, []);
 
     window.addEventListener('resize', showButton);
@@ -48,36 +73,36 @@ const Navbar = () => {
                                 <NavLinks to='/settings'> Settings </NavLinks>
           
                             </NavItem>
+                            {role == "Admin" && 
+                                <NavItem>
+                                    <NavLinks to='/users'> Users </NavLinks>
+                                </NavItem>
+                            }
 
-                            <NavItem>
-                                <NavLinks to='/users'> Users </NavLinks>
-                            </NavItem>
-
-                            <NavItem>
-                                <NavLinks to='/form'> Add user</NavLinks>
-                            </NavItem>
+                            {role == "Admin" &&
+                                <NavItem>
+                                    <NavLinks to='/form'> Add user</NavLinks>
+                                </NavItem>
+                            }
                             
 
                             <NavItemBtn>
 
-                                { button ? (
-                                    <NavBtnLink to="/log-in">
-                                        <Button primary> LogIn </Button>
+                                
+                                    {!role &&
+                                        <NavBtnLink to="/log-in">
+                                            <Button primary> LogIn </Button>
 
-                                    </NavBtnLink>
-                                ) : (
-                                    <NavBtnLink to="/log-in">
-                                        <Button fontBig primary>
-                                             LogIn
-
-                                        </Button>
-                                    </NavBtnLink>
-                                )}
+                                        </NavBtnLink>
+                                    }
+                                
 
               
 
                             </NavItemBtn>
-                            <LogOutButton button={button}></LogOutButton>
+                            {role && 
+                                <LogOutButton button={button}></LogOutButton>
+                            }
                             
                         </NavMenu>
 

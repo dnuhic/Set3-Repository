@@ -14,6 +14,7 @@ namespace SET3_Backend.Controllers
 {
     
     [Route("[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -37,15 +38,15 @@ namespace SET3_Backend.Controllers
         }
 
         //metoda napravljena samo za svrhu testiranja!!!
-        [HttpGet]
+        [HttpGet ("add")]
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
             Console.WriteLine("inside get");
-            RoleModel role = new RoleModel(RoleType.Admin);
+            RoleModel role = new RoleModel(RoleType.User);
             _context.RoleModels.Add(role);
             SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
             _context.SecurityQuestionModels.Add(question);
-            UserModel user = new UserModel("dzenan.nuhic@gmail.com", "dzenan", "nuhic",
+            UserModel user = new UserModel("dzenan.nuhic1@gmail.com", "dzenan", "nuhic",
                 "password", role, role.Id, question, question.Id, "test", false);
             _context.UserModels.Add(user);
             await _context.SaveChangesAsync();
@@ -72,7 +73,7 @@ namespace SET3_Backend.Controllers
             CookieOptions cookieOptions = new CookieOptions();
             cookieOptions.Secure = true;
             cookieOptions.HttpOnly = false;
-            cookieOptions.Expires = DateTime.UtcNow.AddDays(1);
+            cookieOptions.Expires = DateTime.UtcNow.AddMinutes(30);
             Response.Cookies.Append("jwt", token, cookieOptions);
 
             return Ok(token);
@@ -92,7 +93,7 @@ namespace SET3_Backend.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(5),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials
                 );
 
@@ -111,14 +112,28 @@ namespace SET3_Backend.Controllers
             return new Tuple<string, string, string>(name, email, role);
         }
 
-        [HttpGet(Name = "getusertoken")]
+        [EnableCors]
+        [HttpPost("getusertoken")]
         public async Task<ActionResult<UserToken>> GetUserToken()
         {
+            System.Diagnostics.Debug.WriteLine(HttpContext.Request.Body);
+            string body;
+           
 
-            String jsontoken = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+            using (var reader = new StreamReader(Request.Body))
+            {
+                body = await reader.ReadToEndAsync();
 
-            JwtSecurityToken token = JsonSerializer.Deserialize<JwtSecurityToken>(jsontoken);
-            var tokenUser = GetUserFromToken(token);
+                // Do something
+            }
+
+            String jsontoken = body.Split("=")[1].Replace("\"", "");
+            System.Diagnostics.Debug.WriteLine(jsontoken);
+
+            /*var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
+
+            var tokenUser = GetUserFromToken(ValidateToken(jsontoken));
             UserToken userToken = new UserToken(tokenUser.Item3);
 
  
