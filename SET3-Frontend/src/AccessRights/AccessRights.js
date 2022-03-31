@@ -1,60 +1,105 @@
-import React, { Component } from 'react';
-import './AccessRights/AccessRights.css';
+import { React,useState,useEffect } from 'react';
+import './AccessRights.css';
 
+const AccessRights = () => {
+    const [rights, setRights] = useState([]);
 
-
-export default class AccessRights extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            roles: []
+    useEffect(() => {
+        const getRights = async () => {
+            const rightsFromServer = await fetchRights()
+            setRights(rightsFromServer);
         }
-    }
-    refreshList() {
-        fetch('localhost:7194/api/RoleModels')
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ roles: data });
-            });
-    }
-    componentDidMount() {
-        this.refreshList();
-    }
-    render() {
-        const {
-            roles
-        } = this.state;
+        getRights();
+    }, [])
 
-        return (
+    const fetchRights = async () => {
+        const res = await fetch('https://localhost:7194/api/RoleModels')
+        const data = await res.json();
+        return data;
+    }
 
-            <div className="App">
-                <div className="Naslov">
-                    <h1>Promjena prava pristupa za sve korisnike</h1>
-                </div>
+    const postRights = async () => {
+        let requests = [];
+        for (const object of rights) {
+            console.log(JSON.stringify(object));
+            console.log('https://localhost:7194/api/RoleModels/' + object.id.toString())
+            requests.push(
+                fetch('https://localhost:7194/api/RoleModels/' + object.id.toString(), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'PUT',
+                    body: JSON.stringify(object)
+                }).then(async (response) => {
+                    const body = await response.text();
+                    if (response.status !== 200) throw Error(body.message);
+                    // if everything is fine resiolve to true or for example your body content
+                    return Promise.resolve(true);
+                }).catch((e) => {
+                    // if we encounter an error resolve to false
+                    console.log(e.message);
+                    console.error('there was an error:', e.message)
+                    return Promise.resolve(false);
+                })
+            )
+        }
+        await Promise.all(requests).then((results) => {
+            // here we have all the results
+            console.log('all requests finished!', results);
+            for (let i = 0; i < requests.length; i++) {
+                console.log(i, 'request resulted in', results[i]);
+            }
+        })
+    }
+
+    const changeRead= (index,e) => {
+        const temp = rights;
+        temp[index].readAccess = e.target.checked;
+        setRights(temp)
+    }
+    const changeWrite = (index, e) => {
+        const temp = rights;
+        temp[index].writeAccess = e.target.checked;
+        setRights(temp)
+    }
+    const changeDelete = (index, e) => {
+        const temp = rights;
+        temp[index].deleteAccess = e.target.checked;
+        setRights(temp)
+    }
+
+    return (
+                    <div className="App">
+            <div className="Naslov">
+                <h1>Promjena prava pristupa</h1>
+            </div>
+            <div>
                 <table >
                     <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Tip</th>
                             <th>Read</th>
                             <th>Write</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {roles.map(rol =>
-                            <tr key={rol.Id}>
-                                <td>{rol.Id}</td>
-                                <td>{rol.RoleName}</td>
-                                <td>{rol.ReadAccess}</td>
-                                <td>{rol.WriteAccess}</td>
-                                <td>{rol.DeleteAccess}</td>
+                <tbody>
+                    { rights.map((rol,index) =>
+                            <tr key={index}>
+                            <td>{rol.roleName}</td>
+                            <td><input type="checkbox" onChange={e => changeRead(index, e)} defaultChecked={rol.readAccess} /></td>
+                            <td><input type="checkbox" onChange={e => changeWrite(index, e)} defaultChecked={rol.writeAccess} /></td>
+                            <td><input type="checkbox" onChange={e => changeDelete(index, e)} defaultChecked={rol.deleteAccess} /></td>
                             </tr>
                         )}
                     </tbody>
-                </table>
-                <button type="button" id="spremi" name="formBtn">Save </button>
+            </table>
+                <button type="button" id="spremi" name="formBtn" onClick={e => postRights()}>Save </button>
+                </div>
             </div>
-        );
-    }
+        )
 }
+
+export default AccessRights
+
+
