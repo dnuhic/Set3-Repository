@@ -55,15 +55,12 @@ const UpdateUserComponent = (props) => {
       FirstName: document.getElementById("firstName").value,
       LastName: document.getElementById("lastName").value,
       Password: newPassword !== null && newPassword !== "" ? newPassword : user.password,
-      Question: {
-        id: 2,
-        Question: "pitanje",
-        },
       Role: {
           id: 1,
           roleType: 0,
-      },
-      QuestionId: 2,
+        },
+      RoleId: user.RoleId,
+      QuestionId: user.QuestionId,
       Answer: user.answer,
       Deleted: user.deleted,
     };

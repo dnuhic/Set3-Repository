@@ -15,69 +15,96 @@ const AddAUserForm = () => {
         console.log(pitanja);
 
       //  const nizPitanja = []
-        for (const k of pitanja) {
+        /*for (const k of pitanja) {
             nizPitanja.push(k.question);
-        }
-        setQuestions(nizPitanja);
-        console.log(nizPitanja[0])
-        console.log('ovo se smijesta u setter');
+        }*/
+        setQuestions(pitanja);
      //   console.log(questions);
     }, []);
 
-    const newUser = () => {
-
-        if (document.getElementById("ime").value == "" ||
-            document.getElementById("prezime").value == "" ||
-            document.getElementById("email").value == "" ||
-            document.getElementById("password").value == "" ||
-            document.getElementById("answer").value == "") {
-            alert("All fields must not be empty!");
-            return;
-        } else if (document.getElementById("password").value.length < 8) {
-            alert("Password must contain at least 8 characters!");
-            return;
-        } else if (!document.getElementById("email").value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
-            alert("Email must be valid!");
-            return;
+    const idPitanja = () => {
+        if (questions != null) {
+        for (let pitanje of questions) {
+            if (pitanje.question == document.getElementById("pitanja").value)
+                return pitanje.id;
         }
 
-        let user = {
-            "Email": document.getElementById("email").value,
-            "FirstName": document.getElementById("ime").value,
-            "LastName": document.getElementById("prezime").value,
-            "Password": document.getElementById("password").value,
-            "Question": {
-                "Question": "pitanje"
-            },
-            "QuestionId": 1,
-            "Answer": document.getElementById("answer").value,
-            "Deleted": false
+        return -1;
         }
-
-        setCreatedUser(user);
-
-        document.getElementById("ime").value = "";
-        document.getElementById("prezime").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("password").value = "";
-        document.getElementById("answer").value = "";
-        alert("Action completed!");
+        
     }
 
-    useEffect(async () => {
-        // POST request using fetch inside useEffect React hook
-        console.log(newUser)
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(createdUser)
-        };
-        fetch('https://localhost:7194/usermodels', requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-            });
+    const newUser = () => {
 
+        if (questions != null) {
+            if (document.getElementById("ime").value == "" ||
+                document.getElementById("prezime").value == "" ||
+                document.getElementById("e-mail").value == "" ||
+                document.getElementById("password").value == "" ||
+                document.getElementById("answer").value == "") {
+                alert("All fields must not be empty!");
+                return;
+            } else if (document.getElementById("password").value.length < 8) {
+                alert("Password must contain at least 8 characters!");
+                return;
+            } else if (!document.getElementById("e-mail").value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
+                alert("Email must be valid!");
+                return;
+            }
+
+            let user = {
+                "Email": document.getElementById("e-mail").value,
+                "FirstName": document.getElementById("ime").value,
+                "LastName": document.getElementById("prezime").value,
+                "Password": document.getElementById("password").value,
+                "Role": {
+                    "RoleType": 1
+                },
+                "RoleId": 1,
+                "QuestionId": idPitanja(),
+                "Answer": document.getElementById("answer").value,
+                "Deleted": false
+            }
+
+            setCreatedUser(user);
+
+            console.log(user);
+
+            document.getElementById("ime").value = "";
+            document.getElementById("prezime").value = "";
+            document.getElementById("e-mail").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("answer").value = "";
+            alert("Action completed!");
+
+        }
+
+       
+    }
+
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+
+
+    useEffect(async () => {
+        if (pitanja != null) {
+            // POST request using fetch inside useEffect React hook
+            console.log(createdUser);
+            const requestOptions = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+                credentials: 'same-origin',
+                body: JSON.stringify(createdUser)
+            };
+            fetch('https://localhost:7194/usermodels', requestOptions)
+                .then(response => { response.json(); console.log(response); })
+                .then(data => {
+                    console.log(data)
+                });
+
+        }
         // empty dependency array means this effect will only run once (like componentDidMount in classes)
     }, [createdUser]);
 
@@ -112,7 +139,7 @@ const AddAUserForm = () => {
                 </div>
             </div>
             <input
-                id="email"
+                id="e-mail"
                 type="email"
                 className="form-control"
                 placeholder="E-mail"
@@ -124,15 +151,13 @@ const AddAUserForm = () => {
                 <input type="password" className="form-control" id="password" placeholder="Password"></input>
             </div>
 
-            <div className="dropdown">
-                <button id="dropdownMenu" className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Choose a question
-                </button>
-                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    
-                </ul> 
-              
-            </div> 
+            <div>Choose a question</div>
+            <select name="pitanja" id="pitanja">
+                {questions && questions.length &&
+                    questions.map(q => <option>{q.question}</option>)
+                }
+            </select>
+            
 
             <input
                 id="answer"

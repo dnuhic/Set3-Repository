@@ -13,9 +13,20 @@ export default function ResetPassword() {
     const [questions, setQuestions] = useState(null);
     const [newPassword, setNewPassword] = useState(null);
 
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+
     const getData = async () => {
         //console.log(id);
-        const response = await fetch('https://localhost:7194/usermodels/'+id);
+        const requestOptions = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+
+        const response = await fetch('https://localhost:7194/usermodels/' + id, requestOptions);
         //console.log(response);
         const data = await response.json();
         //console.log(data);        

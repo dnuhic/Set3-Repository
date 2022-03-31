@@ -47,7 +47,7 @@ namespace SET3_Backend.Controllers
             SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
             _context.SecurityQuestionModels.Add(question);
             UserModel user = new UserModel("dzenan.nuhic1@gmail.com", "dzenan", "nuhic",
-                "password", role, role.Id, question, question.Id, "test", false);
+                "password", role, role.Id, question.Id, "test", false);
             _context.UserModels.Add(user);
             await _context.SaveChangesAsync();
             return user;
@@ -67,7 +67,7 @@ namespace SET3_Backend.Controllers
             }
             //treba provjeriti da li je nesto od ovoga null
             user.Role = await _context.RoleModels.FindAsync(user.RoleId);
-            user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
+            //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
 
             CookieOptions cookieOptions = new CookieOptions();

@@ -13,6 +13,7 @@ const Navbar = () => {
     const [click, setClick] = useState(false);
     const [button, setButton] = useState(true);
     const [role, setRole] = useState(null);
+    const [user, setUser] = useState(null);
 
     const handleClick = () => setClick(!click);
     const showButton = () => {
@@ -43,6 +44,32 @@ const Navbar = () => {
 
     }, [])
 
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+
+    useEffect(async () => {
+        if (role != null) {
+ const requestOptions = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+
+        const response = await fetch('https://localhost:7194/authentication/getUserId', requestOptions);
+
+        const data = await response.json();
+
+            setUser(data);
+            console.log(user);
+        }
+
+       
+
+
+    }, [role])
+
     
 
     useEffect(
@@ -68,11 +95,10 @@ const Navbar = () => {
                             <NavItem>
                                 <NavLinks to='/home'> Home </NavLinks>
                             </NavItem>
-
-                            <NavItem>
-                                <NavLinks to='/settings'> Settings </NavLinks>
-          
-                            </NavItem>
+                            {role && user && 
+                                <NavItem>
+                                <NavLinks to={'/resetpassword/' + user.id}> Settings </NavLinks>
+                                </NavItem>}
                             {role == "Admin" && 
                                 <NavItem>
                                     <NavLinks to='/users'> Users </NavLinks>

@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace SET3_Backend.Controllers
 {
@@ -58,16 +59,13 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /usermodels/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
-            try
-            {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
+            if (ValidateToken(token) != null)
                     {
                         var userModel = await _context.UserModels.FindAsync(id);
                         if (userModel == null)
@@ -79,12 +77,7 @@ namespace SET3_Backend.Controllers
                     }
                     else
                         return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
+
             return NoContent();
 
         }
@@ -141,25 +134,24 @@ namespace SET3_Backend.Controllers
 
         // POST: api/UserModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
             
             try
             {
-                String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
+                var token = Request.Headers["Authorization"];
+                token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-                if (token != null)
-                {
-                    if (ValidateToken(token) != null)
-                    {
+                if (ValidateToken(token) != null)
+                  {
                         _context.UserModels.Add(userModel);
                         await _context.SaveChangesAsync();
                         return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
-                    }
-                    else
-                        return NoContent();
-                }
+                 }
+                  else
+                    return NoContent();
+                
             }
             catch (Exception ex)
             {
@@ -206,8 +198,8 @@ namespace SET3_Backend.Controllers
 
 
 }
-
-private bool UserModelExists(int id)
+       
+        private bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
         }
@@ -233,6 +225,41 @@ private bool UserModelExists(int id)
             {
                 return null;
             }
+        }
+
+        public class ZaPromjenuSifre
+        {
+            public int Id { get; set; }
+            public string NewPassword { get; set; }
+        }
+
+        [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
+        public async Task<ActionResult<UserModel>> changePassword()
+        {
+            string proba;
+
+            Console.WriteLine("USJE LI OVDJE??");
+
+            using (var reader = new StreamReader(Request.Body))
+            {
+                proba = await reader.ReadToEndAsync();
+
+                // Do something
+            }
+
+            ZaPromjenuSifre unos = JsonSerializer.Deserialize<ZaPromjenuSifre>(proba);
+
+            Console.WriteLine(unos.Id);
+            Console.WriteLine(unos.NewPassword);
+
+            var user = await _context.UserModels.FindAsync(unos.Id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            user.Password = unos.NewPassword;
+            await _context.SaveChangesAsync();
+            return Ok(user);
         }
     }
 }
