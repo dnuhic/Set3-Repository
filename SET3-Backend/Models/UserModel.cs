@@ -17,6 +17,7 @@ namespace SET3_Backend.Models
 		public int QuestionId { get; set; }
 		public string Answer { get; set; }
 		public bool Deleted { get; set; }
+        public bool TFA { get; set; }
 
         public UserModel() { }
 
@@ -32,6 +33,7 @@ namespace SET3_Backend.Models
             QuestionId = questionId;
             Answer = answer;
             Deleted = deleted;
+            TFA = false;
         }
     }
 }
