@@ -84,18 +84,15 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPost("{id}"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
-            
 
-            try
-            {
-                
-                    String token = Request.Cookies.Where(c => c.Key == "jwt").Select(c => c.Value).First();
 
-                if (token != null)
-                {
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+      
                     if (ValidateToken(token) != null)
                     {
                         if (id != userModel.Id)
@@ -103,14 +100,16 @@ namespace SET3_Backend.Controllers
                             return BadRequest();
                         }
 
-                        _context.Entry(userModel).State = EntityState.Modified;
+                        //_context.Entry(userModel).State = EntityState.Modified;
+                        _context.Update(userModel);
 
                         try
                         {
                             await _context.SaveChangesAsync();
                         }
-                        catch (DbUpdateConcurrencyException)
+                        catch (Exception e)
                         {
+       
                             if (!UserModelExists(id))
                             {
                                 return NotFound();
@@ -122,13 +121,8 @@ namespace SET3_Backend.Controllers
                         }
                     }
                     else return NoContent();
-                }
-            }
-
-            catch (Exception ex)
-            {
-                return NoContent();
-            }
+                
+        
             return NoContent();
         }
 

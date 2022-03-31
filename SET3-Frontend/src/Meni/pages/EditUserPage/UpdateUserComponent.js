@@ -26,9 +26,18 @@ const UpdateUserComponent = (props) => {
   const { id } = useParams();
   const [editPassword, setEditPassword] = useState(true);
 
+  function getCookie(key) {
+     var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+     return b ? b.pop() : "";
+  }
   const getData = async () => {
-    console.log(id);
-    const response = await fetch("https://localhost:7194/usermodels/" + id);
+      console.log(id);
+      const requestOptions = {
+          method: 'GET',
+          headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+          credentials: 'same-origin'
+      };
+    const response = await fetch("https://localhost:7194/usermodels/" + id, requestOptions);
     console.log(response);
     const data = await response.json();
     console.log(data);
@@ -59,8 +68,8 @@ const UpdateUserComponent = (props) => {
           id: 1,
           roleType: 0,
         },
-      RoleId: user.RoleId,
-      QuestionId: user.QuestionId,
+      RoleId: user.roleId,
+      QuestionId: user.questionId,
       Answer: user.answer,
       Deleted: user.deleted,
     };
@@ -71,11 +80,11 @@ const UpdateUserComponent = (props) => {
 
   useEffect(async () => {
     console.log(updatedUser);
-
     const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedUser),
+      method: "POST",
+        headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+        credentials: 'same-origin'
     };
 
     const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);

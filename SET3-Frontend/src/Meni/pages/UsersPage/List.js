@@ -10,6 +10,10 @@ function List(props) {
     const [user, setToDelete] = useState(null);
     const [deletedUser, setDeletedUser] = useState(null);
 
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
 
     useEffect(() => {
         setSampleData(props.sampleData);
@@ -48,7 +52,7 @@ function List(props) {
                 "Role": {
                     "RoleType": 1
                 },
-                "RoleId": user.RoleId,
+                "RoleId": user.roleId,
                 "QuestionId": user.questionId,
                 "Answer": user.answer,
                 "Deleted": true
@@ -60,13 +64,16 @@ function List(props) {
         
     }, [user])
 
+
+
     useEffect(async () => {
         console.log(deletedUser);
         if (deletedUser != null) {
             const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(deletedUser)
+                method: "POST",
+                headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+                body: JSON.stringify(deletedUser),
+                credentials: 'same-origin'
             };
 
             const response = await fetch('https://localhost:7194/usermodels/' + user.id, requestOptions);
