@@ -7,7 +7,7 @@ const context = [
 
 module.exports = function (app) {
     const appProxy = createProxyMiddleware(context, {
-        target: 'https://localhost:7194',
+        target: 'https://set3-backend20220330235604.azurewebsites.net/',
         secure: false
     });
 

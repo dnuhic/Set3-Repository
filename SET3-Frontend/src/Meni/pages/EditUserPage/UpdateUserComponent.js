@@ -44,7 +44,7 @@ const UpdateUserComponent = (props) => {
           headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
           credentials: 'same-origin'
       };
-    const response = await fetch("https://localhost:7194/usermodels/" + id, requestOptions);
+    const response = await fetch("https://set3-backend20220330235604.azurewebsites.net//usermodels/" + id, requestOptions);
     console.log(response);
     const data = await response.json();
     console.log(data);
@@ -94,7 +94,7 @@ const UpdateUserComponent = (props) => {
         credentials: 'same-origin'
     };
 
-    const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);
+    const response = await fetch("https://set3-backend20220330235604.azurewebsites.net//usermodels/" + user.id, requestOptions);
     const data = await response.json();
     console.log(data);
   }, [updatedUser]);

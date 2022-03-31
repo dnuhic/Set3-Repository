@@ -22,7 +22,7 @@ const Users = () => {
 			credentials: 'same-origin'
 		};
 
-		const response = await fetch('https://localhost:7194/usermodels', requestOptions);
+		const response = await fetch('https://set3-backend20220330235604.azurewebsites.net//usermodels', requestOptions);
 
 		console.log(response);
 		const data = await response.json();

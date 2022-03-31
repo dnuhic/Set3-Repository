@@ -35,7 +35,7 @@ const Navbar = () => {
             body: cookie
         };
 
-        const response = await fetch('https://localhost:7194/authentication/getusertoken', requestOptions);
+        const response = await fetch('https://set3-backend20220330235604.azurewebsites.net//authentication/getusertoken', requestOptions);
 
         const data = await response.json();
 
@@ -57,7 +57,7 @@ const Navbar = () => {
             credentials: 'same-origin'
         };
 
-        const response = await fetch('https://localhost:7194/authentication/getUserId', requestOptions);
+        const response = await fetch('https://set3-backend20220330235604.azurewebsites.net//authentication/getUserId', requestOptions);
 
         const data = await response.json();
 

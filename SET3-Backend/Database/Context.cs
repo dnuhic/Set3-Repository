@@ -31,7 +31,7 @@ namespace SET3_Backend.Database
         //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
         //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //Ovaj dio koda kreira lokalnu bazu
             
             //Update-Database
@@ -46,6 +46,6 @@ namespace SET3_Backend.Database
             //Da vidite gdje vam se nalazi baza:
             //View->Sql server object explorer
             //ima baza (localdb)\Set3 StoreDB je ime lokalnaBaza
-        }
+        }*/
     }
 }
