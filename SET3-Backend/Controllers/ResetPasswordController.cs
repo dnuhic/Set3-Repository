@@ -7,7 +7,6 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class ResetPasswordController : ControllerBase
     {
@@ -21,13 +20,15 @@ namespace SET3_Backend.Controllers
 
         // GET: api/<ResetPasswordController>
         [HttpGet]
+        [Route("api/")]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
         // GET api/<ResetPasswordController>/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("api/{id}")]
         public string Get(int id)
         {
             return "value";
@@ -35,13 +36,15 @@ namespace SET3_Backend.Controllers
 
 
         // PUT api/<ResetPasswordController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("api/{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<ResetPasswordController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("api/{id}")]
         public void Delete(int id)
         {
         }

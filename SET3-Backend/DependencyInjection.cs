@@ -32,6 +32,8 @@ namespace SET3_Backend
             services.AddTransient<IMailService, Services.MailService>();
             //Ovdje se dodaju servisi za dependency injection
 
+            services.AddSwaggerGen();
+
             return services;
         }
     }

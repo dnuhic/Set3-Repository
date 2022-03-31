@@ -10,8 +10,7 @@ using System.Text;
 
 namespace SET3_Backend.Controllers
 {
-    
-    [Route("[controller]")]
+
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -26,6 +25,7 @@ namespace SET3_Backend.Controllers
 
         //metoda napravljena samo za svrhu testiranja!!!
         [HttpGet]
+        [Route("/")]
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
             Console.WriteLine("inside get");
@@ -42,6 +42,7 @@ namespace SET3_Backend.Controllers
 
         [EnableCors]
         [HttpPost]
+        [Route("/")]
         public async Task<ActionResult<string>> Login([FromBody] UserDto userDto)
         {
 

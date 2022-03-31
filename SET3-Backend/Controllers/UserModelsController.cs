@@ -19,7 +19,6 @@ using System.Text;
 namespace SET3_Backend.Controllers
 {
     [EnableCors("CorsPolicy")]
-    [Route("[controller]")]
     [ApiController]
     public class UserModelsController : ControllerBase
     {
@@ -36,7 +35,8 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /userModels
-        [HttpGet(Name = "usermodels")]
+        [HttpGet]
+        [Route("/usermodels")]
         public IEnumerable<UserModel> GetUserModels()
         {
             //Console.WriteLine("inside get usermodels");
@@ -68,7 +68,8 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /usermodels/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("/{id}")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
             _logger.LogInformation("Fetching UserModel started");
@@ -85,6 +86,7 @@ namespace SET3_Backend.Controllers
         // PUT: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Route("/{id}")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
             _logger.LogInformation("Put UserModel started");
@@ -117,6 +119,7 @@ namespace SET3_Backend.Controllers
         // POST: api/UserModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("/")]
         public async Task<ActionResult<UserModel>> PostUserModel(UserModel userModel)
         {
             _context.UserModels.Add(userModel);
@@ -126,7 +129,8 @@ namespace SET3_Backend.Controllers
         }
 
         // DELETE: api/UserModels/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("/{id}")]
         public async Task<IActionResult> DeleteUserModel(int id)
         {
             var userModel = await _context.UserModels.FindAsync(id);
@@ -147,7 +151,9 @@ namespace SET3_Backend.Controllers
             public string NewPassword { get; set; }
         }
 
-        [HttpPost(("changePassword"))] //mijenja sifru usera u bazi
+
+        [HttpPost] //mijenja sifru usera u bazi
+        [Route("/changePassword")]
         public async Task<ActionResult<UserModel>> changePassword()
         {
             string proba;

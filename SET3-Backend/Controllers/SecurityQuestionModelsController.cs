@@ -13,7 +13,6 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("[controller]")]
     [EnableCors("CorsPolicy")]
     [ApiController]
     public class SecurityQuestionModelsController : ControllerBase
@@ -27,13 +26,15 @@ namespace SET3_Backend.Controllers
 
         // GET: api/SecurityQuestionModels // ovo ce se koristiti u check list-i da onaj ko pravi racun izabere security pitanje
         [HttpGet]
+        [Route("/")]
         public async Task<ActionResult<IEnumerable<SecurityQuestionModel>>> GetSecurityQuestionModels()
         {
             return await _context.SecurityQuestionModels.ToListAsync();
         }
 
         // GET: api/SecurityQuestionModels/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("/{id}")]
         public async Task<ActionResult<SecurityQuestionModel>> GetSecurityQuestionModel(int id)
         {
             var securityQuestionModel = await _context.SecurityQuestionModels.FindAsync(id);
@@ -48,7 +49,8 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/SecurityQuestionModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("/{id}")]
         public async Task<IActionResult> PutSecurityQuestionModel(int id, SecurityQuestionModel securityQuestionModel)
         {
             if (id != securityQuestionModel.Id)
@@ -80,6 +82,7 @@ namespace SET3_Backend.Controllers
         // POST: api/SecurityQuestionModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Route("/")]
         public async Task<ActionResult<SecurityQuestionModel>> PostSecurityQuestionModel(SecurityQuestionModel securityQuestionModel)
         {
             _context.SecurityQuestionModels.Add(securityQuestionModel);
@@ -89,7 +92,8 @@ namespace SET3_Backend.Controllers
         }
 
         // DELETE: api/SecurityQuestionModels/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("/{id}")]
         public async Task<IActionResult> DeleteSecurityQuestionModel(int id)
         {
             var securityQuestionModel = await _context.SecurityQuestionModels.FindAsync(id);
@@ -104,7 +108,8 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}/forgotPassword")]//ovo radi jeej
+        [HttpGet]//ovo radi jeej
+        [Route("/{id}/forgotPassword")]
         public async Task<ActionResult<SecurityQuestionModel>> GetSecQuestionOfUser(int id) //ovo je da se nadje security pitanje usera
         {
             //return await _context.SecurityQuestionModels.ToListAsync();
@@ -127,6 +132,7 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpPost("checkAnswer")]// da projeri je li se odudara odgovor sa onim u bazi
+        [Route("/checkAnswer")]
         public async Task<bool> IsAnswerCorrect()
         {
             string proba;

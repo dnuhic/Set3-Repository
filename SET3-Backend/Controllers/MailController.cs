@@ -8,7 +8,6 @@ using SET3_Backend.Services;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     [EnableCors("CorsPolicy")]
     public class MailController : ControllerBase
@@ -23,6 +22,7 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpPost("send")]
+        [Route("api/")]
         public async Task<IActionResult> SendMail(MailRequest request)
         {
            
@@ -44,7 +44,8 @@ namespace SET3_Backend.Controllers
 
         }
 
-        [HttpPost("reset")]
+        [HttpPost)]
+        [Route("api/reset")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel obj)
         {
             var email = DecryptString(obj.id);
