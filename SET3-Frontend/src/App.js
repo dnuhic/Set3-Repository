@@ -57,3 +57,5 @@ export default class App extends Component {
         this.setState({ forecasts: data, loading: false });
     }
 }
+
+
