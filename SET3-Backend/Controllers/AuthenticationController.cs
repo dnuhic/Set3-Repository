@@ -112,6 +112,25 @@ namespace SET3_Backend.Controllers
             return new Tuple<string, string, string>(name, email, role);
         }
 
+        [HttpGet("getUserId")]
+        public async Task<ActionResult<UserModel>> getUserIdFromToken()
+        {
+
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+            
+
+            /*var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
+
+            var tokenUser = GetUserFromToken(ValidateToken(token));
+
+            var user = _context.UserModels.AsNoTracking().Where(u => u.Email == tokenUser.Item2).FirstOrDefault();
+            if (user is not null)
+                return user;
+            return BadRequest();
+        }
+
         [EnableCors]
         [HttpPost("getusertoken")]
         public async Task<ActionResult<UserToken>> GetUserToken()
