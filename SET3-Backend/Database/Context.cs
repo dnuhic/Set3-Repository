@@ -16,10 +16,12 @@ namespace SET3_Backend.Database
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
 
-            if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
-            { 
-                //conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
-            }
+
+            //if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
+            //{ 
+            //    conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
+            //}
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -31,8 +33,7 @@ namespace SET3_Backend.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //Ovaj dio koda kreira lokalnu bazu
-            //run the following command in Package Manager Console. (tools->NuGet Package Manager -> Packet manager console)
-            //Add-Migration Initial
+            
             //Update-Database
             var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
             optionsBuilder.UseSqlServer(dbConnString);

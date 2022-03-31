@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SET3_Backend.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,12 +72,6 @@ namespace SET3_Backend.Migrations
                         principalTable: "RoleModels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserModels_SecurityQuestionModels_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "SecurityQuestionModels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,11 +113,6 @@ namespace SET3_Backend.Migrations
                 column: "UserModelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserModels_QuestionId",
-                table: "UserModels",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserModels_RoleId",
                 table: "UserModels",
                 column: "RoleId");
@@ -135,6 +124,9 @@ namespace SET3_Backend.Migrations
                 name: "LoggingModels");
 
             migrationBuilder.DropTable(
+                name: "SecurityQuestionModels");
+
+            migrationBuilder.DropTable(
                 name: "ActionModels");
 
             migrationBuilder.DropTable(
@@ -142,9 +134,6 @@ namespace SET3_Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoleModels");
-
-            migrationBuilder.DropTable(
-                name: "SecurityQuestionModels");
         }
     }
 }

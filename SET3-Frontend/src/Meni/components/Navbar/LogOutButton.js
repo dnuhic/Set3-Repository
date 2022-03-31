@@ -48,8 +48,13 @@ function SimpleDialog(props) {
         onClose();
     };
     const handleLogOut = () => {
+        document.cookie.split(";").forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
         onClose();
         navigate("/log-in", { replace: true });
+        window.location.reload(false);
+        
     }
 
     return (

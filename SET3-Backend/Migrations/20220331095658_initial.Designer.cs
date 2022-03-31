@@ -12,12 +12,8 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
-<<<<<<<< HEAD:SET3-Backend/Migrations/20220330162636_Initial.Designer.cs
-    [Migration("20220330162636_Initial")]
-========
-    [Migration("20220330150207_Initial")]
->>>>>>>> development:SET3-Backend/Migrations/20220330150207_Initial.Designer.cs
-    partial class Initial
+    [Migration("20220331095658_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -145,8 +141,6 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId");
-
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserModels");
@@ -173,19 +167,11 @@ namespace SET3_Backend.Migrations
 
             modelBuilder.Entity("SET3_Backend.Models.UserModel", b =>
                 {
-                    b.HasOne("SET3_Backend.Models.SecurityQuestionModel", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SET3_Backend.Models.RoleModel", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Question");
 
                     b.Navigation("Role");
                 });

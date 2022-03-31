@@ -26,6 +26,7 @@ const Login = () => {
             if (response.status >= 200 && response.status<300) {
                 console.log("Sve OK: "+ response.status );
                 navigate('/');
+                window.location.reload(false);
             } else {
                 throw new Error("Greska");
             }
