@@ -28,7 +28,7 @@ namespace SET3_Backend
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("https://localhost:3000");
+                    .WithOrigins("https://localhost:3000", "https://si-set3.herokuapp.com/");
                 }));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));

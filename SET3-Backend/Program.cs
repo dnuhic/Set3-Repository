@@ -53,7 +53,7 @@ var app = builder.Build();
     app.UseSwaggerUI();
 //}
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000").AllowCredentials());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000", "https://si-set3.herokuapp.com/").AllowCredentials());
 
 app.UseHttpsRedirection();
 
