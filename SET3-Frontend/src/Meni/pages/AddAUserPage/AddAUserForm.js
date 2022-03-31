@@ -9,7 +9,7 @@ const AddAUserForm = () => {
     const nizPitanja = []
 
     useEffect( async() => {
-        const pitanjaResponse =  await fetch('https://localhost:7194/SecurityQuestionModels')
+        const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
         const pitanja =  await pitanjaResponse.json();
 
         console.log(pitanja);
@@ -98,7 +98,7 @@ const AddAUserForm = () => {
                 credentials: 'same-origin',
                 body: JSON.stringify(createdUser)
             };
-            fetch('https://localhost:7194/usermodels', requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions)
                 .then(response => { response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
