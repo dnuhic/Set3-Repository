@@ -42,11 +42,11 @@ namespace SET3_Backend.Controllers
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
             Console.WriteLine("inside get");
-            RoleModel role = new RoleModel(RoleType.User);
+            RoleModel role = new RoleModel(RoleType.Admin);
             _context.RoleModels.Add(role);
             SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
             _context.SecurityQuestionModels.Add(question);
-            UserModel user = new UserModel("dzenan.nuhic1@gmail.com", "dzenan", "nuhic",
+            UserModel user = new UserModel("admin@gmail.com", "dzenan", "nuhic",
                 "password", role, role.Id, question.Id, "test", false);
             _context.UserModels.Add(user);
             await _context.SaveChangesAsync();

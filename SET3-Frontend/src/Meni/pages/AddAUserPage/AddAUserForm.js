@@ -89,7 +89,7 @@ const AddAUserForm = () => {
 
 
     useEffect(async () => {
-        if (pitanja != null) {
+        if (nizPitanja != null) {
             // POST request using fetch inside useEffect React hook
             console.log(createdUser);
             const requestOptions = {

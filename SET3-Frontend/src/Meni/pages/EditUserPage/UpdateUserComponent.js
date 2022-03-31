@@ -26,6 +26,13 @@ const UpdateUserComponent = (props) => {
   const { id } = useParams();
   const [editPassword, setEditPassword] = useState(true);
 
+    const [selectedOption, setSelectedOption] = useState("User");
+
+
+    function onValueChange(event) {
+        setSelectedOption(event.target.value);
+    }
+
   function getCookie(key) {
      var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
      return b ? b.pop() : "";
@@ -174,7 +181,31 @@ const UpdateUserComponent = (props) => {
               </div>
 
               <div className="edit-role">
-                <p>edit role </p>
+                              <h1>Edit role </h1>
+                              <div>
+                                  <div className="radio">
+                                      <label>
+                                          <input
+                                              type="radio"
+                                              value="User"
+                                              checked={selectedOption === "User"}
+                                              onChange={onValueChange}
+                                          />
+                                          User
+                                      </label>
+                                  </div>
+                                  <div className="radio">
+                                      <label>
+                                          <input
+                                              type="radio"
+                                              value="Admin"
+                                              checked={selectedOption === "Admin"}
+                                              onChange={onValueChange}
+                                          />
+                                          Admin
+                                      </label>
+                                  </div>
+                              </div>
               </div>
             </div>
 
