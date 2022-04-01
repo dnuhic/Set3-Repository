@@ -101,7 +101,8 @@ export default function ResetPassword() {
     const handleOnClick = () => {
         if (document.getElementById('novaSifra1').value.trim() == document.getElementById('novaSifra2').value.trim()) {
             console.log('Nova sifra glas' + document.getElementById('novaSifra1').value.trim())
-                    setNewPassword(document.getElementById('novaSifra1').value);
+            setNewPassword(document.getElementById('novaSifra1').value);
+                alert("You have successfully changed your password");
                 }
                 else {
                     alert("Passwords are not matching");

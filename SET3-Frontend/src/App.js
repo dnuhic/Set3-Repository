@@ -12,6 +12,7 @@ import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
 import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
 import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
+import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 
 
 function App() {
@@ -70,7 +71,7 @@ function App() {
 
                 <Routes>
 
-                    <Route path="/users/:id" element={<UpdateUserComponent />} />
+                    <Route path="/users/:id" element={<EditUserComponent />} />
                 </Routes>
 
 
