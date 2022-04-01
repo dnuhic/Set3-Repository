@@ -6,6 +6,7 @@ using SET3_Backend.Database;
 using SET3_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -46,8 +47,10 @@ namespace SET3_Backend.Controllers
             _context.RoleModels.Add(role);
             SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
             _context.SecurityQuestionModels.Add(question);
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
             UserModel user = new UserModel("admin@gmail.com", "dzenan", "nuhic",
-                "password", role, role.Id, question.Id, "test", false);
+                passwordHash, role, role.Id, question.Id, "test", false);
             _context.UserModels.Add(user);
             await _context.SaveChangesAsync();
             return user;
@@ -61,7 +64,11 @@ namespace SET3_Backend.Controllers
             Console.WriteLine("inside post");
             if (userDto == null) return BadRequest("User not specified");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
-            if (user == null || !userDto.Password.Equals(user.Password))
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userDto.Password)));
+            Console.WriteLine(passwordHash);
+            Console.WriteLine(userDto.Password);
+            if (user == null || !passwordHash.Equals(user.Password))
             {
                 return BadRequest("Incorrect email or password.");
             }
@@ -102,7 +109,7 @@ namespace SET3_Backend.Controllers
             return jwt;
         }
 
-        public Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
+        private Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
         {
             //ovo bi se moglo napraviti da nekad vraca user-a, ali prvo treba vidjeti sta ce se
             //desiti sa atributima role i security question
@@ -159,7 +166,7 @@ namespace SET3_Backend.Controllers
             return userToken;
         }
 
-        public JwtSecurityToken ValidateToken(string token)
+        private JwtSecurityToken ValidateToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             TokenValidationParameters validationParameters = new TokenValidationParameters

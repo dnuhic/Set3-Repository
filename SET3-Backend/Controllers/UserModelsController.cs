@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
+using System.Security.Cryptography;
 
 namespace SET3_Backend.Controllers
 {
@@ -136,7 +137,8 @@ namespace SET3_Backend.Controllers
             {
                 var token = Request.Headers["Authorization"];
                 token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
-
+                var sha = SHA256.Create();
+                userModel.Password = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userModel.Password)));
                 if (ValidateToken(token) != null)
                   {
                         _context.UserModels.Add(userModel);
@@ -246,12 +248,15 @@ namespace SET3_Backend.Controllers
             Console.WriteLine(unos.Id);
             Console.WriteLine(unos.NewPassword);
 
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(unos.NewPassword)));
+
             var user = await _context.UserModels.FindAsync(unos.Id);
             if (user == null)
             {
                 return BadRequest();
             }
-            user.Password = unos.NewPassword;
+            user.Password = passwordHash;
             await _context.SaveChangesAsync();
             return Ok(user);
         }
