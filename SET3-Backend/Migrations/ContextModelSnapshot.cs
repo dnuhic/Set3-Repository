@@ -75,8 +75,18 @@ namespace SET3_Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("RoleType")
-                        .HasColumnType("int");
+                    b.Property<bool>("DeleteAccess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ReadAccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("WriteAccess")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -134,12 +144,11 @@ namespace SET3_Backend.Migrations
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("UserModels");
                 });
@@ -161,17 +170,6 @@ namespace SET3_Backend.Migrations
                     b.Navigation("Action");
 
                     b.Navigation("UserModel");
-                });
-
-            modelBuilder.Entity("SET3_Backend.Models.UserModel", b =>
-                {
-                    b.HasOne("SET3_Backend.Models.RoleModel", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

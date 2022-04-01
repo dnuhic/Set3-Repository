@@ -49,10 +49,7 @@ function List(props) {
                 "FirstName": user.firstName,
                 "LastName": user.lastName,
                 "Password": user.password,
-                "Role": {
-                    "RoleType": 1
-                },
-                "RoleId": user.roleId,
+                "RoleName": user.roleName,
                 "QuestionId": user.questionId,
                 "Answer": user.answer,
                 "Deleted": true

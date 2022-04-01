@@ -71,11 +71,7 @@ const UpdateUserComponent = (props) => {
       FirstName: document.getElementById("firstName").value,
       LastName: document.getElementById("lastName").value,
       Password: newPassword !== null && newPassword !== "" ? newPassword : user.password,
-      Role: {
-          id: 1,
-          roleType: 0,
-        },
-      RoleId: user.roleId,
+      RoleName: user.roleName,
       QuestionId: user.questionId,
       Answer: user.answer,
       Deleted: user.deleted,
@@ -211,11 +207,6 @@ const UpdateUserComponent = (props) => {
 
             <div className="updatePassword-box">
               <h1>Change Password</h1>
-              <label>
-                {" "}
-                Current Password:
-                <input id="password" type="password" value={currentPassword} readOnly />
-              </label>
               <label>
                 {" "}
                 New Password:

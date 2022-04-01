@@ -38,22 +38,51 @@ namespace SET3_Backend.Controllers
             _context = context;
         }
 
+        [HttpGet("createFirstData")]
+        public async Task<ActionResult<UserModel>> CreateFirstData()
+        {
+            if(!_context.RoleModels.Any())
+            {
+                RoleModel user = new RoleModel(RoleType.User.ToString(), true, false, false);
+                _context.RoleModels.Add(user);
+
+                RoleModel admin = new RoleModel(RoleType.Admin.ToString(), true, true, true);
+                _context.RoleModels.Add(admin);
+            }
+
+            if (!_context.SecurityQuestionModels.Any())
+            {
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your favourite animal?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your favourite color?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your mothers name?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream destination?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream car?"));
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         //metoda napravljena samo za svrhu testiranja!!!
         [HttpGet ("add")]
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
-            Console.WriteLine("inside get");
-            RoleModel role = new RoleModel(RoleType.Admin);
-            _context.RoleModels.Add(role);
-            SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
-            _context.SecurityQuestionModels.Add(question);
-            var sha = SHA256.Create();
-            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
-            UserModel user = new UserModel("admin@gmail.com", "dzenan", "nuhic",
-                passwordHash, role, role.Id, question.Id, "test", false);
-            _context.UserModels.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            if (_context.RoleModels.Any() && _context.SecurityQuestionModels.Any())
+            {
+                SecurityQuestionModel question = await _context.SecurityQuestionModels.FirstOrDefaultAsync();
+
+                var sha = SHA256.Create();
+                var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
+                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash, RoleType.Admin.ToString(), question!.Id, "Odgovor", false);
+                _context.UserModels.Add(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+
+            // AKO VRATI BAD REQUEST POZOVITE SLIJEDECI GET PRIJE:
+            return BadRequest();
+                
+            
         }
 
         [EnableCors]
@@ -72,8 +101,6 @@ namespace SET3_Backend.Controllers
             {
                 return BadRequest("Incorrect email or password.");
             }
-            //treba provjeriti da li je nesto od ovoga null
-            user.Role = await _context.RoleModels.FindAsync(user.RoleId);
             //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
 
@@ -91,7 +118,7 @@ namespace SET3_Backend.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, Enum.GetName(typeof(RoleType), user.Role.RoleType)),
+                new Claim(ClaimTypes.Role, Enum.GetName(typeof(RoleType), Enum.Parse<RoleType>(user.RoleName))),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
             };
 

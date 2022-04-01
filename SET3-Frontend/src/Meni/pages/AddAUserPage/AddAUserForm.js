@@ -52,15 +52,13 @@ const AddAUserForm = () => {
                 return;
             }
 
+            
             let user = {
                 "Email": document.getElementById("e-mail").value,
                 "FirstName": document.getElementById("ime").value,
                 "LastName": document.getElementById("prezime").value,
                 "Password": document.getElementById("password").value,
-                "Role": {
-                    "RoleType": 1
-                },
-                "RoleId": 1,
+                "RoleName": "User",
                 "QuestionId": idPitanja(),
                 "Answer": document.getElementById("answer").value,
                 "Deleted": false
