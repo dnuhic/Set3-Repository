@@ -6,12 +6,13 @@ namespace SET3_Backend.Models
         
         [Key]
         public int Id { get; set; }
-        public RoleType RoleType { get; set; }
+        public int RoleType { get; set; }
 
         public RoleModel() { }
+        
         public RoleModel(RoleType roleType)
         {
-            this.RoleType = roleType;
+            this.RoleType = ((int)roleType);
         }
     }
     public enum RoleType

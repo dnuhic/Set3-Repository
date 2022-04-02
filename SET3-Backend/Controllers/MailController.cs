@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -10,7 +10,7 @@ namespace SET3_Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("CorsPolicy")]
+    
     public class MailController : ControllerBase
     {
         private readonly IMailService mailService;

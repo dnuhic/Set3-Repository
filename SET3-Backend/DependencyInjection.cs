@@ -21,34 +21,9 @@ namespace SET3_Backend
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
 
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
-                builder =>
-                {
-
-                    builder
-                    .AllowAnyHeader()
-                    .WithOrigins(new string[] { "https://localhost:3000", "https://si-set3.herokuapp.com" });
-
-                }));
-
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, Services.MailService>();
             //Ovdje se dodaju servisi za dependency injection
-            services.ConfigureSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-
-                options.OperationFilter<SecurityRequirementsOperationFilter>();
-
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-            });
 
             services.AddSwaggerGen(options =>
             {

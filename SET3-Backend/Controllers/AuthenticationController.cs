@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,7 +14,7 @@ namespace SET3_Backend.Controllers
 {
     
     [Route("[controller]")]
-    [EnableCors("CorsPolicy")]
+    
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
@@ -53,7 +53,7 @@ namespace SET3_Backend.Controllers
             return user;
         }
 
-        [EnableCors]
+        
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] UserDto userDto)
         {
@@ -131,7 +131,7 @@ namespace SET3_Backend.Controllers
             return BadRequest();
         }
 
-        [EnableCors]
+        
         [HttpPost("getusertoken")]
         public async Task<ActionResult<UserToken>> GetUserToken()
         {
