@@ -105,7 +105,7 @@ const EditUserComponent = () => {
             FirstName: document.getElementById("firstName").value,
             LastName: document.getElementById("lastName").value,
             Password: user.password,
-            RoleName: role,
+            RoleName: user.roleName,
             QuestionId: user.questionId,
             Answer: user.answer,
             Deleted: user.deleted,
@@ -136,7 +136,15 @@ const EditUserComponent = () => {
         };
 
         const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);
+        
+
+        console.log("OVO ERROR BACA ");
+        console.log(response);
         const data = await response.json();
+
+        console.log("OVO JE DATA ");
+        console.log(data);
+
         alert("Changes have been saved succesfully!")
         console.log(data);
     }, [updatedUser]);
