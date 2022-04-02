@@ -6,6 +6,7 @@ const AddAUserForm = () => {
     
     const [createdUser, setCreatedUser] = useState(false);
     const [questions, setQuestions] = useState(null);
+    const [users, setAllUsers] = useState(null);
     const nizPitanja = []
 
     const [roles, setRoles] = useState(null);
@@ -22,7 +23,15 @@ const AddAUserForm = () => {
         setRole(dataRoles[0].roleName);
         setRoles(dataRoles);
 
-        console.log(pitanja);
+        const requestOptions = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+
+        const response = await fetch('https://localhost:7194/usermodels', requestOptions);
+        const data = await response.json();
+        setAllUsers(data);
 
       //  const nizPitanja = []
         /*for (const k of pitanja) {
@@ -44,15 +53,23 @@ const AddAUserForm = () => {
         
     }
 
+    const checkEmail = () => {
+        const emails = users.map(u => u.email);
+        return emails.includes(document.getElementById("e-mail").value);
+    }
+
     const newUser = () => {
 
-        if (questions != null) {
+        if (questions != null && roles != null && users != null) {
             if (document.getElementById("ime").value == "" ||
                 document.getElementById("prezime").value == "" ||
                 document.getElementById("e-mail").value == "" ||
                 document.getElementById("password").value == "" ||
                 document.getElementById("answer").value == "") {
                 alert("All fields must not be empty!");
+                return;
+            } else if (checkEmail()) {
+                alert("There is already an account with that e-mail in the database. Please use another one.");
                 return;
             } else if (document.getElementById("password").value.length < 8) {
                 alert("Password must contain at least 8 characters!");
@@ -97,7 +114,7 @@ const AddAUserForm = () => {
 
 
     useEffect(async () => {
-        if (nizPitanja != null) {
+        if (nizPitanja != null && questions != null && roles != null && users != null) {
             // POST request using fetch inside useEffect React hook
             console.log(createdUser);
             const requestOptions = {
@@ -122,7 +139,7 @@ const AddAUserForm = () => {
 
     return (
         <>
-            {roles && role && questions && <form className="unos">
+            {roles && role && questions && users && <form className="unos">
                 <div className="col">
                     <h1>Create new user</h1>
                 </div>
@@ -210,7 +227,7 @@ const AddAUserForm = () => {
             </form>
             }
             {
-                !(roles && role && questions) && <h1>Loading...</h1>
+                !(roles && role && users && questions) && <h1>Loading...</h1>
             }
             </>
        

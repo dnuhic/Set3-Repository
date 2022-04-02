@@ -112,15 +112,16 @@ export default function ResetPassword() {
    
 
 
-        return (
-            <div class="form-container">
+    return (
+            <>
+            {qFetched && <div class="form-container">
                 <div action="#" class="form-wrap">
                     <h1>Reset Password</h1>
 
                     <div class="form-box">
                         {qFetched && <div>{qFetched} </div>}
                         {!qFetched && <p> Loading... </p>}
-                        <input type="text" id = "odgovor" placeholder="Your Answer" required />
+                        <input type="text" id="odgovor" placeholder="Your Answer" required />
                     </div>
                     <div className="form-submit">
                         <button onClick={handleChange}>Confirm</button>
@@ -134,7 +135,7 @@ export default function ResetPassword() {
                             <p>Choose new security question</p>
                             <select name="pitanja" id="pitanja">
                                 {questions && questions.length &&
-                                   questions.map( q => <option>{q}</option>)
+                                    questions.map(q => <option>{q}</option>)
 
                                 }
                             </select>
@@ -145,10 +146,10 @@ export default function ResetPassword() {
                         </div>
                         <div class="form-box">
                             <p>Choose new password</p>
-                            <input type="password" id = 'novaSifra1' placeholder="New Password" required />
+                            <input type="password" id='novaSifra1' placeholder="New Password" required />
                         </div>
                         <div class="form-box">
-                            <input type="password" id = 'novaSifra2' placeholder="Confirm New Password" required />
+                            <input type="password" id='novaSifra2' placeholder="Confirm New Password" required />
                         </div>
 
                         <div class="form-submit">
@@ -156,7 +157,11 @@ export default function ResetPassword() {
                         </div>
                     </div>}
                 </div>
-            </div>
+            </div>}
+
+            {!qFetched && <h1>Loading...</h1>}
+            </>
+            
         );
     
 

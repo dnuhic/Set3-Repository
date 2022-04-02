@@ -47,9 +47,13 @@ const Users = () => {
 		>
 
 			<div className="list" style={{width:500}}>
-				<h1> Users </h1>
-				{allUsers && <List sampleData={allUsers} />}
-				{!allUsers && <div>Loading...</div>}
+				
+				{allUsers &&
+					<>
+						<h1> Users </h1>
+						<List sampleData={allUsers} />
+					</>}
+				{!allUsers && <h1>Loading...</h1>}
 				
 			</div>
 
