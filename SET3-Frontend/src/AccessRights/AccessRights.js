@@ -13,7 +13,7 @@ const AccessRights = () => {
     }, [])
 
     const fetchRights = async () => {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        const res = await fetch('https://localhost:7194/api/RoleModels')
         const data = await res.json();
         return data;
     }
@@ -22,9 +22,9 @@ const AccessRights = () => {
         let requests = [];
         for (const object of rights) {
             console.log(JSON.stringify(object));
-            console.log(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels/${object.id.toString()}`)
+            console.log('https://localhost:7194/api/RoleModels/' + object.id.toString())
             requests.push(
-                fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels/${object.id.toString()}`, {
+                fetch('https://localhost:7194/api/RoleModels/' + object.id.toString(), {
                     headers: {
                         'Content-Type': 'application/json'
                     },
