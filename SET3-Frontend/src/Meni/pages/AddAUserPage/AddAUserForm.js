@@ -14,10 +14,17 @@ const AddAUserForm = () => {
 
 
     useEffect( async() => {
-        const pitanjaResponse =  await fetch('https://localhost:7194/SecurityQuestionModels')
+        const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
         const pitanja = await pitanjaResponse.json();
 
-        const responseRole = await fetch("https://localhost:7194/api/RoleModels")
+        console.log('pitanja iz baze')
+        console.log(pitanja);
+
+        console.log('Pitanja response');
+        console.log(pitanjaResponse);
+        setQuestions(pitanja);
+
+        const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
         const dataRoles = await responseRole.json();
 
         setRole(dataRoles[0].roleName);
@@ -29,7 +36,7 @@ const AddAUserForm = () => {
             credentials: 'same-origin'
         };
 
-        const response = await fetch('https://localhost:7194/usermodels', requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions);
         const data = await response.json();
         setAllUsers(data);
 
@@ -37,7 +44,12 @@ const AddAUserForm = () => {
         /*for (const k of pitanja) {
             nizPitanja.push(k.question);
         }*/
-        setQuestions(pitanja);
+      
+
+        console.log('setQuestions(pitanja)')
+        console.log(questions);
+
+
      //   console.log(questions);
     }, []);
 
@@ -55,7 +67,9 @@ const AddAUserForm = () => {
 
     const checkEmail = () => {
         const emails = users.map(u => u.email);
-        return emails.includes(document.getElementById("e-mail").value);
+        let pom = emails.includes(document.getElementById("e-mail").value);
+
+        return pom;
     }
 
     const newUser = () => {
@@ -123,7 +137,7 @@ const AddAUserForm = () => {
                 credentials: 'same-origin',
                 body: JSON.stringify(createdUser)
             };
-            fetch('https://localhost:7194/usermodels', requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions)
                 .then(response => { response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
@@ -176,7 +190,7 @@ const AddAUserForm = () => {
 
                         <div class="form-click">
                             <div class="form-box">
-                                <select name="pitanja" id="pitanja" value={role} onChange={handleRoleChange}>
+                                <select name="role" id="role" value={role} onChange={handleRoleChange}>
                                     {roles && roles.length &&
                                         roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
                                     }

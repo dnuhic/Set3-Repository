@@ -22,7 +22,7 @@ export default function ForgotPasswordConfirm () {
                     body: JSON.stringify({ "id": id, "Password": newPassword })
                 };
 
-                await fetch('https://localhost:7194/api/mail/reset', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/reset`, requestOptions).then(res => res.json).then(json => console.log.json);
                 alert("You changed your password successfully");
                 
             }

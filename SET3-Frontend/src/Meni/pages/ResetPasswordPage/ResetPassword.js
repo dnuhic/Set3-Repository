@@ -26,7 +26,7 @@ export default function ResetPassword() {
             credentials: 'same-origin'
         };
 
-        const response = await fetch('https://localhost:7194/usermodels/' + id, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
         //console.log(response);
         const data = await response.json();
         //console.log(data);        
@@ -34,16 +34,18 @@ export default function ResetPassword() {
     }
     useEffect(getData, []);
     useEffect(async () => {
-        const question = await fetch('https://localhost:7194/SecurityQuestionModels/' + id + '/forgotPassword');
+        const question = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels/${id}/forgotPassword`);
         const data = await question.json();
-        //console.log(question);
-        //console.log(data);
+        console.log(question);
+        console.log(data);
+        console.log('Ovo bi trebalo biti null??')
+        console.log(data.question);
         //console.log(data.question);
         setqFetched(data.question);
     }, [userFetched]);
 
     //const getQuestions = async () => {
-    //    const pitanjaResponse = await fetch('https://localhost:7194/SecurityQuestionModels')
+    //    const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
     //    const pitanja = await pitanjaResponse.json();
 
     //    setQuestions(pitanja);
@@ -51,7 +53,7 @@ export default function ResetPassword() {
 
     //useEffect(getQuestions, []);
     useEffect(async () => {
-        const pitanjaResponse = await fetch('https://localhost:7194/SecurityQuestionModels')
+        const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
         const pitanja = await pitanjaResponse.json();
 
         console.log(pitanja);
@@ -77,7 +79,7 @@ export default function ResetPassword() {
                 console.log("ID I NOVA SIFRA");
                 console.log(pom);
 
-                await fetch('https://localhost:7194/UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch(`${process.env.REACT_APP_BACKEND_URL}UserModels/changePassword`, requestOptions).then(res => res.json).then(json => console.log.json);
             }
             resetPass();
         }

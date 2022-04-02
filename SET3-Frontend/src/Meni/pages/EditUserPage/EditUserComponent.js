@@ -38,10 +38,10 @@ const EditUserComponent = () => {
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
             credentials: 'same-origin'
         };
-        const responseUser = await fetch("https://localhost:7194/usermodels/" + id, requestOptions);
+        const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
         const dataUser = await responseUser.json();
 
-        const responseRole = await fetch("https://localhost:7194/api/RoleModels")
+        const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
         const dataRoles = await responseRole.json();
 
         setUser(dataUser);
@@ -86,7 +86,7 @@ const EditUserComponent = () => {
                 console.log("ID I NOVA SIFRA");
                 console.log(pom);
 
-                await fetch('https://localhost:7194/UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch(`${process.env.REACT_APP_BACKEND_URL}UserModels/changePassword`, requestOptions).then(res => res.json).then(json => console.log.json);
             }
             resetPass();
             document.getElementById("password").value = "";
@@ -137,7 +137,7 @@ const EditUserComponent = () => {
                 credentials: 'same-origin'
             };
 
-            const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
         
 
             console.log("OVO ERROR BACA ");
