@@ -2,6 +2,7 @@ import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
+import '../styleForm.css';
 
 const EditUserComponent = () => {
     // Dobavljanje korisnika iz baze i postavljanje inicijalnih vrijednosti:
@@ -9,7 +10,6 @@ const EditUserComponent = () => {
     // podaci iz baze:
     const [user, setUser] = useState(null);
     const [roles, setRoles] = useState(null);
-    const forSelection = [];
 
 
     //podaci iz url??
@@ -20,7 +20,7 @@ const EditUserComponent = () => {
     const [email, setEmail] = useState("");
 
     //TO DO
-    const [role, setRole] = useState(""); 
+    const [role, setRole] = useState(null); 
 
     const [updatedUser, setUpdatetUser] = useState(null);
 
@@ -48,8 +48,9 @@ const EditUserComponent = () => {
         setFirstName(dataUser.firstName);
         setLastName(dataUser.lastName);
         setEmail(dataUser.email);
-        setRole(dataUser.role);
+        setRole(dataUser.roleName);
         setRoles(dataRoles);
+        console.log(dataUser);
     };
 
     useEffect(getData, []);
@@ -105,7 +106,7 @@ const EditUserComponent = () => {
             FirstName: document.getElementById("firstName").value,
             LastName: document.getElementById("lastName").value,
             Password: user.password,
-            RoleName: user.roleName,
+            RoleName: role,
             QuestionId: user.questionId,
             Answer: user.answer,
             Deleted: user.deleted,
@@ -127,26 +128,25 @@ const EditUserComponent = () => {
 
 
     useEffect(async () => {
-        console.log(updatedUser);
-        const requestOptions = {
-            method: "POST",
-            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
-            body: JSON.stringify(updatedUser),
-            credentials: 'same-origin'
-        };
+        if (user != null && updatedUser != null) {
+            console.log(updatedUser);
+            const requestOptions = {
+                method: "POST",
+                headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+                body: JSON.stringify(updatedUser),
+                credentials: 'same-origin'
+            };
 
-        const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);
+            const response = await fetch("https://localhost:7194/usermodels/" + user.id, requestOptions);
         
 
-        console.log("OVO ERROR BACA ");
-        console.log(response);
-        const data = await response.json();
+            console.log("OVO ERROR BACA ");
+            console.log(response);
 
-        console.log("OVO JE DATA ");
-        console.log(data);
 
-        alert("Changes have been saved succesfully!")
-        console.log(data);
+            alert("Changes have been saved succesfully!")
+        }
+        
     }, [updatedUser]);
 
     const handleRoleChange = (e) => {
@@ -154,57 +154,68 @@ const EditUserComponent = () => {
     }
 
     return (
-        <>
+    <>
+        { user && roles && role && <>
             <form className="unos">
                 <div className="col">
                         <h1>Edit user</h1>
                     </div>
-                <div className="row">
-                    <div className="col">
-                        <h5>First name: </h5>
-                    </div>
-                    <div className="col">
-                        <input value={firstName}
+                    <div className="row">
+                        
+                        <div className="col">
+                            <input value={firstName}
                                 id="firstName"
                                 type="text"
                                 className="form-control"
-                            onChange={handleFirstNameChange}
-                        />
+                                placeholder="First name"
+                                onChange={handleFirstNameChange}
+                            />
+                        </div>
+                        <div className="col">
+                            <input value={lastName}
+                                id="lastName"
+                                type="text"
+                                className="form-control"
+                                placeholder="First name"
+                                onChange={handleLastNameChange}
+                            />
+                        </div>
                     </div>
-                    
-                </div>
-                <div className="row">
-                    <div className="col">
-                        <h5>Last name: </h5>
+                    <div className="row">
+                            
                     </div>
-                    <div className="col">
-                        <input value={lastName}
-                            id="lastName"
-                            type="text"
-                            className="form-control"
-                            onChange={handleLastNameChange}
-                        />
+                    <div className="row">
+                            <div className="col">
+                               
+                            <div class="form-click">
+                                <div class="form-box">
+                                    <select name="pitanja" id="pitanja" value={role} onChange={handleRoleChange}>
+                                    {roles && roles.length &&
+                                        roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
+                                    }
+                                </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col">
-                        <h5>Role type: </h5>
+                    <div className="row">
+                        <div className="col">
+                            
+                        </div>
                     </div>
-                    <div className="col">
-                        <select name="role" id="role" value={role} onChange={handleRoleChange}>
-                            {roles && roles.length &&
-                                roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
-                            }
-                        </select>
+                    <div className="row">
+                            <div className="col">
+                                <p>User e-mail can't be changed</p>
+                            <input value={email}
+                                id="email"
+                                type="email"
+                                className="form-control"
+                                disabled={true}
+                            />
+
+                        </div>
                     </div>
-                </div>
-                <div id="emailHelp" className="form-text">User e-mail can't be changed</div>
-                <input value={email}
-                    id="email"
-                    type="email"
-                    className="form-control"
-                    disabled={true}
-                />
+               
                 
                 <button
                     type="button"
@@ -218,24 +229,34 @@ const EditUserComponent = () => {
                 <div className="mb-3">
                     <h1>Change password</h1>
                 </div>
-                <div className="mb-3">
-                    <input type="password" className="form-control" id="password" placeholder="Password"></input>
+                    <div className="row">
+                        <div className="col">
+                            <input type="password" className="form-control" id="password" placeholder="Password"></input>
+                        </div>
+                        <div className="col">
+                            <input type="password" className="form-control" id="rpassword" placeholder="Repeat password"></input>
+                        </div>
+                    
                 </div>
-
-                <div className="mb-3">
-                    <input type="password" className="form-control" id="rpassword" placeholder="Repeat password"></input>
-                </div>
-
                 <button
                     type="button"
                     className="btn btn-primary"
                     onClick={changePassword}
                 >
                     Change password
-                </button>
+                    </button>
+                    <div className="col"></div>
+                    <div className="col"></div>
+                    <div className="col"></div>
+                    <div className="col"></div>
 
             </form>
-         </>
+            </>
+            }
+            {
+                !(user && roles && role) && <h1>Loading...</h1> 
+            }
+        </>
     );
 
     function hasNumber(myString) {

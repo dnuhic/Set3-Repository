@@ -8,9 +8,19 @@ const AddAUserForm = () => {
     const [questions, setQuestions] = useState(null);
     const nizPitanja = []
 
+    const [roles, setRoles] = useState(null);
+    const [role, setRole] = useState(null);
+
+
     useEffect( async() => {
         const pitanjaResponse =  await fetch('https://localhost:7194/SecurityQuestionModels')
-        const pitanja =  await pitanjaResponse.json();
+        const pitanja = await pitanjaResponse.json();
+
+        const responseRole = await fetch("https://localhost:7194/api/RoleModels")
+        const dataRoles = await responseRole.json();
+
+        setRole(dataRoles[0].roleName);
+        setRoles(dataRoles);
 
         console.log(pitanja);
 
@@ -58,7 +68,7 @@ const AddAUserForm = () => {
                 "FirstName": document.getElementById("ime").value,
                 "LastName": document.getElementById("prezime").value,
                 "Password": document.getElementById("password").value,
-                "RoleName": "User",
+                "RoleName": role,
                 "QuestionId": idPitanja(),
                 "Answer": document.getElementById("answer").value,
                 "Deleted": false
@@ -106,72 +116,104 @@ const AddAUserForm = () => {
         // empty dependency array means this effect will only run once (like componentDidMount in classes)
     }, [createdUser]);
 
+    const handleRoleChange = (e) => {
+        setRole(e.target.value)
+    }
+
     return (
-        <form className="unos">
-            <div className="row">
+        <>
+            {roles && role && questions && <form className="unos">
                 <div className="col">
-                    <div className="form-group">
+                    <h1>Create new user</h1>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <div className="form-group">
+                            <input
+                                id="ime"
+                                type="text"
+                                className="form-control"
+                                placeholder="First name"
+                                onChange={() => {
+                                    let imeOsobe = document.getElementById("ime").value
+                                    if (hasNumber(imeOsobe))
+                                        console.log("ima broj")
+                                    else
+                                        console.log("nema broj")
+                                }
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className="col">
                         <input
-                            id="ime"
+                            id="prezime"
                             type="text"
                             className="form-control"
-                            placeholder="First name"
-                            onChange={() => {
-                                let imeOsobe = document.getElementById("ime").value
-                                if (hasNumber(imeOsobe))
-                                    console.log("ima broj")
-                                else
-                                    console.log("nema broj")
-                            }
-                            }
+                            placeholder="Last name"
                         />
                     </div>
                 </div>
-                <div className="col">
-                    <input
-                        id="prezime"
-                        type="text"
-                        className="form-control"
-                        placeholder="Last name"
-                    />
+                <div className="row">
+                    <div className="col">
+
+                        <div class="form-click">
+                            <div class="form-box">
+                                <select name="pitanja" id="pitanja" value={role} onChange={handleRoleChange}>
+                                    {roles && roles.length &&
+                                        roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <input
-                id="e-mail"
-                type="email"
-                className="form-control"
-                placeholder="E-mail"
-            />
-            <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                <input
+                    id="e-mail"
+                    type="email"
+                    className="form-control"
+                    placeholder="E-mail"
+                />
+                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
 
 
-            <div className="mb-3">
-                <input type="password" className="form-control" id="password" placeholder="Password"></input>
-            </div>
+                <div className="mb-3">
+                    <input type="password" className="form-control" id="password" placeholder="Password"></input>
+                </div>
 
-            <div>Choose a question</div>
-            <select name="pitanja" id="pitanja">
-                {questions && questions.length &&
-                    questions.map(q => <option>{q.question}</option>)
-                }
-            </select>
-            
+                <div>Choose a question</div>
+                <select name="pitanja" id="pitanja">
+                    {questions && questions.length &&
+                        questions.map(q => <option>{q.question}</option>)
+                    }
+                </select>
 
-            <input
-                id="answer"
-                type="text"
-                className="form-control"
-                placeholder="Your answer"
-            />
 
-            <button
-                type="button"
-                className="btn btn-primary"
-                onClick={newUser}
-            >
-                Add
-            </button>
-        </form>
+                <input
+                    id="answer"
+                    type="text"
+                    className="form-control"
+                    placeholder="Your answer"
+                />
+
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={newUser}
+                >
+                    Create user
+                </button>
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
+            </form>
+            }
+            {
+                !(roles && role && questions) && <h1>Loading...</h1>
+            }
+            </>
+       
     );
 
     function hasNumber(myString) {
