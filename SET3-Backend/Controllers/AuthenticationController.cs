@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
             return Ok(token);
         }
 
-        private string CreateToken(UserModel user)
+        protected string CreateToken(UserModel user)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -102,7 +102,7 @@ namespace SET3_Backend.Controllers
             return jwt;
         }
 
-        public Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
+        protected Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
         {
             //ovo bi se moglo napraviti da nekad vraca user-a, ali prvo treba vidjeti sta ce se
             //desiti sa atributima role i security question
@@ -159,7 +159,7 @@ namespace SET3_Backend.Controllers
             return userToken;
         }
 
-        public JwtSecurityToken ValidateToken(string token)
+        protected JwtSecurityToken ValidateToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             TokenValidationParameters validationParameters = new TokenValidationParameters
