@@ -43,7 +43,7 @@ const ForgotPassword = () => {
                 body: JSON.stringify(EmailProvided)
             };
             try {
-                await fetch('https://set3-backend20220330235604.azurewebsites.net//api/mail/send', requestOptions).then(res => {
+                await fetch('https://set3.azurewebsites.net/api/mail/send', requestOptions).then(res => {
                     if (res.status == 400)
                         alert("Wrong email address provided!");
                     else alert("Check your inbox!");

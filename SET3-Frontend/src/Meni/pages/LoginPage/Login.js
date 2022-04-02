@@ -16,9 +16,9 @@ const Login = () => {
         console.log("Uspjesno pozvano");
         console.log(JSON.stringify(user));
 
-        fetch('https://set3-backend20220330235604.azurewebsites.net//Authentication', {
+        fetch('https://set3.azurewebsites.net/Authentication', {
             method: 'POST',
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true, "Access-Control-Allow-Origin": false },
             credentials: 'include',
             body: JSON.stringify(user)
         }).then(response => {

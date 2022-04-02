@@ -22,7 +22,7 @@ export default function ForgotPasswordConfirm () {
                     body: JSON.stringify({ "id": id, "Password": newPassword })
                 };
 
-                await fetch('https://set3-backend20220330235604.azurewebsites.net//api/mail/reset', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch('https://set3.azurewebsites.net/api/mail/reset', requestOptions).then(res => res.json).then(json => console.log.json);
                 alert("You changed your password successfully");
                 
             }

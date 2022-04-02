@@ -26,7 +26,7 @@ export default function ResetPassword() {
             credentials: 'same-origin'
         };
 
-        const response = await fetch('https://set3-backend20220330235604.azurewebsites.net//usermodels/' + id, requestOptions);
+        const response = await fetch('https://set3.azurewebsites.net/usermodels/' + id, requestOptions);
         //console.log(response);
         const data = await response.json();
         //console.log(data);        
@@ -34,7 +34,7 @@ export default function ResetPassword() {
     }
     useEffect(getData, []);
     useEffect(async () => {
-        const question = await fetch('https://set3-backend20220330235604.azurewebsites.net//SecurityQuestionModels/' + id + '/forgotPassword');
+        const question = await fetch('https://set3.azurewebsites.net/SecurityQuestionModels/' + id + '/forgotPassword');
         const data = await question.json();
         //console.log(question);
         //console.log(data);
@@ -43,7 +43,7 @@ export default function ResetPassword() {
     }, [userFetched]);
 
     //const getQuestions = async () => {
-    //    const pitanjaResponse = await fetch('https://set3-backend20220330235604.azurewebsites.net//SecurityQuestionModels')
+    //    const pitanjaResponse = await fetch('https://set3.azurewebsites.net/SecurityQuestionModels')
     //    const pitanja = await pitanjaResponse.json();
 
     //    setQuestions(pitanja);
@@ -51,7 +51,7 @@ export default function ResetPassword() {
 
     //useEffect(getQuestions, []);
     useEffect(async () => {
-        const pitanjaResponse = await fetch('https://set3-backend20220330235604.azurewebsites.net//SecurityQuestionModels')
+        const pitanjaResponse = await fetch('https://set3.azurewebsites.net/SecurityQuestionModels')
         const pitanja = await pitanjaResponse.json();
 
         console.log(pitanja);
@@ -77,7 +77,7 @@ export default function ResetPassword() {
                 console.log("ID I NOVA SIFRA");
                 console.log(pom);
 
-                await fetch('https://set3-backend20220330235604.azurewebsites.net//UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch('https://set3.azurewebsites.net/UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
             }
             resetPass();
         }

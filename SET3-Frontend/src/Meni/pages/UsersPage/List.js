@@ -76,7 +76,7 @@ function List(props) {
                 credentials: 'same-origin'
             };
 
-            const response = await fetch('https://set3-backend20220330235604.azurewebsites.net//usermodels/' + user.id, requestOptions);
+            const response = await fetch('https://set3.azurewebsites.net/usermodels/' + user.id, requestOptions);
             console.log(response);
             const data = await response.json();
             console.log(data);
