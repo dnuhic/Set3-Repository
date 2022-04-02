@@ -9,6 +9,7 @@ const EditUserComponent = () => {
     // podaci iz baze:
     const [user, setUser] = useState(null);
     const [roles, setRoles] = useState(null);
+    const forSelection = [];
 
 
     //podaci iz url??
@@ -38,17 +39,21 @@ const EditUserComponent = () => {
             credentials: 'same-origin'
         };
         const responseUser = await fetch("https://localhost:7194/usermodels/" + id, requestOptions);
-        const data = await responseUser.json();
+        const dataUser = await responseUser.json();
 
-        //const responseRoles = await fetch("https://localhost:7194/usermodels/")
+        const responseRole = await fetch("https://localhost:7194/api/RoleModels")
+        const dataRoles = await responseRole.json();
 
-        setUser(data);
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
+        setUser(dataUser);
+        setFirstName(dataUser.firstName);
+        setLastName(dataUser.lastName);
+        setEmail(dataUser.email);
+        setRole(dataUser.role);
+        setRoles(dataRoles);
     };
 
     useEffect(getData, []);
+
 
     //CHANGE PASSWORD
 
@@ -83,6 +88,9 @@ const EditUserComponent = () => {
                 await fetch('https://localhost:7194/UserModels/changePassword', requestOptions).then(res => res.json).then(json => console.log.json);
             }
             resetPass();
+            document.getElementById("password").value = "";
+            document.getElementById("rpassword").value = "";
+
         }
     }, [newPassword])
 
@@ -93,15 +101,18 @@ const EditUserComponent = () => {
         console.log(user);
         const newUser = {
             Id: user.id,
-            Email: document.getElementById("email").value,
+            Email: user.email,
             FirstName: document.getElementById("firstName").value,
             LastName: document.getElementById("lastName").value,
             Password: user.password,
-            RoleName: user.roleName,
+            RoleName: role,
             QuestionId: user.questionId,
             Answer: user.answer,
             Deleted: user.deleted,
         };
+
+        console.log("NEW USER: ");
+        console.log(newUser);
 
         setUpdatetUser(newUser);
     }
@@ -114,9 +125,6 @@ const EditUserComponent = () => {
         setLastName(event.target.value);
     };
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-    };
 
     useEffect(async () => {
         console.log(updatedUser);
@@ -133,40 +141,63 @@ const EditUserComponent = () => {
         console.log(data);
     }, [updatedUser]);
 
+    const handleRoleChange = (e) => {
+        setRole(e.target.value)
+    }
 
     return (
         <>
             <form className="unos">
+                <div className="col">
+                        <h1>Edit user</h1>
+                    </div>
                 <div className="row">
                     <div className="col">
-                        <div className="form-group">
-                            <input value={firstName}
+                        <h5>First name: </h5>
+                    </div>
+                    <div className="col">
+                        <input value={firstName}
                                 id="firstName"
                                 type="text"
                                 className="form-control"
-                                onChange={handleFirstNameChange}
-
-                            />
-                        </div>
+                            onChange={handleFirstNameChange}
+                        />
+                    </div>
+                    
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <h5>Last name: </h5>
                     </div>
                     <div className="col">
                         <input value={lastName}
                             id="lastName"
                             type="text"
                             className="form-control"
-                            placeholder="Last name"
                             onChange={handleLastNameChange}
                         />
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col">
+                        <h5>Role type: </h5>
+                    </div>
+                    <div className="col">
+                        <select name="role" id="role" value={role} onChange={handleRoleChange}>
+                            {roles && roles.length &&
+                                roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div id="emailHelp" className="form-text">User e-mail can't be changed</div>
                 <input value={email}
                     id="email"
                     type="email"
                     className="form-control"
-                    placeholder="E-mail"
-                    onChange={handleEmailChange}
+                    disabled={true}
                 />
-                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                
                 <button
                     type="button"
                     className="btn btn-primary"
@@ -176,7 +207,9 @@ const EditUserComponent = () => {
                 </button>
             </form>
             <form className="unos">
-
+                <div className="mb-3">
+                    <h1>Change password</h1>
+                </div>
                 <div className="mb-3">
                     <input type="password" className="form-control" id="password" placeholder="Password"></input>
                 </div>
