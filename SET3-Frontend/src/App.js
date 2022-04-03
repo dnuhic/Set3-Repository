@@ -13,7 +13,7 @@ import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/Forgot
 import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
-
+import AccessRights from './AccessRights/AccessRights';
 
 function App() {
 
@@ -73,6 +73,11 @@ function App() {
 
                     <Route path="/users/:id" element={<EditUserComponent />} />
                 </Routes>
+
+                 <Routes>
+
+                <Route path="/accessRights" element={<AccessRights />} />
+                 </Routes>
 
 
             </Router >

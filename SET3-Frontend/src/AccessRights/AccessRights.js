@@ -50,6 +50,7 @@ const AccessRights = () => {
                 console.log(i, 'request resulted in', results[i]);
             }
         })
+        alert("You have successfully changed the access rights!")
     }
 
     const changeRead= (index,e) => {
@@ -71,13 +72,13 @@ const AccessRights = () => {
     return (
                     <div className="App">
             <div className="Naslov">
-                <h1>Promjena prava pristupa</h1>
+                <h1>Change access rights</h1>
             </div>
             <div>
                 <table >
                     <thead>
                         <tr>
-                            <th>Tip</th>
+                            <th>Type</th>
                             <th>Read</th>
                             <th>Write</th>
                             <th>Delete</th>

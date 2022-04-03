@@ -113,6 +113,12 @@ const Navbar = () => {
                                     <NavLinks to='/form'> Add user</NavLinks>
                                 </NavItem>
                             }
+
+                            {role == "Admin" &&
+                                <NavItem>
+                                    <NavLinks to='/accessRights'>Access rights</NavLinks>
+                                </NavItem>
+                            }
                             
 
                             <NavItemBtn>
