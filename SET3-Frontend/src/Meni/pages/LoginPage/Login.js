@@ -25,10 +25,10 @@ const Login = () => {
             body: JSON.stringify(user)
         }).then(response => {
             console.log("Sve OK: " + response.status);
-            fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication/getUserTFA`).then(r => r.json()).then(x => {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication/getUserTFA/${Email}`).then(r => r.json()).then(x => {
                 console.log("X");
                 console.log(x);
-                if (x.response !== "") {
+                if (x.result !== "") {
                     setButtonClicked(true);
                    
                 } else {

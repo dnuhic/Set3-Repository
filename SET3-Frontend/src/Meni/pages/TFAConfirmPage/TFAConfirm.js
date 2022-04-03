@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 
 
-const ForgotPassword = (props) => {
+const TFAConfirm = (props) => {
 
     const { id } = useParams();
 
@@ -74,6 +74,7 @@ const ForgotPassword = (props) => {
         };
 
         var res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/sendcode`, requestOptions);
+        console.log(res);
         var data = await res.json();
 
         alert("Check your e-mail then verify the code.");
@@ -144,4 +145,4 @@ const ForgotPassword = (props) => {
 
 };
 
-export default ForgotPassword;
+export default TFAConfirm;

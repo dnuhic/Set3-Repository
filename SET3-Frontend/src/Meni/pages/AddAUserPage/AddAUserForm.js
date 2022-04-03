@@ -169,14 +169,6 @@ const AddAUserForm = () => {
                                 type="text"
                                 className="form-control"
                                 placeholder="First name"
-                                onChange={() => {
-                                    let imeOsobe = document.getElementById("ime").value
-                                    if (hasNumber(imeOsobe))
-                                        console.log("ima broj")
-                                    else
-                                        console.log("nema broj")
-                                }
-                                }
                             />
                         </div>
                     </div>
@@ -213,7 +205,7 @@ const AddAUserForm = () => {
 
 
                 <div className="mb-3">
-                    <input type="password" value={ pass} className="form-control" placeholder="Password" onInput={e => {
+                    <input id="password" type="password" value={ pass} className="form-control" placeholder="Password" onInput={e => {
                         setPass(e.target.value)
                     }}></input>
                 </div>

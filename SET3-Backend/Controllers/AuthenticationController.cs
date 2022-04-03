@@ -166,7 +166,7 @@ namespace SET3_Backend.Controllers
             return BadRequest();
         }
 
-        [HttpGet("getUserTFA")]
+        [HttpGet("getUserTFA/{email}")]
         public async Task<ActionResult<TFAModel>> getUserTFA(string email)
         {
             /*var handler = new JwtSecurityTokenHandler();
