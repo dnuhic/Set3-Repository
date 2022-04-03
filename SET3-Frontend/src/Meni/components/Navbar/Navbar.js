@@ -54,7 +54,7 @@ const Navbar = () => {
  const requestOptions = {
             method: 'GET',
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
-            credentials: 'same-origin'
+            credentials: 'include'
         };
 
         const response = await fetch('https://set3.azurewebsites.net/authentication/getUserId', requestOptions);

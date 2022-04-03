@@ -18,7 +18,7 @@ const Login = () => {
 
         fetch('https://set3.azurewebsites.net/Authentication', {
             method: 'POST',
-            headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true, "Access-Control-Allow-Origin": false },
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true},
             credentials: 'include',
             body: JSON.stringify(user)
         }).then(response => {

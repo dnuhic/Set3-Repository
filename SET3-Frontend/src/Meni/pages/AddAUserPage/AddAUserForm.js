@@ -95,7 +95,7 @@ const AddAUserForm = () => {
             const requestOptions = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
-                credentials: 'same-origin',
+                credentials: 'include',
                 body: JSON.stringify(createdUser)
             };
             fetch('https://set3.azurewebsites.net/usermodels', requestOptions)
