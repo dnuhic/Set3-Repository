@@ -5,6 +5,9 @@ using Newtonsoft.Json.Linq;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 using SET3_Backend.Services;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -25,7 +28,7 @@ namespace SET3_Backend.Controllers
         [Route("api/")]
         public async Task<IActionResult> SendMail(MailRequest request)
         {
-           
+
             try
             {
                 // dodati provjeru !!!
@@ -44,15 +47,49 @@ namespace SET3_Backend.Controllers
 
         }
 
-        [HttpPost)]
-        [Route("api/reset")]
+        [HttpPost("sendcode")]
+        public async Task<ActionResult<TFAModel>> SendMailCODE(MailRequest request)
+        {
+
+            try
+            {
+                var user = context.UserModels.Where(u => u.Email == request.ToEmail).FirstOrDefault();
+                if (user != null)
+                {
+                    Random rand = new Random();
+                    int span = rand.Next(0, 1000000);
+                    string sixDigit = span.ToString("000000");
+
+                    await mailService.SendEmailCODEAsync(request, sixDigit);
+
+                    user.TFA = sixDigit;
+
+                    context.Update(user);
+                    await context.SaveChangesAsync();
+
+                    return new TFAModel(sixDigit);
+                }
+                else return new TFAModel("Failed");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        [HttpPost("reset")]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel obj)
         {
             var email = DecryptString(obj.id);
 
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(obj.Password)));
+
             var user = context.UserModels.Where(u => u.Email == email).First();
+
             if (user is not null) { 
-                user.Password = obj.Password;
+                user.Password = passwordHash;
 
                 context.Update(user);
                 await context.SaveChangesAsync();
@@ -62,7 +99,7 @@ namespace SET3_Backend.Controllers
             return BadRequest();
         }
 
-        public string DecryptString(string encrString)
+        protected string DecryptString(string encrString)
         {
             byte[] b;
             string decrypted;
@@ -78,7 +115,7 @@ namespace SET3_Backend.Controllers
             return decrypted;
         }
 
-        public string EnryptString(string strEncrypted)
+        protected string EnryptString(string strEncrypted)
         {
             byte[] b = System.Text.ASCIIEncoding.ASCII.GetBytes(strEncrypted);
             string encrypted = Convert.ToBase64String(b);

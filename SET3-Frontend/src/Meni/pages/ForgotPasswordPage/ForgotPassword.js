@@ -43,7 +43,7 @@ const ForgotPassword = () => {
                 body: JSON.stringify(EmailProvided)
             };
             try {
-                await fetch('https://localhost:7194/api/mail/send', requestOptions).then(res => {
+                await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/send`, requestOptions).then(res => {
                     if (res.status == 400)
                         alert("Wrong email address provided!");
                     else alert("Check your inbox!");

@@ -36,7 +36,7 @@ const EditUserComponent = () => {
         const requestOptions = {
             method: 'GET',
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
-            credentials: 'include'
+            credentials: 'same-origin'
         };
         const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
         const dataUser = await responseUser.json();
@@ -135,7 +135,7 @@ const EditUserComponent = () => {
                 method: "POST",
                 headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
                 body: JSON.stringify(updatedUser),
-                credentials: 'include'
+                credentials: 'same-origin'
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);

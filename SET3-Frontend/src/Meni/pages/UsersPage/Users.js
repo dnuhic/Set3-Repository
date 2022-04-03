@@ -22,7 +22,7 @@ const Users = () => {
 			credentials: 'same-origin'
 		};
 
-		const response = await fetch('https://localhost:7194/usermodels', requestOptions);
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions);
 
 		console.log(response);
 		const data = await response.json();
@@ -47,9 +47,13 @@ const Users = () => {
 		>
 
 			<div className="list" style={{width:500}}>
-				<h1> Users </h1>
-				{allUsers && <List sampleData={allUsers} />}
-				{!allUsers && <div>Loading...</div>}
+				
+				{allUsers &&
+					<>
+						<h1> Users </h1>
+						<List sampleData={allUsers} />
+					</>}
+				{!allUsers && <h1>Loading...</h1>}
 				
 			</div>
 

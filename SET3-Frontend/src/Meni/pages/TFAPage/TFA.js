@@ -24,7 +24,7 @@ const TFA = () => {
         const requestOptions = {
             method: 'GET',
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
-            credentials: 'include'
+            credentials: 'same-origin'
         };
         const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
         const dataUser = await responseUser.json();

@@ -6,6 +6,7 @@ using SET3_Backend.Database;
 using SET3_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -37,21 +38,53 @@ namespace SET3_Backend.Controllers
             _context = context;
         }
 
+        [HttpGet("createFirstData")]
+        public async Task<ActionResult<UserModel>> CreateFirstData()
+        {
+            if(!_context.RoleModels.Any())
+            {
+                RoleModel user = new RoleModel(RoleType.User.ToString(), true, false, false);
+                _context.RoleModels.Add(user);
+
+                RoleModel admin = new RoleModel(RoleType.Admin.ToString(), true, true, true);
+                _context.RoleModels.Add(admin);
+            }
+
+            if (!_context.SecurityQuestionModels.Any())
+            {
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your favourite animal?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your favourite color?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your mothers name?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream destination?"));
+                _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream car?"));
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         //metoda napravljena samo za svrhu testiranja!!!
         [HttpGet]
         [Route("/")]
         public async Task<ActionResult<UserModel>> CreateUserTestMethod()
         {
-            Console.WriteLine("inside get");
-            RoleModel role = new RoleModel(RoleType.User);
-            _context.RoleModels.Add(role);
-            SecurityQuestionModel question = new SecurityQuestionModel("test pitanje");
-            _context.SecurityQuestionModels.Add(question);
-            UserModel user = new UserModel("dzenan.nuhic1@gmail.com", "dzenan", "nuhic",
-                "password", role, role.Id, question.Id, "test", false);
-            _context.UserModels.Add(user);
-            await _context.SaveChangesAsync();
-            return user;
+            if (_context.RoleModels.Any() && _context.SecurityQuestionModels.Any())
+            {
+                SecurityQuestionModel question = await _context.SecurityQuestionModels.FirstOrDefaultAsync();
+
+                var sha = SHA256.Create();
+                var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
+                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash,question!.Id, "Odgovor", false,RoleType.Admin.ToString(), "");
+                //UserModel user = new UserModel()
+                _context.UserModels.Add(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+
+            // AKO VRATI BAD REQUEST POZOVITE SLIJEDECI GET PRIJE:
+            return BadRequest();
+                
+            
         }
 
         [EnableCors]
@@ -63,12 +96,14 @@ namespace SET3_Backend.Controllers
             Console.WriteLine("inside post");
             if (userDto == null) return BadRequest("User not specified");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
-            if (user == null || !userDto.Password.Equals(user.Password))
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userDto.Password)));
+            Console.WriteLine(passwordHash);
+            Console.WriteLine(userDto.Password);
+            if (user == null || !passwordHash.Equals(user.Password))
             {
                 return BadRequest("Incorrect email or password.");
             }
-            //treba provjeriti da li je nesto od ovoga null
-            user.Role = await _context.RoleModels.FindAsync(user.RoleId);
             //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
 
@@ -81,12 +116,12 @@ namespace SET3_Backend.Controllers
             return Ok(token);
         }
 
-        private string CreateToken(UserModel user)
+        protected string CreateToken(UserModel user)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, Enum.GetName(typeof(RoleType), user.Role.RoleType)),
+                new Claim(ClaimTypes.Role, Enum.GetName(typeof(RoleType), Enum.Parse<RoleType>(user.RoleName))),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName)
             };
 
@@ -104,7 +139,7 @@ namespace SET3_Backend.Controllers
             return jwt;
         }
 
-        public Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
+        protected Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
         {
             //ovo bi se moglo napraviti da nekad vraca user-a, ali prvo treba vidjeti sta ce se
             //desiti sa atributima role i security question
@@ -131,6 +166,17 @@ namespace SET3_Backend.Controllers
             if (user is not null)
                 return user;
             return BadRequest();
+        }
+
+        [HttpGet("getUserTFA/{email}")]
+        public async Task<ActionResult<TFAModel>> getUserTFA(string email)
+        {
+            /*var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
+
+            var user = _context.UserModels.AsNoTracking().Where(u => u.Email == email).FirstOrDefault();
+            
+            return new TFAModel(user.TFA);
         }
 
         [EnableCors]
@@ -161,7 +207,7 @@ namespace SET3_Backend.Controllers
             return userToken;
         }
 
-        public JwtSecurityToken ValidateToken(string token)
+        protected JwtSecurityToken ValidateToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             TokenValidationParameters validationParameters = new TokenValidationParameters
