@@ -6,6 +6,8 @@ using SET3_Backend.Database;
 using SET3_Backend.Models;
 using SET3_Backend.Services;
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -81,10 +83,13 @@ namespace SET3_Backend.Controllers
         {
             var email = DecryptString(obj.id);
 
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(obj.Password)));
+
             var user = context.UserModels.Where(u => u.Email == email).First();
-            if (user is not null)
-            {
-                user.Password = obj.Password;
+
+            if (user is not null) { 
+                user.Password = passwordHash;
 
                 context.Update(user);
                 await context.SaveChangesAsync();

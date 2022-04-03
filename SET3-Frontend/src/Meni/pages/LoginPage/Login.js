@@ -17,8 +17,8 @@ const Login = () => {
         const user = { Email, Password };
         console.log("Uspjesno pozvano");
         console.log(JSON.stringify(user));
-        
-        fetch('https://localhost:7194/Authentication', {
+
+        fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication`, {
             method: 'POST',
             headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
             credentials: 'include',

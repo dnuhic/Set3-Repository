@@ -1,0 +1,49 @@
+.App {
+    width: 100%;
+    height: 100%;
+  margin: auto;
+}
+h1{
+    text-align:center;
+}
+
+table {
+    font-style: oblique;
+    border-collapse: collapse;
+    width: 50%;
+    margin-right: 25%;
+    margin-left: 25%;
+    margin-top: 15%;
+}
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+
+#spremi {
+    background-color: #0d6efd;
+    color: white;
+    position: absolute;
+    left: 80%;
+    top: 80%;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-style: oblique;
+    cursor: pointer;
+    border: none;
+}
+#spremi:hover{
+    cursor:pointer;
+}
+
+.Naslov {
+    margin: auto;
+}

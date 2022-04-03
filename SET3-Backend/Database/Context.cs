@@ -16,6 +16,8 @@ namespace SET3_Backend.Database
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
 
+            
+
 
             //if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
             //{ 
@@ -25,8 +27,11 @@ namespace SET3_Backend.Database
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            //Ovdje idu relacije u bazi
+            
+
         }
+
+
 
         //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
         //i u metodi dole isto, nakon toga pratite komentare u metodi ispod

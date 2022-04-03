@@ -49,10 +49,7 @@ function List(props) {
                 "FirstName": user.firstName,
                 "LastName": user.lastName,
                 "Password": user.password,
-                "Role": {
-                    "RoleType": 1
-                },
-                "RoleId": user.roleId,
+                "RoleName": user.roleName,
                 "QuestionId": user.questionId,
                 "Answer": user.answer,
                 "Deleted": true
@@ -76,7 +73,7 @@ function List(props) {
                 credentials: 'same-origin'
             };
 
-            const response = await fetch('https://localhost:7194/usermodels/' + user.id, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
             console.log(response);
             const data = await response.json();
             console.log(data);
