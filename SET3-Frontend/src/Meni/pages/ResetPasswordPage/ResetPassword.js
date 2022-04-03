@@ -132,20 +132,7 @@ export default function ResetPassword() {
 
                     {vidljivo && <div class="form-click">
 
-                        <div class="form-box" >
-
-                            <p>Choose new security question</p>
-                            <select name="pitanja" id="pitanja">
-                                {questions && questions.length &&
-                                    questions.map(q => <option>{q}</option>)
-
-                                }
-                            </select>
-
-
-
-                            <input placeholder="New Answer" required />
-                        </div>
+                        
                         <div class="form-box">
                             <p>Choose new password</p>
                             <input type="password" id='novaSifra1' placeholder="New Password" required />
