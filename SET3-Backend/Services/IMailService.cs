@@ -9,12 +9,13 @@ using System.Text;
 
 namespace SET3_Backend.Services
 {
+    
     public interface IMailService
     {
         Task SendEmailAsync(MailRequest mailRequest);
+        Task SendEmailCODEAsync(MailRequest mailRequest, String sixDigit);
     
     }
-
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
@@ -36,6 +37,32 @@ namespace SET3_Backend.Services
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
             email.Subject = $"Password recovery";
+            var builder = new BodyBuilder();
+
+            builder.HtmlBody = MailText;
+
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendEmailCODEAsync(MailRequest mailRequest, String sixDigit)
+        {
+            var hashedUrl = hashMail(mailRequest.ToEmail);
+            string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\authcode.html";
+            StreamReader str = new StreamReader(FilePath);
+            string MailText = str.ReadToEnd();
+            str.Close();
+
+            MailText = MailText.Replace("[name]", mailRequest.ToEmail);
+            MailText = MailText.Replace("[code]", sixDigit);
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
+            email.Subject = $"Code Verify";
             var builder = new BodyBuilder();
 
             builder.HtmlBody = MailText;

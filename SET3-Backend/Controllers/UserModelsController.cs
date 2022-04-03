@@ -199,7 +199,7 @@ namespace SET3_Backend.Controllers
         {
             return _context.UserModels.Any(e => e.Id == id);
         }
-        public JwtSecurityToken ValidateToken(string token)
+        protected JwtSecurityToken ValidateToken(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             TokenValidationParameters validationParameters = new TokenValidationParameters

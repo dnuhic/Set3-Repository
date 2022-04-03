@@ -12,6 +12,8 @@ import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
 import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
 import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
+import TFA from './Meni/pages/TFAPage/TFA';
+import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import AccessRights from './AccessRights/AccessRights';
 
@@ -73,7 +75,17 @@ function App() {
 
                     <Route path="/users/:id" element={<EditUserComponent />} />
                 </Routes>
+                <Routes>
 
+                <Route path="/twoFactorAuthentication/:id" element={<TFA />} />
+
+                </Routes>
+
+                <Routes>
+
+                    <Route path="/twoFactorAuthenticationConfirm/:id" element={<TFAConfirm />} />
+
+                </Routes>
                  <Routes>
 
                 <Route path="/accessRights" element={<AccessRights />} />
@@ -87,7 +99,7 @@ function App() {
 
     /*if (!token) {
         return <Login setToken={setToken} />
-    }*/
+    }     */
     
 
     

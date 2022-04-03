@@ -5,6 +5,8 @@ namespace SET3_Backend.Models
 {
     public class UserModel
     {
+
+        
         [Key]
         public int Id { get; set; }
         [EmailAddress]
@@ -16,6 +18,7 @@ namespace SET3_Backend.Models
         public string Answer { get; set; }
         public bool Deleted { get; set; }
         public string RoleName { get; set; }
+      public string TFA { get; set; }
 
         public UserModel(string email, string firstName, string lastName, string password,
             string roleName, int questionId, string answer, bool deleted)
@@ -28,6 +31,7 @@ namespace SET3_Backend.Models
             QuestionId = questionId;
             Answer = answer;
             Deleted = deleted;
+            TFA = "";
         }
     }
 }
