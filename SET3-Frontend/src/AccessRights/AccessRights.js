@@ -13,7 +13,7 @@ const AccessRights = () => {
     }, [])
 
     const fetchRights = async () => {
-        const res = await fetch('https://localhost:7194/api/RoleModels')
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
         const data = await res.json();
         return data;
     }
@@ -22,9 +22,9 @@ const AccessRights = () => {
         let requests = [];
         for (const object of rights) {
             console.log(JSON.stringify(object));
-            console.log('https://localhost:7194/api/RoleModels/' + object.id.toString())
+            console.log(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels/${object.id.toString()}`)
             requests.push(
-                fetch('https://localhost:7194/api/RoleModels/' + object.id.toString(), {
+                fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels/${object.id.toString()}`, {
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -50,6 +50,7 @@ const AccessRights = () => {
                 console.log(i, 'request resulted in', results[i]);
             }
         })
+        alert("You have successfully changed the access rights!")
     }
 
     const changeRead= (index,e) => {
@@ -71,13 +72,13 @@ const AccessRights = () => {
     return (
                     <div className="App">
             <div className="Naslov">
-                <h1>Promjena prava pristupa</h1>
+                <h1>Change access rights</h1>
             </div>
             <div>
                 <table >
                     <thead>
                         <tr>
-                            <th>Tip</th>
+                            <th>Type</th>
                             <th>Read</th>
                             <th>Write</th>
                             <th>Delete</th>

@@ -35,7 +35,7 @@ const Navbar = () => {
             body: cookie
         };
 
-        const response = await fetch('https://localhost:7194/authentication/getusertoken', requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}authentication/getusertoken`, requestOptions);
 
         const data = await response.json();
 
@@ -57,10 +57,13 @@ const Navbar = () => {
             credentials: 'same-origin'
         };
 
-        const response = await fetch('https://localhost:7194/authentication/getUserId', requestOptions);
-
-        const data = await response.json();
-
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}authentication/getUserId`, requestOptions);
+            //const response = await fetch('https://localhost:7194/authentication/getUserId', requestOptions);
+            const data = await response.json();
+            console.log("RESPONSE")
+            console.log(response);
+            console.log('Response.json tj data')
+            console.log(data);
             setUser(data);
             console.log(user);
         }
@@ -97,7 +100,7 @@ const Navbar = () => {
                             </NavItem>
                             {role && user && 
                                 <NavItem>
-                                <NavLinks to={'/resetpassword/' + user.id}> Settings </NavLinks>
+                                <NavLinks to={'/resetPassword/' + user.id}> Settings </NavLinks>
                                 </NavItem>}
                             {role == "Admin" && 
                                 <NavItem>
@@ -108,6 +111,12 @@ const Navbar = () => {
                             {role == "Admin" &&
                                 <NavItem>
                                     <NavLinks to='/form'> Add user</NavLinks>
+                                </NavItem>
+                            }
+
+                            {role == "Admin" &&
+                                <NavItem>
+                                    <NavLinks to='/accessRights'>Access rights</NavLinks>
                                 </NavItem>
                             }
                             

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SET3_Backend.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,10 @@ namespace SET3_Backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleType = table.Column<int>(type: "int", nullable: false)
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReadAccess = table.Column<bool>(type: "bit", nullable: false),
+                    WriteAccess = table.Column<bool>(type: "bit", nullable: false),
+                    DeleteAccess = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,20 +61,14 @@ namespace SET3_Backend.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    Deleted = table.Column<bool>(type: "bit", nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserModels", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserModels_RoleModels_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "RoleModels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,17 +108,15 @@ namespace SET3_Backend.Migrations
                 name: "IX_LoggingModels_UserModelId",
                 table: "LoggingModels",
                 column: "UserModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserModels_RoleId",
-                table: "UserModels",
-                column: "RoleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "LoggingModels");
+
+            migrationBuilder.DropTable(
+                name: "RoleModels");
 
             migrationBuilder.DropTable(
                 name: "SecurityQuestionModels");
@@ -131,9 +126,6 @@ namespace SET3_Backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserModels");
-
-            migrationBuilder.DropTable(
-                name: "RoleModels");
         }
     }
 }

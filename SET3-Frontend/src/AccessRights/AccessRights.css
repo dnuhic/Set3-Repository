@@ -24,17 +24,21 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+
+
 #spremi {
-    background: #8994A4;
-    color: #fff;
+    background-color: #0d6efd;
+    color: white;
     position: absolute;
     left: 80%;
     top: 80%;
-    font-size: 13px;
+    font-size: 16px;
     text-align: center;
     padding: 10px 30px;
     border-radius: 8px;
     font-style: oblique;
+    cursor: pointer;
+    border: none;
 }
 #spremi:hover{
     cursor:pointer;

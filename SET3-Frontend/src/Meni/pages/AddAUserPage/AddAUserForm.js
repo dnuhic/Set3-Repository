@@ -6,19 +6,52 @@ const AddAUserForm = () => {
     
     const [createdUser, setCreatedUser] = useState(false);
     const [questions, setQuestions] = useState(null);
+    const [users, setAllUsers] = useState(null);
     const nizPitanja = []
 
-    useEffect( async() => {
-        const pitanjaResponse =  await fetch('https://localhost:7194/SecurityQuestionModels')
-        const pitanja =  await pitanjaResponse.json();
+    const [roles, setRoles] = useState(null);
+    const [role, setRole] = useState(null);
 
+    const [pass, setPass] = useState('');
+
+
+    useEffect( async() => {
+        const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
+        const pitanja = await pitanjaResponse.json();
+
+        console.log('pitanja iz baze')
         console.log(pitanja);
+
+        console.log('Pitanja response');
+        console.log(pitanjaResponse);
+        setQuestions(pitanja);
+
+        const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        const dataRoles = await responseRole.json();
+
+        setRole(dataRoles[0].roleName);
+        setRoles(dataRoles);
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions);
+        const data = await response.json();
+        setAllUsers(data);
 
       //  const nizPitanja = []
         /*for (const k of pitanja) {
             nizPitanja.push(k.question);
         }*/
-        setQuestions(pitanja);
+      
+
+        console.log('setQuestions(pitanja)')
+        console.log(questions);
+
+
      //   console.log(questions);
     }, []);
 
@@ -34,15 +67,25 @@ const AddAUserForm = () => {
         
     }
 
+    const checkEmail = () => {
+        const emails = users.map(u => u.email);
+        let pom = emails.includes(document.getElementById("e-mail").value);
+
+        return pom;
+    }
+
     const newUser = () => {
 
-        if (questions != null) {
+        if (questions != null && roles != null && users != null) {
             if (document.getElementById("ime").value == "" ||
                 document.getElementById("prezime").value == "" ||
                 document.getElementById("e-mail").value == "" ||
                 document.getElementById("password").value == "" ||
                 document.getElementById("answer").value == "") {
                 alert("All fields must not be empty!");
+                return;
+            } else if (checkEmail()) {
+                alert("There is already an account with that e-mail in the database. Please use another one.");
                 return;
             } else if (document.getElementById("password").value.length < 8) {
                 alert("Password must contain at least 8 characters!");
@@ -52,15 +95,13 @@ const AddAUserForm = () => {
                 return;
             }
 
+            
             let user = {
                 "Email": document.getElementById("e-mail").value,
                 "FirstName": document.getElementById("ime").value,
                 "LastName": document.getElementById("prezime").value,
-                "Password": document.getElementById("password").value,
-                "Role": {
-                    "RoleType": 1
-                },
-                "RoleId": 1,
+                "Password": pass,
+                "RoleName": role,
                 "QuestionId": idPitanja(),
                 "Answer": document.getElementById("answer").value,
                 "Deleted": false
@@ -73,7 +114,8 @@ const AddAUserForm = () => {
             document.getElementById("ime").value = "";
             document.getElementById("prezime").value = "";
             document.getElementById("e-mail").value = "";
-            document.getElementById("password").value = "";
+            //document.getElementById("password").value = "";
+            setPass('');
             document.getElementById("answer").value = "";
             alert("Action completed!");
 
@@ -89,7 +131,7 @@ const AddAUserForm = () => {
 
 
     useEffect(async () => {
-        if (nizPitanja != null) {
+        if (nizPitanja != null && questions != null && roles != null && users != null) {
             // POST request using fetch inside useEffect React hook
             console.log(createdUser);
             const requestOptions = {
@@ -98,7 +140,7 @@ const AddAUserForm = () => {
                 credentials: 'same-origin',
                 body: JSON.stringify(createdUser)
             };
-            fetch('https://localhost:7194/usermodels', requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions)
                 .then(response => { response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
@@ -108,72 +150,106 @@ const AddAUserForm = () => {
         // empty dependency array means this effect will only run once (like componentDidMount in classes)
     }, [createdUser]);
 
+    const handleRoleChange = (e) => {
+        setRole(e.target.value)
+    }
+    console.log(pass)
     return (
-        <form className="unos">
-            <div className="row">
+        <>
+            {roles && role && questions && users && <form className="unos">
                 <div className="col">
-                    <div className="form-group">
+                    <h1>Create new user</h1>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <div className="form-group">
+                            <input
+                                id="ime"
+                                type="text"
+                                className="form-control"
+                                placeholder="First name"
+                                onChange={() => {
+                                    let imeOsobe = document.getElementById("ime").value
+                                    if (hasNumber(imeOsobe))
+                                        console.log("ima broj")
+                                    else
+                                        console.log("nema broj")
+                                }
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className="col">
                         <input
-                            id="ime"
+                            id="prezime"
                             type="text"
                             className="form-control"
-                            placeholder="First name"
-                            onChange={() => {
-                                let imeOsobe = document.getElementById("ime").value
-                                if (hasNumber(imeOsobe))
-                                    console.log("ima broj")
-                                else
-                                    console.log("nema broj")
-                            }
-                            }
+                            placeholder="Last name"
                         />
                     </div>
                 </div>
-                <div className="col">
-                    <input
-                        id="prezime"
-                        type="text"
-                        className="form-control"
-                        placeholder="Last name"
-                    />
+                <div className="row">
+                    <div className="col">
+
+                        <div className="form-click">
+                            <div className="form-box">
+                                <select name="role" id="role" value={role} onChange={handleRoleChange}>
+                                    {roles && roles.length &&
+                                        roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <input
-                id="e-mail"
-                type="email"
-                className="form-control"
-                placeholder="E-mail"
-            />
-            <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                <input
+                    id="e-mail"
+                    type="email"
+                    className="form-control"
+                    placeholder="E-mail"
+                />
+                <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
 
 
-            <div className="mb-3">
-                <input type="password" className="form-control" id="password" placeholder="Password"></input>
-            </div>
+                <div className="mb-3">
+                    <input type="password" value={ pass} className="form-control" placeholder="Password" onInput={e => {
+                        setPass(e.target.value)
+                    }}></input>
+                </div>
 
-            <div>Choose a question</div>
-            <select name="pitanja" id="pitanja">
-                {questions && questions.length &&
-                    questions.map(q => <option>{q.question}</option>)
-                }
-            </select>
-            
+                <div>Choose a question</div>
+                <select name="pitanja" id="pitanja">
+                    {questions && questions.length &&
+                        questions.map(q => <option>{q.question}</option>)
+                    }
+                </select>
 
-            <input
-                id="answer"
-                type="text"
-                className="form-control"
-                placeholder="Your answer"
-            />
 
-            <button
-                type="button"
-                className="btn btn-primary"
-                onClick={newUser}
-            >
-                Add
-            </button>
-        </form>
+                <input
+                    id="answer"
+                    type="text"
+                    className="form-control"
+                    placeholder="Your answer"
+                />
+
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={newUser}
+                >
+                    Create user
+                </button>
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
+                <div className="col"></div>
+            </form>
+            }
+            {
+                !(roles && role && users && questions) && <h1>Loading...</h1>
+            }
+            </>
+       
     );
 
     function hasNumber(myString) {
