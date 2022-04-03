@@ -173,10 +173,7 @@ namespace SET3_Backend.Controllers
             JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
 
             var user = _context.UserModels.AsNoTracking().Where(u => u.Email == email).FirstOrDefault();
-            if(user.TFA != "")
-            {
-                return new TFAModel("");
-            }
+            
             return new TFAModel(user.TFA);
         }
 

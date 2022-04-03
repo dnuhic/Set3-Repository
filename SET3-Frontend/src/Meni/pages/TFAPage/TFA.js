@@ -44,7 +44,7 @@ const TFA = () => {
                 </div>
             </div>
             </div>}
-            {user && !clicked && <TFAConfirm email={user.email} password={user.password} />}
+            {user && clicked && <TFAConfirm email={user.email} password={user.password} />}
             {!user && <h1>Loading...</h1>}
         </>
         

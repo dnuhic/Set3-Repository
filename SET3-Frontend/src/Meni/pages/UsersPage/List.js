@@ -41,6 +41,8 @@ function List(props) {
         setToDelete(object);      
     }
 
+
+
     useEffect(() => {
         if (user != null) {
             const newUser = {
@@ -53,7 +55,7 @@ function List(props) {
                 "QuestionId": user.questionId,
                 "Answer": user.answer,
                 "Deleted": true,
-                "TFA": user.tFA
+                "TFA": user.tfa
             }
 
             setDeletedUser(newUser);

@@ -110,7 +110,7 @@ const EditUserComponent = () => {
             QuestionId: user.questionId,
             Answer: user.answer,
             Deleted: user.deleted,
-            TFA: user.tFA //provjeriti
+            TFA: user.tfa //provjeriti
         };
 
         console.log("NEW USER: ");
