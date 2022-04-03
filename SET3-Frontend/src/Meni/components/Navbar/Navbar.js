@@ -100,8 +100,13 @@ const Navbar = () => {
                             </NavItem>
                             {role && user && 
                                 <NavItem>
-                                <NavLinks to={'/resetPassword/' + user.id}> Settings </NavLinks>
+                                <NavLinks to={'/resetPassword/' + user.id}> Reset password </NavLinks>
                                 </NavItem>}
+                            {role && user &&
+                                <NavItem>
+                                <NavLinks to={'/twoFactorAuthentication/' + user.id}> TFA </NavLinks>
+                                </NavItem>}
+
                             {role == "Admin" && 
                                 <NavItem>
                                     <NavLinks to='/users'> Users </NavLinks>

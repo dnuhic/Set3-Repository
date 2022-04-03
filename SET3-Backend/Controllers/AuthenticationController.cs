@@ -73,7 +73,8 @@ namespace SET3_Backend.Controllers
 
                 var sha = SHA256.Create();
                 var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
-                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash, RoleType.Admin.ToString(), question!.Id, "Odgovor", false);
+                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash,question!.Id, "Odgovor", false,RoleType.Admin.ToString(), "");
+                //UserModel user = new UserModel()
                 _context.UserModels.Add(user);
                 await _context.SaveChangesAsync();
                 return user;
@@ -136,7 +137,7 @@ namespace SET3_Backend.Controllers
             return jwt;
         }
 
-        protected Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken
+        protected Tuple<string, string, string> GetUserFromToken(JwtSecurityToken jwtSecurityToken)
         {
             //ovo bi se moglo napraviti da nekad vraca user-a, ali prvo treba vidjeti sta ce se
             //desiti sa atributima role i security question
@@ -166,13 +167,17 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpGet("getUserTFA")]
-        public async Task<ActionResult<Boolean>> getUserTFA(string email)
+        public async Task<ActionResult<TFAModel>> getUserTFA(string email)
         {
             /*var handler = new JwtSecurityTokenHandler();
             JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
 
             var user = _context.UserModels.AsNoTracking().Where(u => u.Email == email).FirstOrDefault();
-            return user.TFA != "";
+            if(user.TFA != "")
+            {
+                return new TFAModel("");
+            }
+            return new TFAModel(user.TFA);
         }
 
         [EnableCors]

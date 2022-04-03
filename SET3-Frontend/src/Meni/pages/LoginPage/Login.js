@@ -25,12 +25,16 @@ const Login = () => {
             body: JSON.stringify(user)
         }).then(response => {
             console.log("Sve OK: " + response.status);
-            fetch('https://localhost:7194/Authentication/getUserTFA').then(x => {
-                if (x) {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication/getUserTFA`).then(r => r.json()).then(x => {
+                console.log("X");
+                console.log(x);
+                if (x.response !== "") {
                     setButtonClicked(true);
+                   
                 } else {
                     navigate('/');
                     window.location.reload(false);
+                    setButtonClicked(false);
                 }
             })
         });

@@ -18,20 +18,19 @@ namespace SET3_Backend.Models
         public string Answer { get; set; }
         public bool Deleted { get; set; }
         public string RoleName { get; set; }
-      public string TFA { get; set; }
+        public string TFA { get; set; }
 
-        public UserModel(string email, string firstName, string lastName, string password,
-            string roleName, int questionId, string answer, bool deleted)
+        public UserModel(string email, string firstName, string lastName, string password, int questionId, string answer, bool deleted, string roleName, string tFA)
         {
             Email = email;
             FirstName = firstName;
             LastName = lastName;
             Password = password;
-            RoleName = roleName;
             QuestionId = questionId;
             Answer = answer;
             Deleted = deleted;
-            TFA = "";
+            RoleName = roleName;
+            TFA = tFA;
         }
     }
 }

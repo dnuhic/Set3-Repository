@@ -11,7 +11,6 @@ import Users from './Meni/pages/UsersPage/Users';
 import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
 import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
 import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
-import UpdateUserComponent from './Meni/pages/EditUserPage/UpdateUserComponent'
 import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';

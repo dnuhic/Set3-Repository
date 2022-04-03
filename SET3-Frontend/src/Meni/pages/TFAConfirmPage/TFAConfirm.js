@@ -32,7 +32,7 @@ const ForgotPassword = (props) => {
             console.log("Uspjesno pozvano");
             console.log(JSON.stringify(user));
 
-            fetch('https://localhost:7194/Authentication', {
+            fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
                 credentials: 'include',
@@ -73,7 +73,7 @@ const ForgotPassword = (props) => {
             body: JSON.stringify(email)
         };
 
-        var res = await fetch('https://localhost:7194/api/mail/sendcode', requestOptions);
+        var res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/sendcode`, requestOptions);
         var data = await res.json();
 
         alert("Check your e-mail then verify the code.");

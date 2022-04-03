@@ -52,7 +52,8 @@ function List(props) {
                 "RoleName": user.roleName,
                 "QuestionId": user.questionId,
                 "Answer": user.answer,
-                "Deleted": true
+                "Deleted": true,
+                "TFA": user.tFA
             }
 
             setDeletedUser(newUser);

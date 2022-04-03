@@ -104,7 +104,8 @@ const AddAUserForm = () => {
                 "RoleName": role,
                 "QuestionId": idPitanja(),
                 "Answer": document.getElementById("answer").value,
-                "Deleted": false
+                "Deleted": false,
+                "TFA":""
             }
 
             setCreatedUser(user);
