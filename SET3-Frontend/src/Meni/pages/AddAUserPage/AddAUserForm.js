@@ -12,6 +12,8 @@ const AddAUserForm = () => {
     const [roles, setRoles] = useState(null);
     const [role, setRole] = useState(null);
 
+    const [pass, setPass] = useState('');
+
 
     useEffect( async() => {
         const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
@@ -98,7 +100,7 @@ const AddAUserForm = () => {
                 "Email": document.getElementById("e-mail").value,
                 "FirstName": document.getElementById("ime").value,
                 "LastName": document.getElementById("prezime").value,
-                "Password": document.getElementById("password").value,
+                "Password": pass,
                 "RoleName": role,
                 "QuestionId": idPitanja(),
                 "Answer": document.getElementById("answer").value,
@@ -112,7 +114,8 @@ const AddAUserForm = () => {
             document.getElementById("ime").value = "";
             document.getElementById("prezime").value = "";
             document.getElementById("e-mail").value = "";
-            document.getElementById("password").value = "";
+            //document.getElementById("password").value = "";
+            setPass('');
             document.getElementById("answer").value = "";
             alert("Action completed!");
 
@@ -150,7 +153,7 @@ const AddAUserForm = () => {
     const handleRoleChange = (e) => {
         setRole(e.target.value)
     }
-
+    console.log(pass)
     return (
         <>
             {roles && role && questions && users && <form className="unos">
@@ -188,8 +191,8 @@ const AddAUserForm = () => {
                 <div className="row">
                     <div className="col">
 
-                        <div class="form-click">
-                            <div class="form-box">
+                        <div className="form-click">
+                            <div className="form-box">
                                 <select name="role" id="role" value={role} onChange={handleRoleChange}>
                                     {roles && roles.length &&
                                         roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
@@ -209,7 +212,9 @@ const AddAUserForm = () => {
 
 
                 <div className="mb-3">
-                    <input type="password" className="form-control" id="password" placeholder="Password"></input>
+                    <input type="password" value={ pass} className="form-control" placeholder="Password" onInput={e => {
+                        setPass(e.target.value)
+                    }}></input>
                 </div>
 
                 <div>Choose a question</div>
