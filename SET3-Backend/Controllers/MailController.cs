@@ -46,7 +46,7 @@ namespace SET3_Backend.Controllers
         }
 
         [HttpPost("sendcode")]
-        public async Task<IActionResult> SendMailCODE(MailRequest request)
+        public async Task<ActionResult<TFAModel>> SendMailCODE(MailRequest request)
         {
 
             try
@@ -65,9 +65,9 @@ namespace SET3_Backend.Controllers
                     context.Update(user);
                     await context.SaveChangesAsync();
 
-                    return Ok();
+                    return new TFAModel(sixDigit);
                 }
-                else return BadRequest();
+                else return new TFAModel("Failed");
             }
             catch (Exception ex)
             {

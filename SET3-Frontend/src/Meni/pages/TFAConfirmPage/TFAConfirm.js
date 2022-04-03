@@ -6,44 +6,82 @@ import '../styleForm.css';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
-const ForgotPassword = () => {
+
+const ForgotPassword = (props) => {
 
     const { id } = useParams();
+
     const [UserCode, setUserCode] = useState("");
     const navigate = useNavigate();
+    const [Email, setEmail] = useState("");
+
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
 
     const validCode = () => {
+        let x = validate();
+        console.log(x);
 
-        if (validate()) {
+        if (x) {
+
             alert("Verification successful. TFA activated!");
-            navigate('/');
+
+            const user = { "Email": props.email,"Password": props.password };
+            console.log("Uspjesno pozvano");
+            console.log(JSON.stringify(user));
+
+            fetch('https://localhost:7194/Authentication', {
+                method: 'POST',
+                headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
+                credentials: 'include',
+                body: JSON.stringify(user)
+            }).then(response => {
+
+                if (response.status >= 200 && response.status < 300) {
+                    console.log("Sve OK: " + response.status);
+                    navigate('/');
+                    window.location.reload(false);
+                } else {
+                    throw new Error("Greska");
+                }
+            });
+
+
         } else alert("Wrong code!");
 
     }
 
     useEffect(async () => {
-
+        /*
+        const getEmail = async () => {
+            const emailFromServer = await fetchEmail()
+            setEmail(emailFromServer);
+        }
+        getEmail();
+        */
         let email = {
-            "ToEmail": "adizdarevi1@etf.unsa.ba"
+            "ToEmail": props.email
         };
+        console.log("Email je: ")
         console.log(email);
-        
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(email)
         };
-        await fetch('https://localhost:7194/api/mail/sendcode', requestOptions).then(res => {
-            if (res.ok) console.log("UREDU JE");
-            else console.log("Ne javlja se");
-            if (res.status == 400)
-                alert("User has no e-mail!");
-            else {
-                alert("Check your e-mail then verify the code.");
-            }
-        }).catch((Error) => console.log(Error));
-    }, [])
 
+        var res = await fetch('https://localhost:7194/api/mail/sendcode', requestOptions);
+        var data = await res.json();
+
+        alert("Check your e-mail then verify the code.");
+        console.log(data);
+        setUserCode(data.result);
+
+    }, [])
+    /*
     const fetchCode = async () => {
         const res = await fetch('https://localhost:7194/usermodels/' + id, {
             method: 'GET',
@@ -56,16 +94,35 @@ const ForgotPassword = () => {
         const data = await res.json();
         setUserCode(data.TFA);
         return data;
-    }
+    }*/
+    /*
+    const fetchEmail = async () => {
+        const res = await fetch('https://localhost:7194/usermodels/' + id, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json", "Access-Control-Allow-Credentials": true,
+                "Authorization": "bearer " + getCookie("jwt")
+            },
+            credentials: 'include'
+        })
+        const data = await res.json();
+        setEmail(data.email);
+        return data;
+    }*/
 
-    const validate = async () => {
+
+    const validate = () => {
         var usercode = document.getElementById("codeinput").value;
-
+        /*
         const getCode = async () => {
             const codeFromServer = await fetchCode()
             setUserCode(codeFromServer);
         }
-        getCode();
+        getCode();*/
+
+        console.log("Korisnik unio: " + usercode);
+        console.log("Korisnikov tfa: ");
+        console.log(UserCode);
 
         return usercode === UserCode;
     }
@@ -73,16 +130,13 @@ const ForgotPassword = () => {
     return (
         <div className="form-container">
             <div name="myForm" className="form-wrap" >
-                <h1>Two Factor Authentication</h1>
+                <h1>Input 6-digit code: </h1>
                 <div className="form-box">
                     <input id="codeinput" type="text" placeholder="Input code" required />
                 </div>
                 <div className="form-submit">
                     <button onClick={validCode}>Confirm</button>
                 </div>
-
-
-
 
             </div>
         </div>

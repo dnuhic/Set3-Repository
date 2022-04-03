@@ -131,6 +131,16 @@ namespace SET3_Backend.Controllers
             return BadRequest();
         }
 
+        [HttpGet("getUserTFA")]
+        public async Task<ActionResult<Boolean>> getUserTFA(string email)
+        {
+            /*var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.ReadJwtToken(jsontoken);*/
+
+            var user = _context.UserModels.AsNoTracking().Where(u => u.Email == email).FirstOrDefault();
+            return user.TFA != "";
+        }
+
         [EnableCors]
         [HttpPost("getusertoken")]
         public async Task<ActionResult<UserToken>> GetUserToken()
