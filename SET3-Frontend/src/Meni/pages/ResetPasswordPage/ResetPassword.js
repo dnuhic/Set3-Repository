@@ -6,6 +6,8 @@ import '../styleForm.css';
 
 export default function ResetPassword() {
 
+    console.log(process.env)
+    //process.env.REACT_APP_BACKEND_URL
     const { id } = useParams();
     const [userFetched, setUserFetched] = useState(null);
     const [qFetched, setqFetched] = useState(null);
@@ -36,10 +38,8 @@ export default function ResetPassword() {
     useEffect(async () => {
         const question = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels/${id}/forgotPassword`);
         const data = await question.json();
-        console.log(question);
-        console.log(data);
-        console.log('Ovo bi trebalo biti null??')
-        console.log(data.question);
+       
+        //console.log(data);
         //console.log(data.question);
         setqFetched(data.question);
     }, [userFetched]);
