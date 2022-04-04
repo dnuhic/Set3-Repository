@@ -10,5 +10,7 @@ namespace SET3_Backend.Models
         public string Adress { get; set; }
 
         public int StockId { get; set; }
+        public bool Deleted { get; set; }
+
     }
 }

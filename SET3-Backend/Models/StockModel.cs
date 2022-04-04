@@ -2,10 +2,11 @@
 
 namespace SET3_Backend.Models
 {
-    public class StockModel
+    public class StockModel //SKLADISTE
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; } 
+        public string Name { get; set; }
+
     }
 }
