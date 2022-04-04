@@ -1,11 +1,16 @@
 ﻿#nullable disable
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 
@@ -16,10 +21,13 @@ namespace SET3_Backend.Controllers
     public class ShopModelsController : ControllerBase
     {
         private readonly Context _context;
+        private readonly Configuration _configuration;
 
-        public ShopModelsController(Context context)
+
+        public ShopModelsController(Context context, Configuration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: api/ShopModels
@@ -101,9 +109,70 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
+        [HttpPost("/deleteShop/{id}"), Authorize(Roles = "ShopAdmin")]
+        public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
+        {
+
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+
+            if (ValidateToken(token) != null)
+            {
+                var deletedShop = await _context.ShopModels.FindAsync(id);
+                if (deletedShop == null)
+                {
+                    return deletedShop;
+                }
+                else
+                {
+                    //deletedShop.Deleted = true;
+                    var deletedCashRegister = await _context.CashRegisterModels.Where(x => x.ShopId == id).ToListAsync<CashRegisterModel>();
+                    foreach (var k in deletedCashRegister)
+                    {
+                        k.Deleted = true;
+                        _context.CashRegisterModels.Update(k);
+
+                    }
+                    deletedShop.Deleted = true;
+                    _context.ShopModels.Update(deletedShop);
+                    await _context.SaveChangesAsync();
+                }
+                    return deletedShop;
+     
+            }
+            else return NoContent();
+        }
+
+
+
         private bool ShopModelExists(int id)
         {
             return _context.ShopModels.Any(e => e.Id == id);
+        }
+
+        protected JwtSecurityToken ValidateToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+                handler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                return jwtToken;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
