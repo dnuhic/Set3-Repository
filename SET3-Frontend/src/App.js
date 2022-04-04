@@ -1,107 +1,92 @@
-﻿import React from 'react';
-import GlobalStyle from './globalStyles';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Navbar } from './Meni/components';
-import { Link } from 'react-router-dom';
-import Home from './Meni/pages/HomePage/Home';
-import AddUser from './Meni/pages/AddAUserPage/AddAUserForm';
-import Settings from './Meni/pages/SettingsPage/Settings';
-import Login from './Meni/pages/LoginPage/Login';
-import Users from './Meni/pages/UsersPage/Users';
-import ForgotPassword from './Meni/pages/ForgotPasswordPage/ForgotPassword';
-import ForgotPasswordConfirm from './Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm';
-import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
-import TFA from './Meni/pages/TFAPage/TFA';
-import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
-import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
-import AccessRights from './AccessRights/AccessRights';
+﻿import React from "react";
+import GlobalStyle from "./globalStyles";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Navbar } from "./Meni/components";
+import { Link } from "react-router-dom";
+import Home from "./Meni/pages/HomePage/Home";
+import AddUser from "./Meni/pages/AddAUserPage/AddAUserForm";
+import Settings from "./Meni/pages/SettingsPage/Settings";
+import Login from "./Meni/pages/LoginPage/Login";
+import Users from "./Meni/pages/UsersPage/Users";
+import ForgotPassword from "./Meni/pages/ForgotPasswordPage/ForgotPassword";
+import ForgotPasswordConfirm from "./Meni/pages/ForgotPasswordConfirmPage/ForgotPasswordConfirm";
+import ResetPassword from "./Meni/pages/ResetPasswordPage/ResetPassword";
+import TFA from "./Meni/pages/TFAPage/TFA";
+import TFAConfirm from "./Meni/pages/TFAConfirmPage/TFAConfirm";
+import EditUserComponent from "./Meni/pages/EditUserPage/EditUserComponent";
+import AccessRights from "./AccessRights/AccessRights";
+import ProductPage from "./Meni/pages/ProductPage/ProductPage";
 
 function App() {
+  return (
+    <Router>
+      <GlobalStyle />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
 
+      <Routes>
+        <Route path="/settings/:id" element={<Settings />} />
+      </Routes>
 
-    return (
+      <Routes>
+        <Route path="/log-in" element={<Login />} />
+      </Routes>
 
-            < Router >
-                <GlobalStyle />
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<Home />} />
+      <Routes>
+        <Route path="/home" element={<Home />} />
+      </Routes>
 
-                </Routes>
+      <Routes>
+        <Route path="/users" element={<Users />} />
+      </Routes>
 
-                <Routes>
-                    <Route path="/settings/:id" element={<Settings />} />
+      <Routes>
+        <Route path="/form" element={<AddUser />} />
+      </Routes>
 
-                </Routes>
+      <Routes>
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+      </Routes>
 
-                <Routes>
-                    <Route path="/log-in" element={<Login />} />
+      <Routes>
+        <Route
+          path="/forgotPasswordConfirm/:id"
+          element={<ForgotPasswordConfirm />}
+        />
+      </Routes>
 
-                </Routes>
+      <Routes>
+        <Route path="/resetPassword/:id" element={<ResetPassword />} />
+      </Routes>
 
-                <Routes>
-                    <Route path="/home" element={<Home />} />
+      <Routes>
+        <Route path="/users/:id" element={<EditUserComponent />} />
+      </Routes>
+      <Routes>
+        <Route path="/twoFactorAuthentication/:id" element={<TFA />} />
+      </Routes>
 
-                </Routes>
+      <Routes>
+        <Route
+          path="/twoFactorAuthenticationConfirm/:id"
+          element={<TFAConfirm />}
+        />
+      </Routes>
+      <Routes>
+        <Route path="/accessRights" element={<AccessRights />} />
+      </Routes>
 
-                <Routes>
-                    <Route path="/users" element={<Users />} />
+      <Routes>
+        <Route path="/productsPage" element={<ProductPage />} />
+      </Routes>
+    </Router>
+  );
 
-                </Routes>
-
-                <Routes>
-
-                    <Route path="/form" element={<AddUser />} />
-
-                </Routes>
-
-                <Routes>
-                    <Route path="/forgotPassword" element={<ForgotPassword />} />
-
-                </Routes>
-
-                <Routes>
-                    <Route path="/forgotPasswordConfirm/:id" element={<ForgotPasswordConfirm />} />
-
-                </Routes>
-
-                <Routes>
-                    <Route path="/resetPassword/:id" element={<ResetPassword />} />
-
-                </Routes>
-
-                <Routes>
-
-                    <Route path="/users/:id" element={<EditUserComponent />} />
-                </Routes>
-                <Routes>
-
-                <Route path="/twoFactorAuthentication/:id" element={<TFA />} />
-
-                </Routes>
-
-                <Routes>
-
-                    <Route path="/twoFactorAuthenticationConfirm/:id" element={<TFAConfirm />} />
-
-                </Routes>
-                 <Routes>
-
-                <Route path="/accessRights" element={<AccessRights />} />
-                 </Routes>
-
-
-            </Router >
-            
-        );
-    
-
-    /*if (!token) {
+  /*if (!token) {
         return <Login setToken={setToken} />
     }     */
-    
-
-    
 }
 
 export default App;
