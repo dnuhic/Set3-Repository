@@ -16,6 +16,7 @@ import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import AccessRights from './AccessRights/AccessRights';
 
+
 function App() {
 
 
@@ -89,7 +90,7 @@ function App() {
 
                 <Route path="/accessRights" element={<AccessRights />} />
                  </Routes>
-
+          
 
             </Router >
             
