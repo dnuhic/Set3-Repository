@@ -1,18 +1,14 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
+using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -21,10 +17,10 @@ namespace SET3_Backend.Controllers
     public class ShopModelsController : ControllerBase
     {
         private readonly Context _context;
-        private readonly Configuration _configuration;
+        private readonly IConfiguration _configuration;
 
 
-        public ShopModelsController(Context context, Configuration configuration)
+        public ShopModelsController(Context context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
