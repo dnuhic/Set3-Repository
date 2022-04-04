@@ -15,12 +15,14 @@ import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import AccessRights from './AccessRights/AccessRights';
+import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
+
 
 function App() {
 
 
     return (
-
+            
             < Router >
                 <GlobalStyle />
                 <Navbar />
@@ -89,7 +91,9 @@ function App() {
 
                 <Route path="/accessRights" element={<AccessRights />} />
                  </Routes>
-
+            <Routes>
+                <Route path="/addCashRegister" element={<AddCashRegister/>} />
+                </Routes>
 
             </Router >
             
