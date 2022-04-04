@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CashRegisterModel>>> GetCashRegisterModel()
         {
-            return await _context.CashRegisterModel.ToListAsync();
+            return await _context.CashRegisterModels.ToListAsync();
         }
 
         // GET: api/CashRegisterModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CashRegisterModel>> GetCashRegisterModel(int id)
         {
-            var cashRegisterModel = await _context.CashRegisterModel.FindAsync(id);
+            var cashRegisterModel = await _context.CashRegisterModels.FindAsync(id);
 
             if (cashRegisterModel == null)
             {
@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<CashRegisterModel>> PostCashRegisterModel(CashRegisterModel cashRegisterModel)
         {
-            _context.CashRegisterModel.Add(cashRegisterModel);
+            _context.CashRegisterModels.Add(cashRegisterModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCashRegisterModel", new { id = cashRegisterModel.Id }, cashRegisterModel);
@@ -89,13 +89,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCashRegisterModel(int id)
         {
-            var cashRegisterModel = await _context.CashRegisterModel.FindAsync(id);
+            var cashRegisterModel = await _context.CashRegisterModels.FindAsync(id);
             if (cashRegisterModel == null)
             {
                 return NotFound();
             }
 
-            _context.CashRegisterModel.Remove(cashRegisterModel);
+            _context.CashRegisterModels.Remove(cashRegisterModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace SET3_Backend.Controllers
 
         private bool CashRegisterModelExists(int id)
         {
-            return _context.CashRegisterModel.Any(e => e.Id == id);
+            return _context.CashRegisterModels.Any(e => e.Id == id);
         }
     }
 }

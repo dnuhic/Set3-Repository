@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShopModel>>> GetShopModel()
         {
-            return await _context.ShopModel.ToListAsync();
+            return await _context.ShopModels.ToListAsync();
         }
 
         // GET: api/ShopModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ShopModel>> GetShopModel(int id)
         {
-            var shopModel = await _context.ShopModel.FindAsync(id);
+            var shopModel = await _context.ShopModels.FindAsync(id);
 
             if (shopModel == null)
             {
@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<ShopModel>> PostShopModel(ShopModel shopModel)
         {
-            _context.ShopModel.Add(shopModel);
+            _context.ShopModels.Add(shopModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetShopModel", new { id = shopModel.Id }, shopModel);
@@ -89,13 +89,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShopModel(int id)
         {
-            var shopModel = await _context.ShopModel.FindAsync(id);
+            var shopModel = await _context.ShopModels.FindAsync(id);
             if (shopModel == null)
             {
                 return NotFound();
             }
 
-            _context.ShopModel.Remove(shopModel);
+            _context.ShopModels.Remove(shopModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace SET3_Backend.Controllers
 
         private bool ShopModelExists(int id)
         {
-            return _context.ShopModel.Any(e => e.Id == id);
+            return _context.ShopModels.Any(e => e.Id == id);
         }
     }
 }

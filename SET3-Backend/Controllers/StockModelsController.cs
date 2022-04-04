@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StockModel>>> GetStockModel()
         {
-            return await _context.StockModel.ToListAsync();
+            return await _context.StockModels.ToListAsync();
         }
 
         // GET: api/StockModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<StockModel>> GetStockModel(int id)
         {
-            var stockModel = await _context.StockModel.FindAsync(id);
+            var stockModel = await _context.StockModels.FindAsync(id);
 
             if (stockModel == null)
             {
@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<StockModel>> PostStockModel(StockModel stockModel)
         {
-            _context.StockModel.Add(stockModel);
+            _context.StockModels.Add(stockModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStockModel", new { id = stockModel.Id }, stockModel);
@@ -89,13 +89,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStockModel(int id)
         {
-            var stockModel = await _context.StockModel.FindAsync(id);
+            var stockModel = await _context.StockModels.FindAsync(id);
             if (stockModel == null)
             {
                 return NotFound();
             }
 
-            _context.StockModel.Remove(stockModel);
+            _context.StockModels.Remove(stockModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace SET3_Backend.Controllers
 
         private bool StockModelExists(int id)
         {
-            return _context.StockModel.Any(e => e.Id == id);
+            return _context.StockModels.Any(e => e.Id == id);
         }
     }
 }

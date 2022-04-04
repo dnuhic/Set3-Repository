@@ -54,7 +54,7 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CashRegisterModel");
+                    b.ToTable("CashRegisterModels");
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.CategoryModel", b =>
@@ -71,7 +71,7 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryModel");
+                    b.ToTable("CategoryModels");
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.LoggingModel", b =>
@@ -130,7 +130,7 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductModel");
+                    b.ToTable("ProductModels");
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.RoleModel", b =>
@@ -200,7 +200,7 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShopModel");
+                    b.ToTable("ShopModels");
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.StockModel", b =>
@@ -217,7 +217,7 @@ namespace SET3_Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StockModel");
+                    b.ToTable("StockModels");
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.UserModel", b =>
