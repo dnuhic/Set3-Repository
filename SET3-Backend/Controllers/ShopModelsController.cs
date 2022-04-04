@@ -50,10 +50,10 @@ namespace SET3_Backend.Controllers
         {
             if (id != shopModel.Id)
                 return BadRequest("Url id and body id do not match");
-            if(_context.StockModel.Where(s => s.Id == shopModel.StockId).Count() == 0)
+            if(_context.StockModels.Where(s => s.Id == shopModel.StockId).Count() == 0)
                 return BadRequest("Selected wearhouse does not exist.");
 
-            _context.ShopModel.Update(shopModel);
+            _context.ShopModels.Update(shopModel);
 
             try
             {
