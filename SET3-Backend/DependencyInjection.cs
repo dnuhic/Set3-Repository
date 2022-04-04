@@ -25,7 +25,7 @@ namespace SET3_Backend
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("https://localhost:3000");
+                    .WithOrigins(new string[] { "https://localhost:3000" , "http://set3front.azurewebsites.net"});
                 }));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));

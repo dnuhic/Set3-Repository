@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000").AllowCredentials());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[] { "https://localhost:3000", "http://set3front.azurewebsites.net" }).AllowCredentials());
 
 app.UseHttpsRedirection();
 

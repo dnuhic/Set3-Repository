@@ -24,15 +24,11 @@ const Navbar = () => {
     }
 
     useEffect(async () => {
-
-        var cookie = document.cookie;
-        console.log(cookie);
-
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain', "Access-Control-Allow-Credentials": true },
             credentials: 'include',
-            body: cookie
+            body: document.cookie
         };
 
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}authentication/getusertoken`, requestOptions);
@@ -40,9 +36,8 @@ const Navbar = () => {
         const data = await response.json();
 
         setRole(data.role);
-
-
     }, [])
+
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -51,7 +46,7 @@ const Navbar = () => {
 
     useEffect(async () => {
         if (role != null) {
- const requestOptions = {
+        const requestOptions = {
             method: 'GET',
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
             credentials: 'same-origin'
