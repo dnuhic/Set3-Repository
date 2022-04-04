@@ -37,7 +37,7 @@ namespace SET3_Backend.Controllers
 
             if (ValidateToken(token) != null)
             {
-                return await _context.ProductModel.ToListAsync();
+                return await _context.ProductModels.ToListAsync();
             }
 
             return NoContent();
@@ -52,7 +52,7 @@ namespace SET3_Backend.Controllers
 
             if (ValidateToken(token) != null)
             {
-                var productModel = await _context.ProductModel.FindAsync(id);
+                var productModel = await _context.ProductModels.FindAsync(id);
 
                 if (productModel == null)
                 {
@@ -112,7 +112,7 @@ namespace SET3_Backend.Controllers
 
             if (ValidateToken(token) != null)
             {
-                _context.ProductModel.Add(productModel);
+                _context.ProductModels.Add(productModel);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
