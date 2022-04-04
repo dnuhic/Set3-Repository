@@ -46,14 +46,14 @@ namespace SET3_Backend.Controllers
         // PUT: api/ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShopModel(int id, ShopModel shopModel)
+        public async Task<IActionResult> PutShopModel(int id,[FromBody] ShopModel shopModel)
         {
             if (id != shopModel.Id)
-            {
-                return BadRequest();
-            }
+                return BadRequest("Url id and body id do not match");
+            if(_context.StockModel.Where(s => s.Id == shopModel.StockId).Count() == 0)
+                return BadRequest("Selected wearhouse does not exist.");
 
-            _context.Entry(shopModel).State = EntityState.Modified;
+            _context.ShopModel.Update(shopModel);
 
             try
             {
@@ -71,7 +71,7 @@ namespace SET3_Backend.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/ShopModels
