@@ -23,7 +23,9 @@ namespace SET3_Backend.Models
     public enum RoleType
     {
         Admin = 0,
-        User = 1
+        User = 1,
+        ShopAdmin = 2, // admin poslovnica
+        StockAdmin = 3 //admin skladista
 
     }
 }
