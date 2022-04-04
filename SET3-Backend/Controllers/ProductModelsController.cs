@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModel()
         {
-            return await _context.ProductModel.ToListAsync();
+            return await _context.ProductModels.ToListAsync();
         }
 
         // GET: api/ProductModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
         {
-            var productModel = await _context.ProductModel.FindAsync(id);
+            var productModel = await _context.ProductModels.FindAsync(id);
 
             if (productModel == null)
             {
@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
-            _context.ProductModel.Add(productModel);
+            _context.ProductModels.Add(productModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
@@ -89,13 +89,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductModel(int id)
         {
-            var productModel = await _context.ProductModel.FindAsync(id);
+            var productModel = await _context.ProductModels.FindAsync(id);
             if (productModel == null)
             {
                 return NotFound();
             }
 
-            _context.ProductModel.Remove(productModel);
+            _context.ProductModels.Remove(productModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace SET3_Backend.Controllers
 
         private bool ProductModelExists(int id)
         {
-            return _context.ProductModel.Any(e => e.Id == id);
+            return _context.ProductModels.Any(e => e.Id == id);
         }
     }
 }

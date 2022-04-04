@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryModel>>> GetCategoryModel()
         {
-            return await _context.CategoryModel.ToListAsync();
+            return await _context.CategoryModels.ToListAsync();
         }
 
         // GET: api/CategoryModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryModel>> GetCategoryModel(int id)
         {
-            var categoryModel = await _context.CategoryModel.FindAsync(id);
+            var categoryModel = await _context.CategoryModels.FindAsync(id);
 
             if (categoryModel == null)
             {
@@ -79,7 +79,7 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoryModel>> PostCategoryModel(CategoryModel categoryModel)
         {
-            _context.CategoryModel.Add(categoryModel);
+            _context.CategoryModels.Add(categoryModel);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCategoryModel", new { id = categoryModel.Id }, categoryModel);
@@ -89,13 +89,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoryModel(int id)
         {
-            var categoryModel = await _context.CategoryModel.FindAsync(id);
+            var categoryModel = await _context.CategoryModels.FindAsync(id);
             if (categoryModel == null)
             {
                 return NotFound();
             }
 
-            _context.CategoryModel.Remove(categoryModel);
+            _context.CategoryModels.Remove(categoryModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -103,7 +103,7 @@ namespace SET3_Backend.Controllers
 
         private bool CategoryModelExists(int id)
         {
-            return _context.CategoryModel.Any(e => e.Id == id);
+            return _context.CategoryModels.Any(e => e.Id == id);
         }
     }
 }

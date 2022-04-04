@@ -12,7 +12,6 @@ namespace SET3_Backend.Database
         public virtual DbSet<RoleModel> RoleModels { get; set; }
         public virtual DbSet<SecurityQuestionModel> SecurityQuestionModels { get; set; }
         public virtual DbSet<UserModel> UserModels { get; set; }
-
         public virtual DbSet<CashRegisterModel> CashRegisterModels { get; set; }
         public virtual DbSet<CategoryModel> CategoryModels { get; set; }
         public virtual DbSet<ProductModel> ProductModels { get; set; }
@@ -21,23 +20,7 @@ namespace SET3_Backend.Database
 
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
-
-            
-
-
-            //if (!conn.DataSource.Contains("localdb", StringComparison.OrdinalIgnoreCase))
-            //{ 
-            //    conn.AccessToken = new Microsoft.Azure.Services.AppAuthentication.AzureServiceTokenProvider().GetAccessTokenAsync("https://database.windows.net/").Result;
-            //}
-
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            
-
-        }
-
-
 
         //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
         //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
@@ -46,7 +29,7 @@ namespace SET3_Backend.Database
             //Ovaj dio koda kreira lokalnu bazu
 
             //Update-Database
-            var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
+            var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
             optionsBuilder.UseSqlServer(dbConnString);
@@ -66,34 +49,6 @@ namespace SET3_Backend.Database
         //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
         //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
 
-        public DbSet<SET3_Backend.Models.CashRegisterModel> CashRegisterModel { get; set; }
-
-
-
-        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
-        //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
-
-        public DbSet<SET3_Backend.Models.CategoryModel> CategoryModel { get; set; }
-
-
-
-        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
-        //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
-
-        public DbSet<SET3_Backend.Models.ProductModel> ProductModel { get; set; }
-
-
-
-        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
-        //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
-
-        public DbSet<SET3_Backend.Models.ShopModel> ShopModel { get; set; }
-
-
-
-        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
-        //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
-
-        public DbSet<SET3_Backend.Models.StockModel> StockModel { get; set; }
+        
     }
 }
