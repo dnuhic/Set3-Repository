@@ -125,13 +125,13 @@ namespace SET3_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductModel(int id)
         {
-            var productModel = await _context.ProductModel.FindAsync(id);
+            var productModel = await _context.ProductModels.FindAsync(id);
             if (productModel == null)
             {
                 return NotFound();
             }
 
-            _context.ProductModel.Remove(productModel);
+            _context.ProductModels.Remove(productModel);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -139,7 +139,7 @@ namespace SET3_Backend.Controllers
 
         private bool ProductModelExists(int id)
         {
-            return _context.ProductModel.Any(e => e.Id == id);
+            return _context.ProductModels.Any(e => e.Id == id);
         }
 
         protected JwtSecurityToken ValidateToken(string token)

@@ -52,13 +52,10 @@ const Navbar = () => {
             credentials: 'same-origin'
         };
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}authentication/getUserId`, requestOptions);
-            //const response = await fetch('https://localhost:7194/authentication/getUserId', requestOptions);
-            const data = await response.json();
-            console.log("RESPONSE")
-            console.log(response);
-            console.log('Response.json tj data')
-            console.log(data);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}authentication/getUserId`, requestOptions);
+
+        const data = await response.json();
+
             setUser(data);
             console.log(user);
         }
