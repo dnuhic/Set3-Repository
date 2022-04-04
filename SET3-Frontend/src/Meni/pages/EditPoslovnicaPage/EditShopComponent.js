@@ -18,6 +18,7 @@ const EditShopComponent = () => {
 
     const [Name, setName] = useState("");
     const [Adress, setAddress] = useState("");
+    const [Deleted, setDeleted] = useState(false);
    
 
     const [updatedShop, setUpdatedShop] = useState(null);
@@ -44,6 +45,7 @@ const EditShopComponent = () => {
         setShop(dataShop);
         setName(dataShop.Name);
         setAddress(dataShop.Adress);
+        setDeleted(dataShop.Deleted);
         setStocks(dataStock);
         let temp = dataStock.map(stock => stock.Id == dataShop.StockId)
         setDefaultStock(temp)
@@ -62,7 +64,7 @@ const EditShopComponent = () => {
             Name: document.getElementById("name").value,
             Adress: document.getElementById("address").value,
             StockId: newStockId,
-            Deleted: shop.deleted,
+            Deleted: document.getElementById("deleted").checked
         };
         console.log("NEW SHOP: ");
         console.log(newShop);
@@ -76,6 +78,9 @@ const EditShopComponent = () => {
 
     const handleAdressChange = (event) => {
         setAddress(event.target.value);
+    };
+    const handleDeletedChange = (event) => {
+        setDeleted(event.target.value);
     };
 
 
@@ -129,6 +134,7 @@ const EditShopComponent = () => {
                             />
                         </div>
                     </div>
+                   
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             ${defaultStock}
@@ -142,6 +148,13 @@ const EditShopComponent = () => {
                             }
                            
                         </div>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="deleted" onChange={handleDeletedChange}></input>
+                        //add checked or not
+                        <label class="form-check-label" for="deleted">
+                            Deleted
+                        </label>
                     </div>
                     <button
                         type="button"
