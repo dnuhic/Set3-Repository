@@ -49,6 +49,10 @@ namespace SET3_Backend.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ShopId")
                         .HasColumnType("int");
 
@@ -121,9 +125,6 @@ namespace SET3_Backend.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int");
