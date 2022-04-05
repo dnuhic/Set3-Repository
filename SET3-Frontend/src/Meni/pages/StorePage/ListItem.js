@@ -17,6 +17,7 @@ function ListItem(props) {
     }
 
     const handleEdit = () => {
+        navigate(`/editshop/${props.store.id}`);
 
     }
 

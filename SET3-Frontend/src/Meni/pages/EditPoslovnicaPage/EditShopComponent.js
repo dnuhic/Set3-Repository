@@ -37,7 +37,7 @@ const EditShopComponent = () => {
             credentials: 'same-origin'
         };
         //api poziv fix
-        const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels/${id}`, requestOptions);
+        const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
         if (responseShop.status == 404) {
             alert("Shop does not exist.");
         }
@@ -125,7 +125,7 @@ const EditShopComponent = () => {
                 credentials: 'same-origin'
             };
             //fix api
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels/${shop.id}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${shop.id}`, requestOptions);
             alert("Changes have been saved succesfully!")
         }
 
@@ -160,8 +160,8 @@ const EditShopComponent = () => {
                         </div>
                     </div>
                    
-                    <div class="dropdown">
-                        <select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropDownLista">
+                        <select  type="button" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
                             <option>{
                                 defaultStock
                             }</option>

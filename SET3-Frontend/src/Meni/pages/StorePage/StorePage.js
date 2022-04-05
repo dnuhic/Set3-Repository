@@ -13,7 +13,7 @@ function StorePage(props) {
 	const [allStores, setAllStores] = useState(null);
 
 	const getData = async () => {
-		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels`);
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`);
 
 		console.log(response);
 		const data = await response.json();
