@@ -90,6 +90,11 @@ const Navbar = () => {
                             <NavItem>
                                 <NavLinks to='/home'> Home </NavLinks>
                             </NavItem>
+                            {role && user &&
+                                <NavLinks to={'/settings/' + user.id}>
+                                    Settings
+                                </NavLinks>
+                            }
                             {role && user && 
                                 <NavItem>
                                 <NavLinks to={'/resetPassword/' + user.id}> Reset password </NavLinks>
@@ -116,13 +121,13 @@ const Navbar = () => {
                                     <NavLinks to='/accessRights'>Access rights</NavLinks>
                                 </NavItem>
                             }
-                            <NavItemBtn>
+                            
                                 {role == "ShopAdmin" &&
                                     <NavLinks to="/stores">
                                          Stores 
                                     </NavLinks>
                                 }
-                            </NavItemBtn>
+                            
                             
 
                             <NavItemBtn>

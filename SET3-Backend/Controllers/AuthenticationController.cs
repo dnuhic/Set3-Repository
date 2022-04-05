@@ -110,7 +110,7 @@ namespace SET3_Backend.Controllers
         {
 
             Console.WriteLine("inside post");
-            if (userDto == null) return BadRequest();
+            if (userDto == null) new TFAModel("ERROR");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
             var sha = SHA256.Create();
             var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userDto.Password)));
@@ -118,7 +118,7 @@ namespace SET3_Backend.Controllers
             Console.WriteLine(userDto.Password);
             if (user == null || !passwordHash.Equals(user.Password))
             {
-                return BadRequest();
+                return new TFAModel("ERROR");
             }
             //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);

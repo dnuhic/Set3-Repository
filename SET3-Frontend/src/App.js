@@ -107,6 +107,11 @@ function App() {
 
                 <Route path="/stores" element={<StorePage />} />
             </Routes>
+
+            <Routes>
+
+                <Route path="/settings" element={<Settings />} />
+            </Routes>
           
 
             </Router >
