@@ -2,6 +2,7 @@
 using SET3_Backend.Database;
 using SET3_Backend.Settings;
 using SET3_Backend.Services;
+using SET3_Backend.Repository.UserRepo;
 
 namespace SET3_Backend
 {
@@ -31,6 +32,7 @@ namespace SET3_Backend
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, Services.MailService>();
             //Ovdje se dodaju servisi za dependency injection
+            services.AddScoped<IUserRepositroy, UserRepository>();
 
             return services;
         }

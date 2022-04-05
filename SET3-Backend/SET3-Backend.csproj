@@ -31,4 +31,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\Repository\ShopRepo\" />
+  </ItemGroup>
+
 </Project>
