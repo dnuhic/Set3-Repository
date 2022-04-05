@@ -48,6 +48,15 @@ namespace SET3_Backend.Controllers
 
                 RoleModel admin = new RoleModel(RoleType.Admin.ToString(), true, true, true);
                 _context.RoleModels.Add(admin);
+
+                RoleModel shopAdmin = new RoleModel(RoleType.ShopAdmin.ToString(), true, true, true);
+                _context.RoleModels.Add(shopAdmin);
+
+                RoleModel stockAdmin = new RoleModel(RoleType.StockAdmin.ToString(), true, true, true);
+                _context.RoleModels.Add(stockAdmin);
+
+
+
             }
 
             if (!_context.SecurityQuestionModels.Any())
@@ -57,6 +66,14 @@ namespace SET3_Backend.Controllers
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your mothers name?"));
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream destination?"));
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream car?"));
+            }
+
+            if(!_context.CategoryModels.Any())
+            {
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Other.ToString()));
             }
 
             await _context.SaveChangesAsync();
