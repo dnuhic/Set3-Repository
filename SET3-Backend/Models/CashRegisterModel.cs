@@ -8,5 +8,7 @@ namespace SET3_Backend.Models
         public int Id { get; set; }
         public int ShopId { get; set; }
         public bool Deleted { get; set; }
+        public string CashRegisterName { get; set; }
+        public string Description { get; set; }
     }
 }
