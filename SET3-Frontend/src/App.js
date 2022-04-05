@@ -15,6 +15,8 @@ import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import AccessRights from './AccessRights/AccessRights';
+import AddProizvod from './Meni/pages/AddProductPage/AddProizvod';
+
 
 function App() {
 
@@ -90,6 +92,10 @@ function App() {
                 <Route path="/accessRights" element={<AccessRights />} />
                  </Routes>
 
+                <Routes>
+
+                <Route path="/addProduct" element={<AddProizvod /> } />
+                </Routes>
 
             </Router >
             
