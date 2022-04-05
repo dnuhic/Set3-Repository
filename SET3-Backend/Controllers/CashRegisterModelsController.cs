@@ -45,7 +45,7 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/CashRegisterModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"),Authorize(Roles="StockAdmin,ShopAdmin")]
         public async Task<IActionResult> PutCashRegisterModel(int id, CashRegisterModel cashRegisterModel)
         {
             if (id != cashRegisterModel.Id)
