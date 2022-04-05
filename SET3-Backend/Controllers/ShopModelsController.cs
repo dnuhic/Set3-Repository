@@ -12,7 +12,7 @@ using System.Text;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ShopModelsController : ControllerBase
     {
@@ -26,14 +26,14 @@ namespace SET3_Backend.Controllers
             _configuration = configuration;
         }
 
-        // GET: api/ShopModels
+        // GET: ShopModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShopModel>>> GetShopModel()
         {
             return await _context.ShopModels.ToListAsync();
         }
 
-        // GET: api/ShopModels/5
+        // GET: ShopModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ShopModel>> GetShopModel(int id)
         {
@@ -47,7 +47,7 @@ namespace SET3_Backend.Controllers
             return shopModel;
         }
 
-        // PUT: api/ShopModels/5
+        // PUT: ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShopModel(int id, ShopModel shopModel)
@@ -78,7 +78,7 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        // POST: api/ShopModels
+        // POST: ShopModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ShopModel>> PostShopModel(ShopModel shopModel)
@@ -89,7 +89,7 @@ namespace SET3_Backend.Controllers
             return CreatedAtAction("GetShopModel", new { id = shopModel.Id }, shopModel);
         }
 
-        // DELETE: api/ShopModels/5
+        // DELETE: ShopModels/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShopModel(int id)
         {
@@ -105,7 +105,7 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        [HttpPost("/deleteShop/{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpPost("deleteShop/{id}"), Authorize(Roles = "ShopAdmin")] 
         public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
         {
 
@@ -122,7 +122,7 @@ namespace SET3_Backend.Controllers
                 }
                 else
                 {
-                    //deletedShop.Deleted = true;
+
                     var deletedCashRegister = await _context.CashRegisterModels.Where(x => x.ShopId == id).ToListAsync<CashRegisterModel>();
                     foreach (var k in deletedCashRegister)
                     {
@@ -134,10 +134,10 @@ namespace SET3_Backend.Controllers
                     _context.ShopModels.Update(deletedShop);
                     await _context.SaveChangesAsync();
                 }
-                    return deletedShop;
-     
+                return deletedShop;
+
             }
-            else return NoContent();
+            else return BadRequest();
         }
 
 
