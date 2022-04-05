@@ -18,6 +18,7 @@ import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent
 import AccessRights from './AccessRights/AccessRights';
 import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
 import StorePage from './Meni/pages/StorePage/StorePage'
+import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 
 function App() {
 
@@ -98,6 +99,11 @@ function App() {
 
                     <Route path="/accessRights" element={<AccessRights />} />
                 </Routes>
+
+		<Routes>
+                	<Route path="/addShop" element={<AddShopComponent />} />
+            	</Routes>
+
                 <Routes>
 
                     <Route path="/cashRegister/:id" element={<CashRegister />} />
