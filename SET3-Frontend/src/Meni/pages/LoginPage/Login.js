@@ -24,17 +24,12 @@ const Login = () => {
             credentials: 'include',
             body: JSON.stringify(user)
         })
-        .then(response => {
-            if (response.status >= 200 && response.status < 300) {
-                console.log("Sve OK: " + response.status);
-                response.json();
-            } else {
-                throw new Error("Greska");
-            }
-                
-        })
+        .then(response => response.json())
         .then(data => {
             const token = data.result;
+            if (token === "ERROR") {
+                throw Error("nema u bazi");
+            }
             document.cookie = `jwt=${token};max-age=604800;domain=`
         })
         .then(() => {
@@ -52,7 +47,7 @@ const Login = () => {
             })
         }).catch(function (error) {
             console.log(error);
-            alert("There is no user with that e-mail in the database");
+            alert("Wrong log in information");
         });
 
         /*
