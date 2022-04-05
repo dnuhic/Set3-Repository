@@ -11,7 +11,7 @@ const Login = () => {
     const [error, setError] = useState(false);
     const [buttonClicked, setButtonClicked] = useState(false);
 
-    const handleSumbit = (e) => {
+    const handleSumbit = async (e) => {
         e.preventDefault();
 
         const user = { Email, Password };
@@ -23,8 +23,13 @@ const Login = () => {
             headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
             credentials: 'include',
             body: JSON.stringify(user)
-        }).then(response => {
-            console.log("Sve OK: " + response.status);
+        })
+        .then(response => response.json())
+        .then(data => {
+            const token = data.result;
+            document.cookie = `jwt=${token};max-age=604800;domain=`
+        })
+        .then(() => {
             fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication/getUserTFA/${Email}`).then(r => r.json()).then(x => {
                 console.log("X");
                 console.log(x);
@@ -37,7 +42,8 @@ const Login = () => {
                     setButtonClicked(false);
                 }
             })
-        });
+        })
+
         /*
         var response = await fetch('https://localhost:7194/Authentication', {
             method: 'POST',

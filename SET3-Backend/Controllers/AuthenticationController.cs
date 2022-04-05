@@ -48,6 +48,15 @@ namespace SET3_Backend.Controllers
 
                 RoleModel admin = new RoleModel(RoleType.Admin.ToString(), true, true, true);
                 _context.RoleModels.Add(admin);
+
+                RoleModel shopAdmin = new RoleModel(RoleType.ShopAdmin.ToString(), true, true, true);
+                _context.RoleModels.Add(shopAdmin);
+
+                RoleModel stockAdmin = new RoleModel(RoleType.StockAdmin.ToString(), true, true, true);
+                _context.RoleModels.Add(stockAdmin);
+
+
+
             }
 
             if (!_context.SecurityQuestionModels.Any())
@@ -57,6 +66,14 @@ namespace SET3_Backend.Controllers
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your mothers name?"));
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream destination?"));
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream car?"));
+            }
+
+            if(!_context.CategoryModels.Any())
+            {
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Other.ToString()));
             }
 
             await _context.SaveChangesAsync();
@@ -86,13 +103,13 @@ namespace SET3_Backend.Controllers
             
         }
 
-        [EnableCors]
+        [EnableCors("CorsPolicy")]
         [HttpPost]
-        public async Task<ActionResult<string>> Login([FromBody] UserDto userDto)
+        public async Task<ActionResult<TFAModel>> Login(UserDto userDto)
         {
 
             Console.WriteLine("inside post");
-            if (userDto == null) return BadRequest("User not specified");
+            if (userDto == null) return BadRequest();
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
             var sha = SHA256.Create();
             var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userDto.Password)));
@@ -100,18 +117,19 @@ namespace SET3_Backend.Controllers
             Console.WriteLine(userDto.Password);
             if (user == null || !passwordHash.Equals(user.Password))
             {
-                return BadRequest("Incorrect email or password.");
+                return BadRequest();
             }
             //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
             string token = CreateToken(user);
 
             CookieOptions cookieOptions = new CookieOptions();
-            cookieOptions.Secure = true;
+            cookieOptions.Secure = false;
             cookieOptions.HttpOnly = false;
             cookieOptions.Expires = DateTime.UtcNow.AddMinutes(30);
+            cookieOptions.SameSite = SameSiteMode.None;
             Response.Cookies.Append("jwt", token, cookieOptions);
 
-            return Ok(token);
+            return new TFAModel(token);
         }
 
         protected string CreateToken(UserModel user)
@@ -177,22 +195,28 @@ namespace SET3_Backend.Controllers
             return new TFAModel(user.TFA);
         }
 
-        [EnableCors]
+        [EnableCors("CorsPolicy")]
         [HttpPost("getusertoken")]
         public async Task<ActionResult<UserToken>> GetUserToken()
         {
-            System.Diagnostics.Debug.WriteLine(HttpContext.Request.Body);
-            string body;
-           
-
+            var body = "";
             using (var reader = new StreamReader(Request.Body))
             {
                 body = await reader.ReadToEndAsync();
-
-                // Do something
             }
 
-            String jsontoken = body.Split("=")[1].Replace("\"", "");
+            var cookies = body.Split(';');
+            var cookie = "";
+            foreach(var kuki in cookies) {
+                if (kuki.Contains("jwt")) { 
+                    cookie= kuki;
+                    cookie.Trim();
+                }
+            }
+
+            if (cookie.IsNullOrEmpty()) return BadRequest("no jwt cookie found");
+
+            String jsontoken = cookie.Split("=")[1].Replace("\"", "");
             System.Diagnostics.Debug.WriteLine(jsontoken);
 
             /*var handler = new JwtSecurityTokenHandler();
