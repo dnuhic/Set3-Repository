@@ -17,14 +17,22 @@ const Login = () => {
         const user = { Email, Password };
         console.log("Uspjesno pozvano");
         console.log(JSON.stringify(user));
-
+        
         fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication`, {
             method: 'POST',
             headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
             credentials: 'include',
             body: JSON.stringify(user)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status >= 200 && response.status < 300) {
+                console.log("Sve OK: " + response.status);
+                response.json();
+            } else {
+                throw new Error("Greska");
+            }
+                
+        })
         .then(data => {
             const token = data.result;
             document.cookie = `jwt=${token};max-age=604800;domain=`
@@ -42,7 +50,10 @@ const Login = () => {
                     setButtonClicked(false);
                 }
             })
-        })
+        }).catch(function (error) {
+            console.log(error);
+            alert("There is no user with that e-mail in the database");
+        });
 
         /*
         var response = await fetch('https://localhost:7194/Authentication', {
