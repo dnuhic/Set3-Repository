@@ -41,23 +41,21 @@ const AddProizvod = () => {
         console.log("klik zasad")
         if(stocks != null) {
             if(document.getElementById("name").value == "" ||
-                document.getElementById("typePrice").value == "" ||
                 document.getElementById("categories").value == "" || 
                 document.getElementById("stock").value == "") {
                     alert("All fields must not be empty!");
                     return;
             }
-            if(document.getElementById("typePrice").value < 0) {
-                alert("Price cannot be negative!");
-                return;
-            }
+            // if(document.getElementById("typePrice").value < 0) {
+            //    alert("Price cannot be negative!");
+            //    return;
+            // }
         }
 
         let product = {
             "StockId": getStockId(),
             "Name": document.getElementById("name").value,
             "CategoryName": document.getElementById("categories").value,
-            "Price": document.getElementById("typePrice").value,
             "Deleted": false
         };
 
@@ -124,10 +122,6 @@ const AddProizvod = () => {
                     placeholder="Product name"
                 />
             </div>
-        </div>
-        <div className="col">
-            <label className="form-label" for="typePrice">Product price</label>
-            <input type="number" id="typePrice" className="form-control" step="0.01" />
         </div>
         <div className="col">
         <label className="form-label" for="category">Category</label>
