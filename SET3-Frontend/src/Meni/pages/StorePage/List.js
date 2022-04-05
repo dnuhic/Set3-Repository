@@ -10,10 +10,7 @@ function List(props) {
     const [user, setToDelete] = useState(null);
     const [deletedUser, setDeletedUser] = useState(null);
 
-    function getCookie(key) {
-        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-        return b ? b.pop() : "";
-    }
+    
 
     useEffect(() => {
         setSampleData(props.sampleData);
@@ -27,17 +24,31 @@ function List(props) {
         setToDelete(object);
     }
 
+    function handleSort() {
+        const sortedData = [...sampleData].sort((a, b) => {
+            return a.name > b.name ? 1 : -1
+        })
 
+        setSampleData(sortedData);
+    }
 
+    function handleSort1() {
+        const sortedData = [...sampleData].sort((a, b) => {
+            return a.name < b.name ? 1 : -1
+        })
+
+        setSampleData(sortedData);
+    }
 
 
     const listComponents = sampleData.map((object) => {
-        return <ListItem store={object} deleteAction={deleteUser} />
+        return <ListItem store={object} deleteAction={deleteStore} />
     })
 
     return (
         <>
-
+            <button onClick={handleSort} id="sorta-z"> A-Z  </button>
+            <button onClick={handleSort1} id="sortz-a"> Z-A </button>
             <Box sx={{
                 width: '100%',
                 maxWidth: 500,

@@ -10,12 +10,63 @@ import { useState, useEffect } from 'react';
 
 function CashboxPage(props) {
 
-	const data = [{ name: "Kasa 1", id: 1 }, { name: "Kasa 2", id: 2 },{ name: "Kasa 3", id: 3}];
+	const data = [{ name: "Kasa 1", id: 1 }, { name: "Kasa 2", id: 2 }, { name: "Kasa 3", id: 3 }];
+	const store = {
+		"Name": "Poslovnica 2",
+		"Adress": "Adresa",
+		"StockId": 1,
+		"Deleted": false
+	}
 	
 	
 
 	return (
-		<List sampleData={data} />
+		<div style={{
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			height: '90vh'
+		}}
+		>
+
+			<div className="list" style={{ width: 500 }}>
+
+				{data &&
+					<>
+					<div className="row">
+						<div className="col">
+							<div className="form-control">
+								Name:
+								
+							</div>
+						</div>
+						<div className="col">
+							<div className="form-control">
+								{store.Name}
+								</div>
+							</div>
+					</div>
+					<div className="row">
+						<div className="col">
+							<div className="form-control">
+								Adress:
+
+							</div>
+						</div>
+						<div className="col">
+							<div className="form-control">
+								{store.Adress}
+							</div>
+						</div>
+					</div>
+						<h1> Cash registers for the store </h1>
+						<List sampleData={data} />
+					</>}
+				{!data && <h1>Loading...</h1>}
+
+			</div>
+
+		</div>
 	)
 }
 

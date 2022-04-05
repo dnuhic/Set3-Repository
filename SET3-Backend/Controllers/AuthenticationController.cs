@@ -90,9 +90,10 @@ namespace SET3_Backend.Controllers
 
                 var sha = SHA256.Create();
                 var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
-                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash,question!.Id, "Odgovor", false,RoleType.Admin.ToString(), "");
-                //UserModel user = new UserModel()
+                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.Admin.ToString(), "");
                 _context.UserModels.Add(user);
+                _context.UserModels.Add(new UserModel("shopAdmin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.ShopAdmin.ToString(), ""));
+                _context.UserModels.Add(new UserModel("stockAdmin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.StockAdmin.ToString(), ""));
                 await _context.SaveChangesAsync();
                 return user;
             }

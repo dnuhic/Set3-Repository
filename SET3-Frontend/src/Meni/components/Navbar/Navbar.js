@@ -116,6 +116,13 @@ const Navbar = () => {
                                     <NavLinks to='/accessRights'>Access rights</NavLinks>
                                 </NavItem>
                             }
+                            <NavItemBtn>
+                                {role == "ShopAdmin" &&
+                                    <NavLinks to="/stores">
+                                         Stores 
+                                    </NavLinks>
+                                }
+                            </NavItemBtn>
                             
 
                             <NavItemBtn>
@@ -132,6 +139,7 @@ const Navbar = () => {
               
 
                             </NavItemBtn>
+                            
                             {role && 
                                 <LogOutButton button={button}></LogOutButton>
                             }

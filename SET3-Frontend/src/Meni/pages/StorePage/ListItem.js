@@ -15,8 +15,13 @@ function ListItem(props) {
     const handleDelete = () => {
 
     }
+
     const handleEdit = () => {
 
+    }
+
+    const handleStoreClick = () => {
+        navigate(`/cashRegister/${props.store.id}`);
     }
 
     return (
@@ -33,7 +38,7 @@ function ListItem(props) {
                 </div>
             }
         >
-            <ListItemText primary={`${props.store.name}`} />
+            <ListItemText primary={`${props.store.name}`} onClick={handleStoreClick} />
         </MuiListItem>
     )
 }
