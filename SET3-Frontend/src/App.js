@@ -14,6 +14,7 @@ import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
+import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent'
 import AccessRights from './AccessRights/AccessRights';
 
 function App() {
@@ -77,6 +78,12 @@ function App() {
                 <Routes>
 
                 <Route path="/twoFactorAuthentication/:id" element={<TFA />} />
+
+                </Routes>
+
+                <Routes>
+
+                    <Route path="/editshop/:id" element={<EditShopComponent />} />
 
                 </Routes>
 

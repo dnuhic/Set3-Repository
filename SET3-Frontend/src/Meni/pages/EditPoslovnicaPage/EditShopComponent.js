@@ -9,6 +9,7 @@ const EditShopComponent = () => {
     // podaci iz baze:
     const [shop, setShop] = useState(null);
     const [stocks, setStocks] = useState([]);
+    const [fullStocks, setFullStocks] = useState([]);
     const [defaultStock, setDefaultStock] = useState(null);
     //kase?? - dodati kase?
 
@@ -37,19 +38,30 @@ const EditShopComponent = () => {
         };
         //api poziv fix
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels/${id}`, requestOptions);
+        if (responseShop.status == 404) {
+            alert("Shop does not exist.");
+        }
         const dataShop = await responseShop.json();
+        console.log(dataShop);
 
         const responseStock = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`, requestOptions);
         const dataStock = await responseStock.json();
 
         setShop(dataShop);
-        setName(dataShop.Name);
-        setAddress(dataShop.Adress);
-        setDeleted(dataShop.Deleted);
-        setStocks(dataStock);
-        let temp = dataStock.map(stock => stock.Id == dataShop.StockId)
+        setName(dataShop.name);
+        setAddress(dataShop.adress);
+        setDeleted(dataShop.deleted);
+        if (document.getElementById("deleted") != null) {
+            if (dataShop.deleted)
+                document.getElementById("deleted").checked = true
+            else
+                document.getElementById("deleted").checked = false
+        }
+        setFullStocks(dataStock);
+        setStocks(dataStock.filter(stock => stock.id != dataShop.stockId).map(stock => stock.name));
+        let temp = dataStock.filter(stock => stock.id == dataShop.stockId).map(stock => stock.name);
         setDefaultStock(temp)
-        console.log(dataShop);
+        console.log(temp)
     };
 
     useEffect(getData, []);
@@ -57,18 +69,26 @@ const EditShopComponent = () => {
     // EDIT POSLOVNICA
     const editShop = () => {
         console.log("POSLOVNICA: " + shop);
-        console.log(shop);
-        let newStockId = dataStock.map(stock => stock.Name == document.getElementById("stockNames").value);
+        let list = document.getElementById("dropdownMenuButton")
+        let name = document.getElementById("dropdownMenuButton")[list.selectedIndex].text
+        console.log(name);
+        let newStockId = fullStocks.filter(stock => stock.name == name)[0];
+        console.log(newStockId);
+        console.log(newStockId);
+        let deleted = true
+        if (document.getElementById("deleted") == null)
+            deleted = false
+        else
+            deleted = document.getElementById("deleted").checked
         const newShop = {
-            Id: shop.id,
-            Name: document.getElementById("name").value,
-            Adress: document.getElementById("address").value,
-            StockId: newStockId,
-            Deleted: document.getElementById("deleted").checked
+            id: shop.id,
+            name: document.getElementById("name").value,
+            adress: document.getElementById("address").value,
+            stockId: newStockId.id,
+            deleted: deleted
         };
         console.log("NEW SHOP: ");
         console.log(newShop);
-
         setUpdatedShop(newShop);
     }
 
@@ -80,27 +100,32 @@ const EditShopComponent = () => {
         setAddress(event.target.value);
     };
     const handleDeletedChange = (event) => {
-        setDeleted(event.target.value);
+        let checked = document.getElementById("deleted").checked
+        console.log(checked)
+        if (!checked)
+            document.getElementById("deleted").checked = false
+        else
+            document.getElementById("deleted").checked = true
     };
+
+    const checkDeleted = () => {
+        if (Deleted == true)
+            return (<label><input class="form-check-input" type="checkbox" value="Deleted" id="deleted" onChange={handleDeletedChange}></input>Deleted</label>);
+        return <div></div>
+    }
 
 
     useEffect(async () => {
         if (shop != null && updatedShop != null) {
             console.log(updatedShop);
             const requestOptions = {
-                method: "POST",
+                method: "PUT",
                 headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
                 body: JSON.stringify(updatedShop),
                 credentials: 'same-origin'
             };
             //fix api
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels/${shop.id}`, requestOptions);
-
-
-            console.log("OVO ERROR BACA ");
-            console.log(response);
-
-
             alert("Changes have been saved succesfully!")
         }
 
@@ -109,7 +134,7 @@ const EditShopComponent = () => {
     return (
         <>
             {shop && <>
-                <form className="unos">
+                <form className="unos" id="form">
                     <div className="col">
                         <h1>Edit shop</h1>
                     </div>
@@ -136,25 +161,20 @@ const EditShopComponent = () => {
                     </div>
                    
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            ${defaultStock}
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <option>{
+                                defaultStock
+                            }</option>
                             {
-                                stocks.forEach(stock => {
-                                    <a class="dropdown-item" href="#">${stock}</a>
-                            })
+                                stocks.map(stock => {
+                                    return <option class="dropdown-item" href="#">{stock}</option >;
+                                })
 
                             }
-                           
-                        </div>
+                        </select>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="deleted" onChange={handleDeletedChange}></input>
-                        //add checked or not
-                        <label class="form-check-label" for="deleted">
-                            Deleted
-                        </label>
+                        {checkDeleted()}
                     </div>
                     <button
                         type="button"
