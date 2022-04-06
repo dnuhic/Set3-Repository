@@ -91,19 +91,23 @@ const AddProizvod = () => {
     }, []);
 
     useEffect(async () => {
-        const postRequest = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
-            credentials: 'same-origin',
-            body: JSON.stringify(newProduct)
-        };
+        if (document.getElementById("name").value != "" && document.getElementById("categories").value != "" &&
+            document.getElementById("stock").value != "") {
 
-        fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, postRequest)
-            .then(response => { response.json(); console.log(response); })
-            .then(data => {
-                console.log(data)
-            });
+            const postRequest = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+                credentials: 'same-origin',
+                body: JSON.stringify(newProduct)
+            };
 
+            fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, postRequest)
+                .then(response => { response.json(); console.log(response); })
+                .then(data => {
+                    console.log(data)
+                });
+
+        }
     }, [newProduct]);
 
   return (

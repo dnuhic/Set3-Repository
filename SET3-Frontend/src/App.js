@@ -16,6 +16,7 @@ import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import AccessRights from './AccessRights/AccessRights';
 import AddProizvod from './Meni/pages/AddProductPage/AddProizvod';
+import EditProizvod from './Meni/pages/EditProductPage/EditProizvod';
 
 
 function App() {
@@ -97,6 +98,9 @@ function App() {
                 <Route path="/addProduct" element={<AddProizvod /> } />
                 </Routes>
 
+                <Routes>
+                <Route path="/editProduct/:id" element={<EditProizvod />} />
+                </Routes>
             </Router >
             
         );
