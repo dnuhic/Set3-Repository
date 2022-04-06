@@ -17,7 +17,7 @@ const Login = () => {
         const user = { Email, Password };
         console.log("Uspjesno pozvano");
         console.log(JSON.stringify(user));
-
+        
         fetch(`${process.env.REACT_APP_BACKEND_URL}Authentication`, {
             method: 'POST',
             headers: { "Content-Type": "application/json", "Access-Control-Allow-Credentials": true },
@@ -27,6 +27,9 @@ const Login = () => {
         .then(response => response.json())
         .then(data => {
             const token = data.result;
+            if (token === "ERROR") {
+                throw Error("nema u bazi");
+            }
             document.cookie = `jwt=${token};max-age=604800;domain=`
         })
         .then(() => {
@@ -42,7 +45,10 @@ const Login = () => {
                     setButtonClicked(false);
                 }
             })
-        })
+        }).catch(function (error) {
+            console.log(error);
+            alert("Wrong log in information");
+        });
 
         /*
         var response = await fetch('https://localhost:7194/Authentication', {

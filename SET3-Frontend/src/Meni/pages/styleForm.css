@@ -128,6 +128,17 @@ p {
     width: 100%;
 }
 
+#dropdownMenuButton {
+    width: 100%;
+    padding: 5px 8px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    border: 1px solid #353535;
+    color: white;
+    background-color: #0d6efd;
+    width: 100%;
+}
+
 option {
     color: white;
     background-color: #0d6efd;

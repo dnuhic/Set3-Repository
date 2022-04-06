@@ -85,7 +85,7 @@ namespace SET3_Backend.Controllers
 
         // POST: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("{id}"), Authorize(Roles = "Admin")]
+        [HttpPost("{id}"), Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
 
