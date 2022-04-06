@@ -8,9 +8,12 @@ function List(props) {
 
     const [products, setProducts] = useState([])
     const [product, setToDelete] = useState(null);
+    const [deletedProduct, setDeletedProduct] = useState(null);
 
-
-
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
 
     useEffect(() => {
         setProducts(props.products);
@@ -39,6 +42,44 @@ function List(props) {
 
         setProducts(sortedData);
     }
+
+    useEffect(() => {
+        if (product != null) {
+            const newProduct = {
+                "Id": product.id,
+                "StockId": product.stockId,
+                "Name": product.name,
+                "CategoryName": product.categoryName,
+                "Deleted": true
+            }
+
+            setDeletedProduct(newProduct); 
+        }
+
+
+    }, [product])
+
+    useEffect(async () => {
+        console.log(deletedProduct);
+        if (deletedProduct != null) {
+            const requestOptions = {
+                method: "POST",
+                headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+                body: JSON.stringify(deletedProduct),
+                credentials: 'same-origin'
+            };
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/productmodels/${product.id}`, requestOptions);
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+
+            const index = products.indexOf(product, 0);
+            const productsCopy = products;
+            products[index] = deletedProduct;
+            setProducts(productsCopy);
+        }
+    }, [deletedProduct])
 
 
     const listComponents = products.map((object) => {

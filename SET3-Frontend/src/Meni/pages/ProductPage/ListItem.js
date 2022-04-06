@@ -13,13 +13,15 @@ function ListItem(props) {
     const [deleted, setDeleted] = useState(props.product.deleted);
     let navigate = useNavigate();
 
+    const { deleteAction } = props;
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
     }
     const handleDelete = async () => {
-
+        setDeleted(true);
+        deleteAction(props.product);
     }
 
     const handleEdit = () => {
@@ -42,6 +44,7 @@ function ListItem(props) {
                 </div>
             }
         >
+            <ListItemText primary={`${props.product.name} - Category: ${props.product.categoryName} `} />
         </MuiListItem>
     )
 }
