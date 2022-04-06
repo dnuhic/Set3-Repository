@@ -1,20 +1,201 @@
-import React from 'react';
+import { Alert } from 'bootstrap';
+import React, { Component, useState, useEffect, useCallback } from 'react';
+import "bootstrap/dist/css/bootstrap.css";
+import { useParams } from "react-router-dom";
+import '../styleForm.css';
 
 const Settings = () => {
-	return (
-		<div style={{
-			display: 'flex',
-			justifyContent: 'center',
-			alignItems: 'center',
-			height: '90vh'
+    const [user, setUser] = useState(null);
+    const [roles, setRoles] = useState(null);
 
-		}}
-		>
 
-			<h1> Settings </h1>
+    //podaci iz url??
+    const { id } = useParams();
 
-		</div>
-	);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+
+    //TO DO
+    const [role, setRole] = useState(null);
+
+    const [updatedUser, setUpdatetUser] = useState(null);
+
+    const [newPassword, setNewPassword] = useState(null);
+
+    function getCookie(key) {
+        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+        return b ? b.pop() : "";
+    }
+
+    const getData = async () => {
+        console.log(id);
+        const requestOptions = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+        const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
+        const dataUser = await responseUser.json();
+
+        const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        const dataRoles = await responseRole.json();
+
+        setUser(dataUser);
+        setFirstName(dataUser.firstName);
+        setLastName(dataUser.lastName);
+        setEmail(dataUser.email);
+        setRole(dataUser.roleName);
+        setRoles(dataRoles);
+        console.log(dataUser);
+    };
+
+    useEffect(getData, []);
+
+
+
+    // EDIT USER
+    const editUser = () => {
+        console.log("USER: " + user);
+        console.log(user);
+        const newUser = {
+            Id: user.id,
+            Email: user.email,
+            FirstName: document.getElementById("firstName").value,
+            LastName: document.getElementById("lastName").value,
+            Password: user.password,
+            RoleName: role,
+            QuestionId: user.questionId,
+            Answer: user.answer,
+            Deleted: user.deleted,
+            TFA: user.tfa //provjeriti
+        };
+
+        console.log("NEW USER: ");
+        console.log(newUser);
+
+        setUpdatetUser(newUser);
+    }
+
+    const handleFirstNameChange = (event) => {
+        setFirstName(event.target.value);
+    };
+
+    const handleLastNameChange = (event) => {
+        setLastName(event.target.value);
+    };
+
+
+    useEffect(async () => {
+        if (user != null && updatedUser != null) {
+            console.log(updatedUser);
+            const requestOptions = {
+                method: "POST",
+                headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+                body: JSON.stringify(updatedUser),
+                credentials: 'same-origin'
+            };
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
+
+
+            console.log("OVO ERROR BACA ");
+            console.log(response);
+
+
+            alert("Changes have been saved succesfully!")
+        }
+
+    }, [updatedUser]);
+
+    const handleRoleChange = (e) => {
+        setRole(e.target.value)
+    }
+
+    return (
+        <>
+            {user && roles && role && <>
+                <form className="unos">
+                    <div className="col">
+                        <h1>Settings</h1>
+                    </div>
+                    <div className="row">
+
+                        <div className="col">
+                            <input value={firstName}
+                                id="firstName"
+                                type="text"
+                                className="form-control"
+                                placeholder="First name"
+                                onChange={handleFirstNameChange}
+                            />
+                        </div>
+                        <div className="col">
+                            <input value={lastName}
+                                id="lastName"
+                                type="text"
+                                className="form-control"
+                                placeholder="First name"
+                                onChange={handleLastNameChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+
+                    </div>
+                    <div className="row">
+                        <div className="col">
+
+                            <div class="form-click">
+                                <div class="form-box">
+                                    <select name="pitanja" id="pitanja" value={role} onChange={handleRoleChange}>
+                                        {roles && roles.length &&
+                                            roles.map(q => <option value={q.roleName}>{q.roleName}</option>)
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <p>User e-mail can't be changed</p>
+                            <input value={email}
+                                id="email"
+                                type="email"
+                                className="form-control"
+                                disabled={true}
+                            />
+
+                        </div>
+                    </div>
+
+
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={editUser}
+                    >
+                        Edit
+                    </button>
+                </form>
+               
+            </>
+            }
+            {
+                !(user && roles && role) && <h1>Loading...</h1>
+            }
+        </>
+    );
+
+    function hasNumber(myString) {
+        return /\d/.test(myString);
+    }
 };
 
 export default Settings;

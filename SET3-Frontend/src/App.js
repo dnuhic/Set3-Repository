@@ -14,7 +14,10 @@ import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
+import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent'
 import AccessRights from './AccessRights/AccessRights';
+import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
+import StorePage from './Meni/pages/StorePage/StorePage'
 
 function App() {
 
@@ -82,14 +85,34 @@ function App() {
 
                 <Routes>
 
+                    <Route path="/editshop/:id" element={<EditShopComponent />} />
+
+                </Routes>
+
+                <Routes>
+
                     <Route path="/twoFactorAuthenticationConfirm/:id" element={<TFAConfirm />} />
 
                 </Routes>
                  <Routes>
 
-                <Route path="/accessRights" element={<AccessRights />} />
-                 </Routes>
+                    <Route path="/accessRights" element={<AccessRights />} />
+                </Routes>
+                <Routes>
 
+                    <Route path="/cashRegister/:id" element={<CashRegister />} />
+            </Routes>
+
+            <Routes>
+
+                <Route path="/stores" element={<StorePage />} />
+            </Routes>
+
+            <Routes>
+
+                <Route path="/settings" element={<Settings />} />
+            </Routes>
+          
 
             </Router >
             

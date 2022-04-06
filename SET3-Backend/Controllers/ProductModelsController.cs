@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,29 +25,45 @@ namespace SET3_Backend.Controllers
 
         public ProductModelsController(Context context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
             _configuration = configuration;
         }
 
         // GET: api/ProductModels
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "StockAdmin")]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModel()
         {
-            return await _context.ProductModels.ToListAsync();
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+            if (ValidateToken(token) != null)
+            {
+                return await _context.ProductModels.ToListAsync();
+            }
+
+            return NoContent();
         }
 
         // GET: api/ProductModels/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize(Roles = "StockAdmin")]
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
         {
-            var productModel = await _context.ProductModels.FindAsync(id);
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-            if (productModel == null)
+            if (ValidateToken(token) != null)
             {
-                return NotFound();
-            }
+                var productModel = await _context.ProductModels.FindAsync(id);
 
-            return productModel;
+                if (productModel == null)
+                {
+                    return NotFound();
+                }
+
+                return productModel;
+            }
+            return NoContent();
         }
 
         // ova metoda se koristi za update/edit proizvoda kao i za brisanje 
@@ -97,44 +114,59 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/ProductModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "StockAdmin")]
         public async Task<IActionResult> PutProductModel(int id, ProductModel productModel)
         {
-            if (id != productModel.Id)
-            {
-                return BadRequest();
-            }
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-            _context.Entry(productModel).State = EntityState.Modified;
-
-            try
+            if (ValidateToken(token) != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductModelExists(id))
+                if (id != productModel.Id)
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
-                else
+
+                _context.Entry(productModel).State = EntityState.Modified;
+
+                try
                 {
-                    throw;
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ProductModelExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
-
+            
             return NoContent();
+            
         }
 
         // POST: api/ProductModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "StockAdmin")]
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
-            _context.ProductModels.Add(productModel);
-            await _context.SaveChangesAsync();
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-            return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
+            if (ValidateToken(token) != null)
+            {
+                _context.ProductModels.Add(productModel);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
+            }
+
+            return NoContent();
         }
 
         // DELETE: api/ProductModels/5
