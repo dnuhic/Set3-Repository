@@ -19,7 +19,16 @@ function ListItem(props) {
         return b ? b.pop() : "";
     }
     const handleDelete = async () => {
-
+        const requestOptions = {
+            method: "POST",
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+            body: JSON.stringify({ "Id": props.product.id }),
+            credentials: 'same-origin'
+        };
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ProductModels/deleteProduct`, requestOptions);
+        const data = await response.json();
+        setDeleted(true);
+        console.log(data);
     }
 
     const handleEdit = () => {
