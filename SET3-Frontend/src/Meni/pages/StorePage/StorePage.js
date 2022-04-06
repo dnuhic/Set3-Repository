@@ -13,7 +13,7 @@ function StorePage(props) {
 	const [allStores, setAllStores] = useState(null);
 
 	const getData = async () => {
-		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels`);
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`);
 
 		console.log(response);
 		const data = await response.json();
@@ -38,7 +38,7 @@ function StorePage(props) {
 				{allStores &&
 					<>
 						<h1> Stores </h1>
-						<List sampleData={allStores} />
+						<List stores={allStores} />
 					</>}
 				{!allStores && <h1>Loading...</h1>}
 

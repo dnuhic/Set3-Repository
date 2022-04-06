@@ -6,15 +6,15 @@ import { useState, useEffect } from 'react';
 
 function List(props) {
 
-    const [sampleData, setSampleData] = useState([])
-    const [user, setToDelete] = useState(null);
-    const [deletedUser, setDeletedUser] = useState(null);
+    const [stores, setStores] = useState([])
+    const [store, setToDelete] = useState(null);
+    
 
     
 
     useEffect(() => {
-        setSampleData(props.sampleData);
-        console.log(sampleData);
+        setStores(props.stores);
+        console.log(stores);
     }, [])
 
 
@@ -25,23 +25,23 @@ function List(props) {
     }
 
     function handleSort() {
-        const sortedData = [...sampleData].sort((a, b) => {
+        const sortedData = [...stores].sort((a, b) => {
             return a.name > b.name ? 1 : -1
         })
 
-        setSampleData(sortedData);
+        setStores(sortedData);
     }
 
     function handleSort1() {
-        const sortedData = [...sampleData].sort((a, b) => {
+        const sortedData = [...stores].sort((a, b) => {
             return a.name < b.name ? 1 : -1
         })
 
-        setSampleData(sortedData);
+        setStores(sortedData);
     }
 
 
-    const listComponents = sampleData.map((object) => {
+    const listComponents = stores.map((object) => {
         return <ListItem store={object} deleteAction={deleteStore} />
     })
 
