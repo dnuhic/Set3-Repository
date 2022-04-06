@@ -41,7 +41,7 @@ const AddShopComponent = () => {
                 credentials: 'same-origin',
                 body: JSON.stringify(body)
             };
-            fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptions)
                 .then(response => {
                     if (response.ok)
                         return response.json()

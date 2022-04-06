@@ -51,7 +51,7 @@ function List(props) {
                 headers: { "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
                 body: JSON.stringify(deletedRegister),
             };
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${register.id}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}CashRegisterModels/${register.id}`, requestOptions);
             console.log(response);
 
             const index = sampleData.indexOf(register, 0);
