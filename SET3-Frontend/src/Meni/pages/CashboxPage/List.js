@@ -29,10 +29,8 @@ function List(props) {
 
 
 
-
-
     const listComponents = sampleData.map((object) => {
-        return <ListItem cashbox={object} deleteAction={deleteUser} />
+        return <ListItem cashbox={object} deleteAction={deleteCashbox} />
     })
 
     return (
