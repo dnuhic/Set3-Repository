@@ -112,6 +112,9 @@ function App() {
 
                 <Route path="/settings" element={<Settings />} />
             </Routes>
+            <Routes>
+              <Route path="/productsPage" element={<ProductPage />} />
+            </Routes>
           
 
             </Router >
@@ -122,9 +125,6 @@ function App() {
     /*if (!token) {
         return <Login setToken={setToken} />
     }     */
-    
-
-    
 }
 
 export default App;
