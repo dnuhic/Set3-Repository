@@ -17,6 +17,7 @@ using SET3_Backend.Models;
 namespace SET3_Backend.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class ProductModelsController : ControllerBase
     {

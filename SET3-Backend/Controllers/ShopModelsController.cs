@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,7 @@ using System.Text.Json;
 namespace SET3_Backend.Controllers
 {
     [Route("[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class ShopModelsController : ControllerBase
     {
