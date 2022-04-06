@@ -34,7 +34,7 @@ const EditCashRegister = () => {
             headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
             credentials: 'same-origin'
         };
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}CashRegisterModels/${id}`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${id}`, requestOptions);
         const data = await response.json();
 
         setCashRegister(data);
@@ -98,7 +98,7 @@ const EditCashRegister = () => {
                 credentials: 'same-origin'
             };
 
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}CashRegisterModels/${cashRegister.id}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${cashRegister.id}`, requestOptions);
 
 
             alert("Changes have been saved succesfully!")
