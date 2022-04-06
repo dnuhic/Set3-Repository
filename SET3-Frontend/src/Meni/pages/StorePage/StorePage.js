@@ -38,7 +38,7 @@ function StorePage(props) {
 				{allStores &&
 					<>
 						<h1> Stores </h1>
-						<List sampleData={allStores} />
+						<List stores={allStores} />
 					</>}
 				{!allStores && <h1>Loading...</h1>}
 

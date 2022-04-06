@@ -9,6 +9,7 @@ using SET3_Backend.Models;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Text.Json;
 
 namespace SET3_Backend.Controllers
 {
@@ -50,11 +51,11 @@ namespace SET3_Backend.Controllers
         // PUT: ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShopModel(int id,[FromBody] ShopModel shopModel)
+        public async Task<IActionResult> PutShopModel(int id, [FromBody] ShopModel shopModel)
         {
             if (id != shopModel.Id)
                 return BadRequest("Url id and body id do not match");
-            if(_context.StockModels.Where(s => s.Id == shopModel.StockId).Count() == 0)
+            if (_context.StockModels.Where(s => s.Id == shopModel.StockId).Count() == 0)
                 return BadRequest("Selected wearhouse does not exist.");
 
             _context.ShopModels.Update(shopModel);
@@ -105,9 +106,15 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        [HttpPost("deleteShop/{id}"), Authorize(Roles = "ShopAdmin")] 
+        public class ZaBrisanjePoslovnice
+        {
+            public int Id { get; set; }
+        }
+
+        [HttpPost("deleteShop"), Authorize(Roles = "ShopAdmin")] //
         public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
         {
+
 
             var token = Request.Headers["Authorization"];
             token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
@@ -115,7 +122,17 @@ namespace SET3_Backend.Controllers
 
             if (ValidateToken(token) != null)
             {
-                var deletedShop = await _context.ShopModels.FindAsync(id);
+                string proba;
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    proba = await reader.ReadToEndAsync();
+
+                    // Do something
+                }
+
+                ZaBrisanjePoslovnice unos = JsonSerializer.Deserialize<ZaBrisanjePoslovnice>(proba);
+
+                var deletedShop = await _context.ShopModels.Where(x=>x.Id == unos.Id).FirstAsync();
                 if (deletedShop == null)
                 {
                     return deletedShop;
@@ -123,7 +140,7 @@ namespace SET3_Backend.Controllers
                 else
                 {
 
-                    var deletedCashRegister = await _context.CashRegisterModels.Where(x => x.ShopId == id).ToListAsync<CashRegisterModel>();
+                    var deletedCashRegister = await _context.CashRegisterModels.Where(x => x.ShopId == unos.Id).ToListAsync<CashRegisterModel>();
                     foreach (var k in deletedCashRegister)
                     {
                         k.Deleted = true;
