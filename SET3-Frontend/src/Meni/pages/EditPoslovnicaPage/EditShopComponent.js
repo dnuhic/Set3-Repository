@@ -9,8 +9,7 @@ const EditShopComponent = () => {
     // podaci iz baze:
     const [shop, setShop] = useState(null);
     const [stocks, setStocks] = useState([]);
-    const [fullStocks, setFullStocks] = useState([]);
-    const [defaultStock, setDefaultStock] = useState(null);
+    const [defaultStock, setDefaultStock] = useState({id : 1, name : ""});
     //kase?? - dodati kase?
 
 
@@ -57,9 +56,8 @@ const EditShopComponent = () => {
             else
                 document.getElementById("deleted").checked = false
         }
-        setFullStocks(dataStock);
-        setStocks(dataStock.filter(stock => stock.id != dataShop.stockId).map(stock => stock.name));
-        let temp = dataStock.filter(stock => stock.id == dataShop.stockId).map(stock => stock.name);
+        setStocks(dataStock.filter(stock => stock.id != dataShop.stockId));
+        let temp = dataStock.filter(stock => stock.id == dataShop.stockId)[0];
         setDefaultStock(temp)
         console.log(temp)
     };
@@ -68,13 +66,8 @@ const EditShopComponent = () => {
 
     // EDIT POSLOVNICA
     const editShop = () => {
-        console.log("POSLOVNICA: " + shop);
         let list = document.getElementById("dropdownMenuButton")
-        let name = document.getElementById("dropdownMenuButton")[list.selectedIndex].text
-        console.log(name);
-        let newStockId = fullStocks.filter(stock => stock.name == name)[0];
-        console.log(newStockId);
-        console.log(newStockId);
+        let stockId = document.getElementById("dropdownMenuButton")[list.selectedIndex].value
         let deleted = true
         if (document.getElementById("deleted") == null)
             deleted = false
@@ -84,7 +77,7 @@ const EditShopComponent = () => {
             id: shop.id,
             name: document.getElementById("name").value,
             adress: document.getElementById("address").value,
-            stockId: newStockId.id,
+            stockId: stockId,
             deleted: deleted
         };
         console.log("NEW SHOP: ");
@@ -162,12 +155,12 @@ const EditShopComponent = () => {
                    
                     <div class="dropDownLista">
                         <select  type="button" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
-                            <option>{
-                                defaultStock
+                            <option value={defaultStock.id}>{
+                                defaultStock.name
                             }</option>
                             {
                                 stocks.map(stock => {
-                                    return <option class="dropdown-item" href="#">{stock}</option >;
+                                    return <option class="dropdown-item" href="#" value={stock.id}>{stock.name}</option >;
                                 })
 
                             }

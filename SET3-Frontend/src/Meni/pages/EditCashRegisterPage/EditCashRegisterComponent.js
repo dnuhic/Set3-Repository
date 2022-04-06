@@ -11,15 +11,13 @@ const EditCashRegister = () => {
 
     const { id } = useParams();
 
-    const [shopId, setShopId] = useState("");
     const [cashRegisterName, setCashRegisterName] = useState("");
     const [cashRegisterDescription, setCashRegisterDescription] = useState("");
 
     const [updatedCashRegister, setUpdatedCashRegister] = useState(null);
 
-    const [defaultShop, setDefaultShop] = useState(null)
+    const [defaultShop, setDefaultShop] = useState({id : 1, name : ""})
     const [shops, setShops] = useState([])
-    const [allShops, setAllShops] = useState([])
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -36,7 +34,6 @@ const EditCashRegister = () => {
         };
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${id}`, requestOptions);
         const data = await response.json();
-
         setCashRegister(data);
         setCashRegisterName(data.name);
         setCashRegisterDescription(data.description);
@@ -49,26 +46,22 @@ const EditCashRegister = () => {
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptionsShop);
         const dataShop = await responseShop.json();
 
-
-        let currentShop = dataShop.filter(shop => shop.id == id).map(shop => shop.name)
-        console.log(currentShop)
+        let currentShop = dataShop.filter(shop => shop.id == data.shopId)[0]
         setDefaultShop(currentShop)
 
-        let allOtherShops = dataShop.filter(shop => shop.id != id).map(shop => shop.name)
+        let allOtherShops = dataShop.filter(shop => shop.id != data.shopId)
         setShops(allOtherShops)
 
-        setAllShops(dataShop)
     }
 
     useEffect(getData, []);
 
     const editCashRegister = () => {
         let list = document.getElementById("dropdownMenuButton")
-        let name = document.getElementById("dropdownMenuButton")[list.selectedIndex].text
-        let newShopId = allShops.filter(shop => shop.name == name)[0];
+        let shopId = document.getElementById("dropdownMenuButton")[list.selectedIndex].value
         const newCashRegister = {
             id: cashRegister.id,
-            shopId: newShopId.id,
+            shopId: shopId,
             deleted: cashRegister.deleted,
             name: document.getElementById("cashRegisterName").value,
             description: document.getElementById("cashRegisterDescription").value
@@ -77,8 +70,6 @@ const EditCashRegister = () => {
         setUpdatedCashRegister(newCashRegister);
     }
     const handleShopIdChange = (event) => {
-        setShopId(event.target.value);
-        console.log(event.target.value)
     };
     const handleCashRegisterNameChange = (event) => {
         setCashRegisterName(event.target.value);
@@ -115,10 +106,10 @@ const EditCashRegister = () => {
                     </div>
                     <div className="row">
                         <select type="button" id="dropdownMenuButton" onChange={handleShopIdChange}>
-                            <option>{defaultShop}</option>
+                            <option value={ defaultShop.id }>{defaultShop.name}</option>
                             {
                                 shops.map(shop => {
-                                    return <option>{shop}</option>
+                                    return <option value={shop.id}>{shop.name}</option>
                                 })
                             }
                         </select>
