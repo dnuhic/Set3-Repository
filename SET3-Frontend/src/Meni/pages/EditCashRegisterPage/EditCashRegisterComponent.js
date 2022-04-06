@@ -17,6 +17,10 @@ const EditCashRegister = () => {
 
     const [updatedCashRegister, setUpdatedCashRegister] = useState(null);
 
+    const [defaultShop, setDefaultShop] = useState(null)
+    const [shops, setShops] = useState([])
+    const [allShops, setAllShops] = useState([])
+
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
@@ -36,30 +40,45 @@ const EditCashRegister = () => {
         setCashRegister(data);
         setCashRegisterName(data.name);
         setCashRegisterDescription(data.description);
-        console.log("Data je");
-        console.log(data);
+
+        const requestOptionsShop = {
+            method: 'GET',
+            headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+            credentials: 'same-origin'
+        };
+        const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptionsShop);
+        const dataShop = await responseShop.json();
+
+
+        let currentShop = dataShop.filter(shop => shop.id == id).map(shop => shop.name)
+        console.log(currentShop)
+        setDefaultShop(currentShop)
+
+        let allOtherShops = dataShop.filter(shop => shop.id != id).map(shop => shop.name)
+        setShops(allOtherShops)
+
+        setAllShops(dataShop)
     }
 
     useEffect(getData, []);
 
     const editCashRegister = () => {
-        console.log("CASHREGISTER: " + cashRegister);
-        console.log(cashRegister);
+        let list = document.getElementById("dropdownMenuButton")
+        let name = document.getElementById("dropdownMenuButton")[list.selectedIndex].text
+        let newShopId = allShops.filter(shop => shop.name == name)[0];
         const newCashRegister = {
-            Id: cashRegister.id,
-            ShopId: document.getElementById("shopId").value,
-            Deleted: cashRegister.deleted,
-            Name: document.getElementById("cashRegisterName").value,
-            Description: document.getElementById("cashRegisterDescription").value
+            id: cashRegister.id,
+            shopId: newShopId.id,
+            deleted: cashRegister.deleted,
+            name: document.getElementById("cashRegisterName").value,
+            description: document.getElementById("cashRegisterDescription").value
         };
-
-        console.log("NEW CashRegister: ");
-        console.log(newCashRegister);
 
         setUpdatedCashRegister(newCashRegister);
     }
     const handleShopIdChange = (event) => {
         setShopId(event.target.value);
+        console.log(event.target.value)
     };
     const handleCashRegisterNameChange = (event) => {
         setCashRegisterName(event.target.value);
@@ -73,7 +92,7 @@ const EditCashRegister = () => {
         if (cashRegister != null && updatedCashRegister != null) {
             console.log(updatedCashRegister);
             const requestOptions = {
-                method: "POST",
+                method: "PUT",
                 headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
                 body: JSON.stringify(updatedCashRegister),
                 credentials: 'same-origin'
@@ -81,8 +100,6 @@ const EditCashRegister = () => {
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}CashRegisterModels/${cashRegister.id}`, requestOptions);
 
-            console.log("OVO ERROR BACA ");
-            console.log(response);
 
             alert("Changes have been saved succesfully!")
         }
@@ -97,7 +114,13 @@ const EditCashRegister = () => {
                         <h1>Edit cash register</h1>
                     </div>
                     <div className="row">
-                        <select name="shopId" id="shopId" value={shopId} onChange={handleShopIdChange}>
+                        <select type="button" id="dropdownMenuButton" onChange={handleShopIdChange}>
+                            <option>{defaultShop}</option>
+                            {
+                                shops.map(shop => {
+                                    return <option>{shop}</option>
+                                })
+                            }
                         </select>
                     </div>
                     <div className="row">

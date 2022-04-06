@@ -113,6 +113,11 @@ function App() {
 
             <Routes>
 
+                <Route path="/editcashRegister/:id" element={<EditCashRegisterComponent />} />
+            </Routes>
+
+            <Routes>
+
                 <Route path="/stores" element={<StorePage />} />
             </Routes>
 

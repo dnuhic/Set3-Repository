@@ -14,7 +14,7 @@ function CashboxPage(props) {
 	const [store, setStore] = useState(null);
 
 	const getData = async () => {
-		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`);
+		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}CashRegisterModels`);
 		const c = await responseC.json();
 
 		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`);
