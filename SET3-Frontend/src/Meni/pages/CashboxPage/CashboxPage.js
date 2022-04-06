@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { default as MuiListItem } from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,17 +9,25 @@ import List from './List';
 import { useState, useEffect } from 'react';
 
 function CashboxPage(props) {
+	const { id } = useParams();
+	const [allCashRegisters, setAllCashRegisters] = useState(null);
+	const [store, setStore] = useState(null);
 
-	const data = [{ name: "Kasa 1", id: 1 }, { name: "Kasa 2", id: 2 }, { name: "Kasa 3", id: 3 }];
-	const store = {
-		"Name": "Poslovnica 2",
-		"Adress": "Adresa",
-		"StockId": 1,
-		"Deleted": false
+	const getData = async () => {
+		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`);
+		const c = await responseC.json();
+
+		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`);
+		const s = await responseS.json();
+
+		const filtered = c.filter(c => c.shopId == id)
+
+		setAllCashRegisters(filtered);
+		setStore(s)
 	}
-	
-	
 
+	useEffect(getData, [])
+	
 	return (
 		<div style={{
 			display: 'flex',
@@ -31,8 +39,9 @@ function CashboxPage(props) {
 
 			<div className="list" style={{ width: 500 }}>
 
-				{data &&
+				{allCashRegisters && store &&
 					<>
+					<h1> Store </h1>
 					<div className="row">
 						<div className="col">
 							<div className="form-control">
@@ -42,7 +51,7 @@ function CashboxPage(props) {
 						</div>
 						<div className="col">
 							<div className="form-control">
-								{store.Name}
+								{store.name}
 								</div>
 							</div>
 					</div>
@@ -55,14 +64,14 @@ function CashboxPage(props) {
 						</div>
 						<div className="col">
 							<div className="form-control">
-								{store.Adress}
+								{store.adress}
 							</div>
 						</div>
 					</div>
-						<h1> Cash registers for the store </h1>
-						<List sampleData={data} />
+					<h1> Cash registers for the store </h1>
+					<List sampleData={allCashRegisters} />
 					</>}
-				{!data && <h1>Loading...</h1>}
+				{!allCashRegisters && !store && <h1>Loading...</h1>}
 
 			</div>
 

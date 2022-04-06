@@ -33,7 +33,7 @@ function ListItem(props) {
                 </div>
             }
         >
-            <ListItemText primary={`${props.cashbox.name}`} />
+            <ListItemText primary={`${props.cashbox.description}`} />
         </MuiListItem>
     )
 }
