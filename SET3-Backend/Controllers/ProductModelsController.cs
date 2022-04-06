@@ -22,10 +22,12 @@ namespace SET3_Backend.Controllers
     {
         private readonly Context _context;
         private readonly IConfiguration _configuration;
+
         public ProductModelsController(Context context, IConfiguration configuration)
         {
             _configuration = configuration;
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: api/ProductModels
@@ -61,6 +63,52 @@ namespace SET3_Backend.Controllers
 
                 return productModel;
             }
+            return NoContent();
+        }
+
+        // ova metoda se koristi za update/edit proizvoda kao i za brisanje 
+        // na formi za brisanje se salje taj proizvod samo sa promijenjenim atributom deleted na true
+        // i ovdje se to update
+        // provjeriti autorizaciju je li samo admin skladista ovo moze??
+        // metodu sam testirao bez autorizacije i tokena i radi, kada se poveze sa frontendom bice sve ok
+        [HttpPost("{id}"), Authorize(Roles = "StockAdmin")] 
+        public async Task<IActionResult> PostUpdateProductModel(int id, ProductModel productModel)
+        {
+
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+
+            if (ValidateToken(token) != null)
+            {
+                if (id != productModel.Id)
+                {
+                    return BadRequest();
+                }
+
+                
+                _context.Update(productModel);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+
+                    if (!ProductModelExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            else return NoContent();
+
+
             return NoContent();
         }
 
