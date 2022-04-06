@@ -12,7 +12,7 @@ using SET3_Backend.Models;
 
 namespace SET3_Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class CashRegisterModelsController : ControllerBase
     {
@@ -46,15 +46,15 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/CashRegisterModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}"),Authorize(Roles="StockAdmin,ShopAdmin")]
-        public async Task<IActionResult> PutCashRegisterModel(int id, CashRegisterModel cashRegisterModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCashRegisterModel(int id,[FromBody] CashRegisterModel cashRegisterModel)
         {
             if (id != cashRegisterModel.Id)
-            {
-                return BadRequest();
-            }
+                return BadRequest("Url id and body id do not match");
+            if (_context.ShopModels.Where(s => s.Id == cashRegisterModel.ShopId).Count() == 0)
+                return BadRequest("Selected shop does not exist.");
 
-            _context.Entry(cashRegisterModel).State = EntityState.Modified;
+            _context.CashRegisterModels.Update(cashRegisterModel);
 
             try
             {
@@ -72,7 +72,7 @@ namespace SET3_Backend.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/CashRegisterModels
