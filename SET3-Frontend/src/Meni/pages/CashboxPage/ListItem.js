@@ -11,9 +11,12 @@ import { useState, useEffect } from 'react';
 function ListItem(props) {
 
     let navigate = useNavigate();
+    const [deleted, setDeleted] = useState(props.cashbox.deleted);
+    const { deleteAction } = props;
 
     const handleDelete = () => {
-
+        setDeleted(true);
+        deleteAction(props.cashbox);
     }
     const handleEdit = () => {
 
@@ -24,10 +27,10 @@ function ListItem(props) {
             key={props.cashbox.id}
             secondaryAction={
                 <div style={{ paddingLeft: 100 }}>
-                    <IconButton onClick={handleEdit} color="primary">
+                    <IconButton onClick={handleEdit} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton onClick={handleDelete} color="primary">
+                    <IconButton onClick={handleDelete} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
                         <DeleteForeverIcon />
                     </IconButton>
                 </div>
