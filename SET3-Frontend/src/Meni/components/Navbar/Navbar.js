@@ -134,8 +134,16 @@ const Navbar = () => {
                                     </NavLinks>
                                 }
                             
-                            
-
+                            {role == "StockAdmin" &&
+                                <NavItem>
+                                    <NavLinks to='/productsPage'>Products</NavLinks>
+                                </NavItem>
+                            }
+                            {role == "StockAdmin" &&
+                                <NavItem>
+                                    <NavLinks to='/addProduct'>Add product</NavLinks>
+                                </NavItem>
+                            }
                             <NavItemBtn>
 
                                 
