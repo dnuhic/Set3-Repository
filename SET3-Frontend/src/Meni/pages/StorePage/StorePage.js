@@ -8,16 +8,45 @@ import { useNavigate } from "react-router-dom";
 import List from './List';
 import { useState, useEffect } from 'react';
 
-function CashboxPage(props) {
+function StorePage(props) {
 
-	const data = [{ name: "Poslovnica 1", id: 1 }, { name: "Poslovnica 2", id: 2 }, { name: "Poslovnica 3", id: 3 }];
+	const [allStores, setAllStores] = useState(null);
 
+	const getData = async () => {
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`);
+
+		console.log(response);
+		const data = await response.json();
+		console.log(data);
+		setAllStores(data);
+	}
+
+	useEffect(getData, [])
 
 
 	return (
-		<List sampleData={data} />
+		<div style={{
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			height: '90vh'
+		}}
+		>
+
+			<div className="list" style={{ width: 500 }}>
+
+				{allStores &&
+					<>
+						<h1> Stores </h1>
+						<List stores={allStores} />
+					</>}
+				{!allStores && <h1>Loading...</h1>}
+
+			</div>
+
+		</div>
 	)
 }
 
 
-export default CashboxPage;
+export default StorePage;

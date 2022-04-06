@@ -6,18 +6,15 @@ import { useState, useEffect } from 'react';
 
 function List(props) {
 
-    const [sampleData, setSampleData] = useState([])
-    const [user, setToDelete] = useState(null);
-    const [deletedUser, setDeletedUser] = useState(null);
+    const [stores, setStores] = useState([])
+    const [store, setToDelete] = useState(null);
+    
 
-    function getCookie(key) {
-        var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-        return b ? b.pop() : "";
-    }
+    
 
     useEffect(() => {
-        setSampleData(props.sampleData);
-        console.log(sampleData);
+        setStores(props.stores);
+        console.log(stores);
     }, [])
 
 
@@ -27,17 +24,31 @@ function List(props) {
         setToDelete(object);
     }
 
+    function handleSort() {
+        const sortedData = [...stores].sort((a, b) => {
+            return a.name > b.name ? 1 : -1
+        })
+
+        setStores(sortedData);
+    }
+
+    function handleSort1() {
+        const sortedData = [...stores].sort((a, b) => {
+            return a.name < b.name ? 1 : -1
+        })
+
+        setStores(sortedData);
+    }
 
 
-
-
-    const listComponents = sampleData.map((object) => {
-        return <ListItem store={object} deleteAction={deleteUser} />
+    const listComponents = stores.map((object) => {
+        return <ListItem store={object} deleteAction={deleteStore} />
     })
 
     return (
         <>
-
+            <button onClick={handleSort} id="sorta-z"> A-Z  </button>
+            <button onClick={handleSort1} id="sortz-a"> Z-A </button>
             <Box sx={{
                 width: '100%',
                 maxWidth: 500,
