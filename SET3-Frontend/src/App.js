@@ -58,7 +58,7 @@ function App() {
 
                 <Routes>
                 
-                <Route path="/form2" element={<EditProduct />} />
+                <Route path="/form2/:id" element={<EditProduct />} />
 
                 </Routes>
 

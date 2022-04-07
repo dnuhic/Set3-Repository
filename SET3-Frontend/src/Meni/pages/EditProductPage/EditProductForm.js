@@ -20,9 +20,18 @@ function EditProductForm() {
 
     // EDIT PRODUCT
     const editProduct = () => {
+
+        var noviId;
+        for (let i = 0; i < stocks.length; i++) {
+            if (stocks[i].name == stock) {
+                noviId = stocks[i].id;
+                break;
+            }
+        }
+
         const newProduct = {
             Id: product.id,
-            StockId: stock,
+            StockId: noviId,
             Name: document.getElementById("name").value,
             CategoryName: category,
             Price: product.price,
@@ -43,18 +52,26 @@ function EditProductForm() {
         };
 
         // Check if these are the correct URLs
-        const responseProduct = await fetch(`${process.env.REACT_APP_BACKEND_URL}productmodels/${id}`, requestOptions);
+        const responseProduct = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/productmodels/${id}`, requestOptions);
         const dataProduct = await responseProduct.json();
         
-        const responseCategory = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/Categories`)
+        const responseCategory = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`)
         const dataCategories = await responseCategory.json();
 
-        const responseStocks = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/Stocks`)
+        const responseStocks = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`)
         const dataStocks = await responseStocks.json();
+
+        var noviName;
+        for (let i = 0; i < dataStocks.length; i++) {
+            if (dataStocks[i].id == dataProduct.stockId) {
+                noviName = dataStocks[i].name;
+                break;
+            }
+        }
 
         setProduct(dataProduct);
         setName(dataProduct.name);
-        setStock(dataProduct.stockId);
+        setStock(noviName);
         setCategory(dataProduct.categoryName);
         setCategories(dataCategories);
         setStocks(dataStocks);
@@ -73,7 +90,7 @@ function EditProductForm() {
                 credentials: 'same-origin'
             };
 
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${product.id}`, requestOptions);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/productmodels/${product.id}`, requestOptions);
 
 
             console.log("OVO ERROR BACA ");
@@ -126,7 +143,7 @@ function EditProductForm() {
                             <div className="form-box">
                                 <select name="role" id="role" className="category" value={category} onChange={handleCategoryChange}>
                                     {categories && categories.length &&
-                                        categories.map(q => <option value={q.categoryName}>{q.categoryName}</option>)
+                                        categories.map(q => <option value={q.name}>{q.name}</option>)
                                     }
                                 </select>
                             </div>
@@ -140,7 +157,7 @@ function EditProductForm() {
                             <div className="form-box">
                                 <select name="role" id="role" className="stock" value={stock} onChange={handleStockChange}>
                                     {stocks && stocks.length &&
-                                        stocks.map(q => <option value={q.stock}>{q.categoryName}</option>)
+                                        stocks.map(q => <option value={q.name}>{q.name}</option>)
                                     }
                                 </select>
                              </div>
