@@ -2,6 +2,7 @@
 import GlobalStyle from './globalStyles';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navbar } from './Meni/components';
+import NavigationBar from './Meni/components/NavigationBar/NavigationBar'
 import { Link } from 'react-router-dom';
 import Home from './Meni/pages/HomePage/Home';
 import AddUser from './Meni/pages/AddAUserPage/AddAUserForm';
@@ -32,7 +33,7 @@ function App() {
             
             < Router >
                 <GlobalStyle />
-                <Navbar />
+                <NavigationBar />
                 <Routes>
                     <Route path="/" element={<Home />} />
 
@@ -60,7 +61,7 @@ function App() {
 
                 <Routes>
 
-                    <Route path="/form" element={<AddUser />} />
+                    <Route path="/addNewUser" element={<AddUser />} />
 
                 </Routes>
 
@@ -122,7 +123,7 @@ function App() {
 
             <Routes>
 
-                <Route path="/stores" element={<StorePage />} />
+                <Route path="/shops" element={<StorePage />} />
             </Routes>
 
             <Routes>
@@ -131,7 +132,7 @@ function App() {
             </Routes>
 
             <Routes>
-              <Route path="/productsPage" element={<ProductPage />} />
+              <Route path="/products" element={<ProductPage />} />
             </Routes>
 
             <Routes>

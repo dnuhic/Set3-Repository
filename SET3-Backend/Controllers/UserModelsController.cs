@@ -39,7 +39,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /userModels
-        [HttpGet(Name = "usermodels"), Authorize(Roles = "Admin, User")]
+        [HttpGet(Name = "usermodels"), Authorize(Roles = "Admin,User,StockAdmin,ShopAdmin")]
         public IEnumerable<UserModel> GetUserModels()
         {
 
@@ -60,7 +60,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /usermodels/5
-        [HttpGet("{id}"), Authorize(Roles = "Admin, User")]
+        [HttpGet("{id}"), Authorize(Roles = "Admin,User,StockAdmin,ShopAdmin")]
         public async Task<ActionResult<UserModel>> GetUserModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -85,7 +85,7 @@ namespace SET3_Backend.Controllers
 
         // POST: api/UserModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("{id}"), Authorize(Roles = "Admin, User")]
+        [HttpPost("{id}"), Authorize(Roles = "Admin,User,StockAdmin,ShopAdmin")]
         public async Task<IActionResult> PutUserModel(int id, UserModel userModel)
         {
 

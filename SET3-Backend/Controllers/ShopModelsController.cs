@@ -30,7 +30,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: ShopModels
-        [HttpGet, Authorize(Roles = "ShopAdmin")]
+        [HttpGet, Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<IEnumerable<ShopModel>>> GetShopModel()
         {
             var token = Request.Headers["Authorization"];
@@ -42,7 +42,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: ShopModels/5
-        [HttpGet("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpGet("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<ShopModel>> GetShopModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -64,7 +64,7 @@ namespace SET3_Backend.Controllers
 
         // PUT: ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpPut("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<IActionResult> PutShopModel(int id, [FromBody] ShopModel shopModel)
         {
             var token = Request.Headers["Authorization"];
@@ -101,7 +101,7 @@ namespace SET3_Backend.Controllers
 
         // POST: ShopModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost, Authorize(Roles = "ShopAdmin")]
+        [HttpPost, Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<ShopModel>> PostShopModel(ShopModel shopModel)
         {
             var token = Request.Headers["Authorization"];
@@ -117,7 +117,7 @@ namespace SET3_Backend.Controllers
         }
 
         // DELETE: ShopModels/5
-        [HttpDelete("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpDelete("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<IActionResult> DeleteShopModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -144,7 +144,7 @@ namespace SET3_Backend.Controllers
             public int Id { get; set; }
         }
 
-        [HttpPost("deleteShop"), Authorize(Roles = "ShopAdmin")] //
+        [HttpPost("deleteShop"), Authorize(Roles = "ShopAdmin,Admin")] //
         public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
         {
 
