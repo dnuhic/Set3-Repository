@@ -20,6 +20,7 @@ import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
 import StorePage from './Meni/pages/StorePage/StorePage'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
+import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
 import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import EditProduct from './Meni/pages/EditProductPage/EditProduct';
 
@@ -110,6 +111,11 @@ function App() {
                 <Routes>
 
                     <Route path="/cashRegister/:id" element={<CashRegister />} />
+            </Routes>
+
+            <Routes>
+
+                <Route path="/editcashRegister/:id" element={<EditCashRegisterComponent />} />
             </Routes>
 
             <Routes>
