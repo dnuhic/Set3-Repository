@@ -41,7 +41,7 @@ const AddShopComponent = () => {
                 credentials: 'same-origin',
                 body: JSON.stringify(body)
             };
-            fetch(`${process.env.REACT_APP_BACKEND_URL}api/ShopModels`, requestOptions)
+            fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptions)
                 .then(response => {
                     if (response.ok)
                         return response.json()
@@ -93,7 +93,12 @@ const AddShopComponent = () => {
 
     const handleStockChange = (e) => {
         console.log("Stock change ", e.target.options[0].getAttribute("data-id"));
-        setSelectedStock(e.target.options[0].getAttribute("data-id"));
+        //setSelectedStock(e.target.value.getAttribute("data-id"));
+        setSelectedStock(e.target.value);
+        //console.log(e.target.value.id)
+        console.log('ID:')
+        console.log(e.target.value)
+        
     }
 
     return (
@@ -132,7 +137,7 @@ const AddShopComponent = () => {
                             onChange={(e) => handleStockChange(e)}>
                             {
                                 shopStocks.map(stock => {
-                                    return <option className="dropdown-item" href="#" key={stock.id} data-id={stock.id}>{stock.name}</option>;
+                                    return <option className="dropdown-item" href="#" key={stock.id} value={stock.id} data-id={stock.id}>{stock.name}</option>;
                                 })
                             }
                         </select>
