@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 import { useState, useEffect } from 'react';
 
@@ -26,6 +27,7 @@ function ListItem(props) {
             credentials: 'same-origin'
         };
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/deleteShop`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         const data = await response.json();
         setDeleted(true);
         console.log(data);

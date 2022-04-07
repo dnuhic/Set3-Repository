@@ -1,9 +1,12 @@
 import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const AddAUserForm = () => {
-    
+
+    const navigate = useNavigate()
     const [createdUser, setCreatedUser] = useState(false);
     const [questions, setQuestions] = useState(null);
     const [users, setAllUsers] = useState(null);
@@ -17,6 +20,7 @@ const AddAUserForm = () => {
 
     useEffect( async() => {
         const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(pitanjaResponse, navigate)
         const pitanja = await pitanjaResponse.json();
 
         console.log('pitanja iz baze')
@@ -27,6 +31,7 @@ const AddAUserForm = () => {
         setQuestions(pitanja);
 
         const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(responseRole, navigate)
         const dataRoles = await responseRole.json();
 
         setRole(dataRoles[0].roleName);
@@ -39,6 +44,7 @@ const AddAUserForm = () => {
         };
 
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         const data = await response.json();
         setAllUsers(data);
 

@@ -1,11 +1,14 @@
 import ListItem from './ListItem'
 import Box from '@mui/material/Box';
 import { default as MuiList } from '@mui/material/List';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 import { useState, useEffect } from 'react';
 
 function List(props) {
 
+    const navigate = useNavigate()
     const [products, setProducts] = useState([])
     const [product, setToDelete] = useState(null);
     const [deletedProduct, setDeletedProduct] = useState(null);
@@ -70,6 +73,7 @@ function List(props) {
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/productmodels/${product.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
             console.log(response);
             const data = await response.json();
             console.log(data);

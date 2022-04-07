@@ -3,10 +3,14 @@ import React, {
     Component, useState, useEffect, useCallback
 } from 'react';
 import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
+
 
 
 const ForgotPassword = () => {
 
+    const navigate = useNavigate()
     const [EmailProvided, setEmailProvided] = useState(null);
 
     const ProvideEmail = () => {
@@ -44,6 +48,7 @@ const ForgotPassword = () => {
             };
             try {
                 await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/send`, requestOptions).then(res => {
+                    ResponseCheckModule.unauthorizedResponseCheck(res, navigate)
                     if (res.status == 400)
                         alert("Wrong email address provided!");
                     else alert("Check your inbox!");

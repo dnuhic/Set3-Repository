@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import '../styleForm.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 
 
@@ -38,7 +39,7 @@ const TFAConfirm = (props) => {
                 credentials: 'include',
                 body: JSON.stringify(user)
             }).then(response => {
-
+                ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
                 
                     navigate('/');
                     window.location.reload(false);
@@ -72,6 +73,7 @@ const TFAConfirm = (props) => {
         };
 
         var res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/sendcode`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(res, navigate)
         console.log(res);
         var data = await res.json();
 

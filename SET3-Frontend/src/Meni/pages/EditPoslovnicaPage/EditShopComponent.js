@@ -3,11 +3,14 @@ import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
 import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const EditShopComponent = () => {
     // Dobavljanje poslovnice iz baze i postavljanje inicijalnih vrijednosti
     // podaci iz baze:
     const [shop, setShop] = useState(null);
+    const navigate = useNavigate()
     const [stocks, setStocks] = useState([]);
     const [defaultStock, setDefaultStock] = useState({id : 1, name : ""});
     //kase?? - dodati kase?
@@ -37,6 +40,7 @@ const EditShopComponent = () => {
         };
         //api poziv fix
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseShop, navigate)
         if (responseShop.status == 404) {
             alert("Shop does not exist.");
         }
@@ -44,6 +48,7 @@ const EditShopComponent = () => {
         console.log(dataShop);
 
         const responseStock = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseStock, navigate)
         const dataStock = await responseStock.json();
 
         setShop(dataShop);
@@ -119,6 +124,7 @@ const EditShopComponent = () => {
             };
             //fix api
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${shop.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
             alert("Changes have been saved succesfully!")
         }
 

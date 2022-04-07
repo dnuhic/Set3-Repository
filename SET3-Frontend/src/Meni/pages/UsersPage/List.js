@@ -4,7 +4,13 @@ import { default as MuiList } from '@mui/material/List';
 
 import { useState, useEffect } from 'react';
 
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
+
+
 function List(props) {
+
+    const navigate = useNavigate()
 
     const [sampleData, setSampleData] = useState([])
     const [user, setToDelete] = useState(null);
@@ -77,6 +83,7 @@ function List(props) {
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
             console.log(response);
             const data = await response.json();
             console.log(data);

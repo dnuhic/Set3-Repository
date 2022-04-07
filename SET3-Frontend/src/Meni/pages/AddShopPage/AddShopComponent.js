@@ -2,8 +2,12 @@ import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
+
 const AddShopComponent = () => {
 
+    const navigate = useNavigate()
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
     const [shopStocks, setShopStocks] = useState(null);
@@ -43,6 +47,7 @@ const AddShopComponent = () => {
             };
             fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptions)
                 .then(response => {
+                    ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
                     if (response.ok)
                         return response.json()
                     else
@@ -71,7 +76,7 @@ const AddShopComponent = () => {
             credentials: 'same-origin'
         };
         fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`, requestOptions)
-            .then(response => response.json())
+            .then(response => { ResponseCheckModule.unauthorizedResponseCheck(response, navigate); return response.json() })
             .then(data => {
                 setShopStocks(data);
                 setDefaultStock(data[0]);

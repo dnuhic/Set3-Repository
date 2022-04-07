@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 //import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 export default function AddCashRegister(props) {
+    const navigate = useNavigate()
     const [shops, setShops] = useState(null);
     const [createRegister, setCreateRegister] = useState(null);
     const [store, setStore] = useState(null);
@@ -20,6 +23,7 @@ export default function AddCashRegister(props) {
             credentials: 'same-origin'
         };
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptionsShop);
+        ResponseCheckModule.unauthorizedResponseCheck(responseShop, navigate)
         const dataShop = await responseShop.json();
 
         setShops(dataShop);
@@ -55,7 +59,7 @@ export default function AddCashRegister(props) {
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`, requestOptions)
-                .then(response => { response.json(); console.log(response); })
+                .then(response => { ResponseCheckModule.unauthorizedResponseCheck(response, navigate); response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
                     document.getElementById("nazivKase").value = "";

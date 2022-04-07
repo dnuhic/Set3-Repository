@@ -2,9 +2,12 @@ import React from "react"
 import { useState, useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const EditProduct = () => {
 
+    const navigate = useNavigate()
     const [categories, setCategories] = useState(null)
     const [stocks, setStocks] = useState(null)
     const [newProduct, setNewProduct] = useState(null)
@@ -63,16 +66,19 @@ const EditProduct = () => {
         };
 
         const responseSkaldista = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`, getRequest);
+        ResponseCheckModule.unauthorizedResponseCheck(responseSkaldista, navigate)
         const skladista = await responseSkaldista.json();
         setStocks(skladista);
         console.log(skladista);
 
         const responseKategorije = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`, getRequest);
+        ResponseCheckModule.unauthorizedResponseCheck(responseKategorije, navigate)
         const kategorije = await responseKategorije.json();
         setCategories(kategorije);
         console.log(kategorije);
 
         const responseOld = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels/${id}`, getRequest);
+        ResponseCheckModule.unauthorizedResponseCheck(responseOld, navigate)
         const old = await responseOld.json();
         console.log(old);
 
@@ -91,7 +97,7 @@ const EditProduct = () => {
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels/${id}`, putRequest)
-                .then(response => { response.json(); console.log(response); })
+                .then(response => { ResponseCheckModule.unauthorizedResponseCheck(response, navigate); response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
                 });

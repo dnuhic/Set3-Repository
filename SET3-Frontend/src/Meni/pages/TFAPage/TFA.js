@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import '../styleForm.css';
 import TFAConfirm from "../TFAConfirmPage/TFAConfirm";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 const TFA = () => {
     const [user, setUser] = useState(null);
     const [clicked, setClicked] = useState(false)
-
+    const navigate = useNavigate()
     const handleSumbit = () => {
         setClicked(true);
 
@@ -27,6 +28,7 @@ const TFA = () => {
             credentials: 'same-origin'
         };
         const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseUser, navigate)
         const dataUser = await responseUser.json();
 
         setUser(dataUser);

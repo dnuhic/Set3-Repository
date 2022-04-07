@@ -1,10 +1,12 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.css";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const AddProduct = () => {
 
-
+    const navigate = useNavigate()
     const [categories, setCategories] = useState(null)
     const [stocks, setStocks] = useState(null)
     const [newProduct, setNewProduct] = useState(null)
@@ -76,11 +78,13 @@ const AddProduct = () => {
         };
 
         const responseSkaldista = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/StockModels`, getRequest);
+        ResponseCheckModule.unauthorizedResponseCheck(responseSkaldista, navigate)
         const skladista = await responseSkaldista.json();
         setStocks(skladista);
         console.log(skladista);
 
         const responseKategorije = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`, getRequest);
+        ResponseCheckModule.unauthorizedResponseCheck(responseKategorije, navigate)
         const kategorije = await responseKategorije.json();
         setCategories(kategorije);
         console.log(kategorije);
@@ -102,7 +106,7 @@ const AddProduct = () => {
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, postRequest)
-                .then(response => { response.json(); console.log(response); })
+                .then(response => { ResponseCheckModule.unauthorizedResponseCheck(response, navigate); response.json(); console.log(response); })
                 .then(data => {
                     console.log(data)
                 });
