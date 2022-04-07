@@ -3,12 +3,14 @@ import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
 import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const Settings = () => {
     const [user, setUser] = useState(null);
     const [roles, setRoles] = useState(null);
 
-
+    const navigate = useNavigate()
     //podaci iz url??
     const { id } = useParams();
 
@@ -36,9 +38,11 @@ const Settings = () => {
             credentials: 'same-origin'
         };
         const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseUser, navigate)
         const dataUser = await responseUser.json();
 
         const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(responseRole, navigate)
         const dataRoles = await responseRole.json();
 
         setUser(dataUser);
@@ -97,6 +101,7 @@ const Settings = () => {
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 
 
             console.log("OVO ERROR BACA ");

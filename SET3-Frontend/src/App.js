@@ -24,7 +24,8 @@ import StorePage from './Meni/pages/StorePage/StorePage'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
-import AddProduct from './Meni/pages/AddProductPage/AddProduct';
+import AddProduct from './Meni/pages/AddProductPage/AddProduct'
+import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
 
 function App() {
 
@@ -147,6 +148,10 @@ function App() {
 
             <Routes>
                 <Route path="/editProduct/:id" element={<EditProduct />} />
+            </Routes>
+
+            <Routes>
+                <Route path="/unauthorized" element={<UnauthorizedError />} />
             </Routes>
 
             </Router >

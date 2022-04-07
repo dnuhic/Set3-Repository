@@ -1,6 +1,9 @@
 import React, { Component, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
+
 
 
 
@@ -8,6 +11,7 @@ export default function ResetPassword() {
 
     console.log(process.env)
     //process.env.REACT_APP_BACKEND_URL
+    const navigate = useNavigate()
     const { id } = useParams();
     const [userFetched, setUserFetched] = useState(null);
     const [qFetched, setqFetched] = useState(null);
@@ -29,6 +33,7 @@ export default function ResetPassword() {
         };
 
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         //console.log(response);
         const data = await response.json();
         //console.log(data);        
@@ -37,6 +42,7 @@ export default function ResetPassword() {
     useEffect(getData, []);
     useEffect(async () => {
         const question = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels/${id}/forgotPassword`);
+        ResponseCheckModule.unauthorizedResponseCheck(question, navigate)
         const data = await question.json();
        
         //console.log(data);
@@ -54,6 +60,7 @@ export default function ResetPassword() {
     //useEffect(getQuestions, []);
     useEffect(async () => {
         const pitanjaResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}SecurityQuestionModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(pitanjaResponse, navigate)
         const pitanja = await pitanjaResponse.json();
 
         console.log(pitanja);

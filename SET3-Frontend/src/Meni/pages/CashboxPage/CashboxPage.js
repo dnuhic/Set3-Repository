@@ -7,8 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
 import List from './List';
 import { useState, useEffect } from 'react';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 function CashboxPage(props) {
+	const navigate = useNavigate()
 	const { id } = useParams();
 	const [allCashRegisters, setAllCashRegisters] = useState(null);
 	const [store, setStore] = useState(null);
@@ -25,9 +27,11 @@ function CashboxPage(props) {
 			credentials: 'same-origin'
 		};
 		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`, requestOptions);
+		ResponseCheckModule.unauthorizedResponseCheck(responseC, navigate)
 		const c = await responseC.json();
 
 		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
+		ResponseCheckModule.unauthorizedResponseCheck(responseS, navigate)
 		const s = await responseS.json();
 
 		const filtered = c.filter(c => c.shopId == id)

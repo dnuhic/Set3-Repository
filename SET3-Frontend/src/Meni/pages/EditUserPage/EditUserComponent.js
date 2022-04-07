@@ -3,11 +3,15 @@ import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
 import '../styleForm.css';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const EditUserComponent = () => {
     // Dobavljanje korisnika iz baze i postavljanje inicijalnih vrijednosti:
 
     // podaci iz baze:
+    const navigate = useNavigate()
+
     const [user, setUser] = useState(null);
     const [roles, setRoles] = useState(null);
 
@@ -39,9 +43,11 @@ const EditUserComponent = () => {
             credentials: 'same-origin'
         };
         const responseUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseUser, navigate)
         const dataUser = await responseUser.json();
 
         const responseRole = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(responseRole, navigate)
         const dataRoles = await responseRole.json();
 
         setUser(dataUser);
@@ -139,6 +145,7 @@ const EditUserComponent = () => {
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels/${user.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         
 
             console.log("OVO ERROR BACA ");

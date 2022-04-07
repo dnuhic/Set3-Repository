@@ -6,10 +6,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
 import List from './List';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useState, useEffect } from 'react';
 
 function ProductPage(props) {
 
+	const navigate = useNavigate()
 	const [allProducts, setAllProducts] = useState(null);
 
 
@@ -26,6 +28,7 @@ function ProductPage(props) {
 		};
 
 		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, requestOptions);
+		ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 
 		console.log(response);
 		const data = await response.json();

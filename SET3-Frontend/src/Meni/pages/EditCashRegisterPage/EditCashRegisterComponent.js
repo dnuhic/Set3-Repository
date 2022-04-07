@@ -4,9 +4,12 @@ import "bootstrap/dist/css/bootstrap.css";
 import { useParams } from "react-router-dom";
 import '../styleForm.css';
 import { Update } from '@mui/icons-material';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 const EditCashRegister = () => {
 
+    const navigate = useNavigate()
     const [cashRegister, setCashRegister] = useState(null);
 
     const { id } = useParams();
@@ -33,6 +36,7 @@ const EditCashRegister = () => {
             credentials: 'same-origin'
         };
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         const data = await response.json();
         setCashRegister(data);
         setCashRegisterName(data.name);
@@ -44,6 +48,7 @@ const EditCashRegister = () => {
             credentials: 'same-origin'
         };
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptionsShop);
+        ResponseCheckModule.unauthorizedResponseCheck(responseShop, navigate)
         const dataShop = await responseShop.json();
 
         let currentShop = dataShop.filter(shop => shop.id == data.shopId)[0]
@@ -90,7 +95,7 @@ const EditCashRegister = () => {
             };
 
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${cashRegister.id}`, requestOptions);
-
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 
             alert("Changes have been saved succesfully!")
         }

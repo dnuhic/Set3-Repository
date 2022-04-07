@@ -1,11 +1,14 @@
 import ListItem from './ListItem'
 import Box from '@mui/material/Box';
 import { default as MuiList } from '@mui/material/List';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
 
 import { useState, useEffect } from 'react';
 
 function List(props) {
 
+    const navigate = useNavigate()
     const [sampleData, setSampleData] = useState([])
     const [register, setToDelete] = useState(null);
     const [deletedRegister, setDeletedRegister] = useState(null);
@@ -54,6 +57,7 @@ function List(props) {
                 body: JSON.stringify(deletedRegister),
             };
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${register.id}`, requestOptions);
+            ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
             console.log(response);
             //ne radi
             const index = sampleData.indexOf(register, 0);

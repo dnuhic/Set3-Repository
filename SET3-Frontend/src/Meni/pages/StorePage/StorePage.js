@@ -7,9 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
 import List from './List';
 import { useState, useEffect } from 'react';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 function StorePage(props) {
 
+	const navigate = useNavigate()
 	const [allStores, setAllStores] = useState(null);
 
 	function getCookie(key) {
@@ -24,6 +26,8 @@ function StorePage(props) {
 			credentials: 'same-origin'
 		};
 		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptions);
+		ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
+
 
 		console.log(response);
 		const data = await response.json();

@@ -1,9 +1,14 @@
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import List from './List';
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { useNavigate } from "react-router-dom"
+
 
 
  
 const Users = () => {
+
+	const navigate = useNavigate()
 	const [allUsers, setAllUsers] = useState(null);
 	const [allUsersFetched, setAllUsersFetched] = useState(false);
 
@@ -23,6 +28,7 @@ const Users = () => {
 		};
 
 		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}usermodels`, requestOptions);
+		ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 
 		console.log(response);
 		const data = await response.json();

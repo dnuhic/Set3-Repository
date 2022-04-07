@@ -1,7 +1,10 @@
 import { React,useState,useEffect } from 'react';
 import './AccessRights.css';
+import ResponseCheckModule from '../Meni/pages/ErrorPage/ResponseCheckModule'
+import { useNavigate } from "react-router-dom"
 
 const AccessRights = () => {
+    const navigate = useNavigate()
     const [rights, setRights] = useState([]);
 
     useEffect(() => {
@@ -14,6 +17,7 @@ const AccessRights = () => {
 
     const fetchRights = async () => {
         const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/RoleModels`)
+        ResponseCheckModule.unauthorizedResponseCheck(res, navigate)
         const data = await res.json();
         return data;
     }
@@ -31,6 +35,7 @@ const AccessRights = () => {
                     method: 'PUT',
                     body: JSON.stringify(object)
                 }).then(async (response) => {
+                    ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
                     const body = await response.text();
                     if (response.status !== 200) throw Error(body.message);
                     // if everything is fine resiolve to true or for example your body content
