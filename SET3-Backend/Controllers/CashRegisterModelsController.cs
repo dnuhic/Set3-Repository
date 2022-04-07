@@ -31,7 +31,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/CashRegisterModels
-        [HttpGet, Authorize(Roles = "ShopAdmin")]
+        [HttpGet, Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<IEnumerable<CashRegisterModel>>> GetCashRegisterModel()
         {
             var token = Request.Headers["Authorization"];
@@ -43,7 +43,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/CashRegisterModels/5
-        [HttpGet("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpGet("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<CashRegisterModel>> GetCashRegisterModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -66,7 +66,7 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/CashRegisterModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpPut("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<IActionResult> PutCashRegisterModel(int id,[FromBody] CashRegisterModel cashRegisterModel)
         {
             var token = Request.Headers["Authorization"];
@@ -105,7 +105,7 @@ namespace SET3_Backend.Controllers
 
         // POST: api/CashRegisterModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost, Authorize(Roles = "ShopAdmin")]
+        [HttpPost, Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<CashRegisterModel>> PostCashRegisterModel(CashRegisterModel cashRegisterModel)
         {
             var token = Request.Headers["Authorization"];
@@ -122,7 +122,7 @@ namespace SET3_Backend.Controllers
         }
 
         // DELETE: api/CashRegisterModels/5
-        [HttpDelete("{id}"), Authorize(Roles = "ShopAdmin")]
+        [HttpDelete("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<IActionResult> DeleteCashRegisterModel(int id)
         {
             var token = Request.Headers["Authorization"];
