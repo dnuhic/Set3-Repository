@@ -1,9 +1,13 @@
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
+import { useNavigate } from "react-router-dom";
+import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+
 
 function EditProductForm() {
 
+    const navigate = useNavigate();
     // podaci iz baze:
     const [product, setProduct] = useState(null);
 
@@ -53,8 +57,8 @@ function EditProductForm() {
 
         // Check if these are the correct URLs
         const responseProduct = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/productmodels/${id}`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseProduct, navigate)
         const dataProduct = await responseProduct.json();
-        
         const responseCategory = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`)
         const dataCategories = await responseCategory.json();
 
@@ -119,7 +123,7 @@ function EditProductForm() {
 
     return (
         <>
-             <form className="unos">
+            {categories &&  stocks && < form className="unos">
                 <div className="col">
                     <h1>Edit product</h1>
                 </div>
@@ -172,7 +176,8 @@ function EditProductForm() {
                     Edit product
                 </button>
                 
-            </form>
+            </form>}
+            {(!categories || !stocks) && <h1>Loading...</h1>}
            
         </>
 

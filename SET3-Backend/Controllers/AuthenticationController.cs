@@ -86,20 +86,21 @@ namespace SET3_Backend.Controllers
 
         //metoda napravljena samo za svrhu testiranja!!!
         [HttpGet ("add")]
-        public async Task<ActionResult<UserModel>> CreateUserTestMethod()
+        public async Task<ActionResult<List<UserModel>>> CreateUserTestMethod()
         {
             if (_context.RoleModels.Any() && _context.SecurityQuestionModels.Any())
             {
                 SecurityQuestionModel question = await _context.SecurityQuestionModels.FirstOrDefaultAsync();
-
+                List<UserModel> users = new List<UserModel>();
                 var sha = SHA256.Create();
                 var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes("password")));
-                UserModel user = new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.Admin.ToString(), "");
-                _context.UserModels.Add(user);
-                _context.UserModels.Add(new UserModel("shopAdmin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.ShopAdmin.ToString(), ""));
-                _context.UserModels.Add(new UserModel("stockAdmin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.StockAdmin.ToString(), ""));
+
+                users.Add(new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.Admin.ToString(), ""));
+                users.Add(new UserModel("shopAdmin@gmail.com", "Shop", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.ShopAdmin.ToString(), ""));
+                users.Add(new UserModel("stockAdmin@gmail.com", "Stock", "Admin", passwordHash, question!.Id, "Odgovor", false, RoleType.StockAdmin.ToString(), ""));
+                _context.UserModels.AddRange(users);
                 await _context.SaveChangesAsync();
-                return user;
+                return users;
             }
 
             // AKO VRATI BAD REQUEST POZOVITE SLIJEDECI GET PRIJE:

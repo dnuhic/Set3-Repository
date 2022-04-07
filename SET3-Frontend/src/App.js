@@ -67,12 +67,6 @@ function App() {
                 </Routes>
 
                 <Routes>
-                
-                <Route path="/editProduct/:id" element={<EditProduct />} />
-
-                </Routes>
-
-                <Routes>
                     <Route path="/forgotPassword" element={<ForgotPassword />} />
 
                 </Routes>

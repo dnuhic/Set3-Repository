@@ -24,13 +24,13 @@ export default function LogOutButton(props) {
         <Nav>
             {button ? (
                 <NavItem>
-                    <Button primary onClick={handleClickOpen}> LogOut </Button>
+                    <Button primary onClick={handleClickOpen}> Log out </Button>
 
                 </NavItem>
             ) : (
                 <NavItem>
                     <Button fontBig primary onClick={handleClickOpen}>
-                        LogOut
+                        Log out
                     </Button>
                 </NavItem>
             )

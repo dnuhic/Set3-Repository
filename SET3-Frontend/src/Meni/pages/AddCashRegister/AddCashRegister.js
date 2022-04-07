@@ -86,7 +86,7 @@ export default function AddCashRegister(props) {
                             <h6>Shop: </h6>
                         </div>
                         <div className="col">
-                            <select class="form-control" onChange={handleChange}>
+                            <select id="role" onChange={handleChange}>
                                 {shops.map(e => <option value={e.id}>{e.name}</option>)}
                             </select>
                         </div>

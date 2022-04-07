@@ -74,11 +74,11 @@ const TFAConfirm = (props) => {
 
         var res = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/mail/sendcode`, requestOptions);
         ResponseCheckModule.unauthorizedResponseCheck(res, navigate)
-        console.log(res);
+        //console.log(res);
         var data = await res.json();
 
         alert("Check your e-mail then verify the code.");
-        console.log(data);
+        //console.log(data);
         setUserCode(data.result);
 
     }, [])

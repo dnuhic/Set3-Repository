@@ -91,8 +91,7 @@ function List(props) {
 
     return (
         <>
-            <button onClick={handleSort} id="sorta-z"> A-Z  </button>
-            <button onClick={handleSort1} id="sortz-a"> Z-A </button>
+           
             <Box sx={{
                 width: '100%',
                 maxWidth: 500,

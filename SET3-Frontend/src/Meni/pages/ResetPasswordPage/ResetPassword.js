@@ -86,7 +86,7 @@ export default function ResetPassword() {
                 console.log("ID I NOVA SIFRA");
                 console.log(pom);
 
-                await fetch(`${process.env.REACT_APP_BACKEND_URL}UserModels/changePassword`, requestOptions).then(res => res.json).then(json => console.log.json);
+                await fetch(`${process.env.REACT_APP_BACKEND_URL}UserModels/changePassword`, requestOptions).then(res => res.json()).then(json => console.log.json);
             }
             resetPass();
         }

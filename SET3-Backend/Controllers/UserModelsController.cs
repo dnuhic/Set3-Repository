@@ -39,7 +39,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: /userModels
-        [HttpGet(Name = "usermodels"), Authorize(Roles = "Admin,User,StockAdmin,ShopAdmin")]
+        [HttpGet(Name = "usermodels"), Authorize(Roles = "Admin")]
         public IEnumerable<UserModel> GetUserModels()
         {
 
