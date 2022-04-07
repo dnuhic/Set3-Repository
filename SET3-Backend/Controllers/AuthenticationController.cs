@@ -41,7 +41,7 @@ namespace SET3_Backend.Controllers
         [HttpGet("createFirstData")]
         public async Task<ActionResult<UserModel>> CreateFirstData()
         {
-            if(!_context.RoleModels.Any())
+            if (!_context.RoleModels.Any())
             {
                 RoleModel user = new RoleModel(RoleType.User.ToString(), true, false, false);
                 _context.RoleModels.Add(user);
@@ -56,7 +56,6 @@ namespace SET3_Backend.Controllers
                 _context.RoleModels.Add(stockAdmin);
 
 
-
             }
 
             if (!_context.SecurityQuestionModels.Any())
@@ -68,12 +67,17 @@ namespace SET3_Backend.Controllers
                 _context.SecurityQuestionModels.Add(new SecurityQuestionModel("What is your dream car?"));
             }
 
-            if(!_context.CategoryModels.Any())
+            if (!_context.CategoryModels.Any())
             {
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString()));
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString()));
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString()));
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Other.ToString()));
+            }
+
+            if (!_context.StockModels.Any())
+            {
+                _context.StockModels.Add(new StockModel("Warehouse"));
             }
 
             await _context.SaveChangesAsync();

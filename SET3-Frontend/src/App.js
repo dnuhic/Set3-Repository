@@ -2,6 +2,7 @@
 import GlobalStyle from './globalStyles';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Navbar } from './Meni/components';
+import NavigationBar from './Meni/components/NavigationBar/NavigationBar'
 import { Link } from 'react-router-dom';
 import Home from './Meni/pages/HomePage/Home';
 import AddUser from './Meni/pages/AddAUserPage/AddAUserForm';
@@ -14,7 +15,8 @@ import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
-import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent'
+import EditProduct from './Meni/pages/EditProductPage/EditProductForm';
+import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent';
 import AccessRights from './AccessRights/AccessRights';
 import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
 import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
@@ -33,7 +35,7 @@ function App() {
             
             < Router >
                 <GlobalStyle />
-                <Navbar />
+                <NavigationBar />
                 <Routes>
                     <Route path="/" element={<Home />} />
 
@@ -61,7 +63,13 @@ function App() {
 
                 <Routes>
 
-                    <Route path="/form" element={<AddUser />} />
+                    <Route path="/addNewUser" element={<AddUser />} />
+
+                </Routes>
+
+                <Routes>
+                
+                <Route path="/form2/:id" element={<EditProduct />} />
 
                 </Routes>
 
@@ -123,7 +131,7 @@ function App() {
 
             <Routes>
 
-                <Route path="/stores" element={<StorePage />} />
+                <Route path="/shops" element={<StorePage />} />
             </Routes>
 
             <Routes>
@@ -132,7 +140,7 @@ function App() {
             </Routes>
 
             <Routes>
-              <Route path="/productsPage" element={<ProductPage />} />
+              <Route path="/products" element={<ProductPage />} />
             </Routes>
 
             <Routes>

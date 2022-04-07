@@ -87,7 +87,7 @@ const Navbar = () => {
                         </MenuIcon>
 
                         <NavMenu onClick={handleClick} click={click}>
-                            <NavItem>
+                                                        <NavItem>
                                 <NavLinks to='/home'> Home </NavLinks>
                             </NavItem>
                             {role && user &&
