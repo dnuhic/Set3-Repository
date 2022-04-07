@@ -47,7 +47,9 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/ProductModels/5
+
         [HttpGet("{id}"), Authorize(Roles = "StockAdmin,Admin")]
+
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -115,7 +117,9 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/ProductModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPut("{id}"), Authorize(Roles = "StockAdmin,Admin")]
+
         public async Task<IActionResult> PutProductModel(int id, ProductModel productModel)
         {
             var token = Request.Headers["Authorization"];
@@ -153,7 +157,9 @@ namespace SET3_Backend.Controllers
 
         // POST: api/ProductModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
         [HttpPost, Authorize(Roles = "StockAdmin,Admin")]
+
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
             var token = Request.Headers["Authorization"];

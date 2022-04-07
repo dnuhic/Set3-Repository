@@ -15,7 +15,8 @@ import ResetPassword from './Meni/pages/ResetPasswordPage/ResetPassword';
 import TFA from './Meni/pages/TFAPage/TFA';
 import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
-import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent'
+import EditProduct from './Meni/pages/EditProductPage/EditProductForm';
+import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent';
 import AccessRights from './AccessRights/AccessRights';
 import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
 import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
@@ -23,8 +24,7 @@ import StorePage from './Meni/pages/StorePage/StorePage'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
-import AddProduct from './Meni/pages/AddProductPage/AddProduct'
-import EditProduct from './Meni/pages/EditProductPage/EditProduct';
+import AddProduct from './Meni/pages/AddProductPage/AddProduct';
 
 function App() {
 
@@ -62,6 +62,12 @@ function App() {
                 <Routes>
 
                     <Route path="/addNewUser" element={<AddUser />} />
+
+                </Routes>
+
+                <Routes>
+                
+                <Route path="/form2/:id" element={<EditProduct />} />
 
                 </Routes>
 
