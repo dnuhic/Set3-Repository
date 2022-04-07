@@ -14,6 +14,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\Meni\pages\ForgotPasswordConfirmPage\" />
+    <Folder Include="src\Meni\pages\AddProductPage\" />
+    <Folder Include="src\Meni\pages\EditProductPage\" />
+    <Folder Include="src\Meni\pages\ProductPage\" />
+    <Folder Include="src\Meni\pages\StorePage\" />
     <Folder Include="src\Meni\pages\ResetPasswordPage\" />
   </ItemGroup>
   <!-- This target is copied from the ASP.NET SPA template in order to ensure node_modules are in place. -->
