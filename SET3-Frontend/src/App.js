@@ -16,6 +16,7 @@ import TFAConfirm from './Meni/pages/TFAConfirmPage/TFAConfirm';
 import EditUserComponent from './Meni/pages/EditUserPage/EditUserComponent';
 import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent'
 import AccessRights from './AccessRights/AccessRights';
+import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
 import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
 import StorePage from './Meni/pages/StorePage/StorePage'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
@@ -28,7 +29,7 @@ function App() {
 
 
     return (
-
+            
             < Router >
                 <GlobalStyle />
                 <Navbar />
@@ -100,9 +101,10 @@ function App() {
 
                 </Routes>
                  <Routes>
-
-                    <Route path="/accessRights" element={<AccessRights />} />
-                </Routes>
+                <Route path="/accessRights" element={<AccessRights />} />
+                 </Routes>
+            <Routes>
+                <Route path="/addCashRegister" element={<AddCashRegister/>} />
 
 		<Routes>
                 	<Route path="/addShop" element={<AddShopComponent />} />
