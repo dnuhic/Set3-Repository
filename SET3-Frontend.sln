@@ -6,12 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "SET3-Frontend", "SET3-Frontend\SET3-Frontend.esproj", "{24D7D212-F828-42F5-801A-9246903AADD8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E} = {5E830923-1FEB-4942-BBAB-D862BBAB2A3E}
-		{89C36A31-B96C-411A-931E-0FFD5C32E309} = {89C36A31-B96C-411A-931E-0FFD5C32E309}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SET3-Backend", "SET3-Backend\SET3-Backend.csproj", "{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{89C36A31-B96C-411A-931E-0FFD5C32E309}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +26,6 @@ Global
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89C36A31-B96C-411A-931E-0FFD5C32E309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89C36A31-B96C-411A-931E-0FFD5C32E309}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89C36A31-B96C-411A-931E-0FFD5C32E309}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89C36A31-B96C-411A-931E-0FFD5C32E309}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,15 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
+﻿//using MailKit.Net.Smtp;
+
+//using MailKit.Security;
+
 using Microsoft.Extensions.Options;
 using MimeKit;
 using SET3_Backend.Models;
 using SET3_Backend.Settings;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net;
+using System.Net.Mail;
 
 namespace SET3_Backend.Services
 {
@@ -24,7 +28,7 @@ namespace SET3_Backend.Services
             _mailSettings = mailSettings.Value;
         }
 
-        public async Task SendEmailAsync(MailRequest mailRequest)
+        /*public async Task SendEmailAsync(MailRequest mailRequest)
         {
             var hashedUrl = hashMail(mailRequest.ToEmail);
             string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\passforgot.html";
@@ -47,9 +51,50 @@ namespace SET3_Backend.Services
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
+        }*/
+
+        public async Task SendEmailAsync(MailRequest mailRequest) {
+            var hashedUrl = hashMail(mailRequest.ToEmail);
+            MailMessage Message = new MailMessage(_mailSettings.Mail, mailRequest.ToEmail);
+            Message.Subject = "Mail recovery";
+
+            string url = "https://set3front.azurewebsites.net/forgotpasswordconfirm/" + hashedUrl;
+
+            Message.Body = "\nRecovery mail link: " + url;
+
+            SmtpClient SmtpClient = new SmtpClient(_mailSettings.Host);
+
+            SmtpClient.EnableSsl = true;
+
+            NetworkCredential credential = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
+            SmtpClient.UseDefaultCredentials = false;
+            SmtpClient.Credentials = credential;
+            SmtpClient.Port = 587;
+            SmtpClient.Send(Message);
         }
 
         public async Task SendEmailCODEAsync(MailRequest mailRequest, String sixDigit)
+        {
+            var hashedUrl = hashMail(mailRequest.ToEmail);
+            MailMessage Message = new MailMessage(_mailSettings.Mail, mailRequest.ToEmail);
+            Message.Subject = "Code verify";
+
+            string url = "https://set3front.azurewebsites.net/forgotpasswordconfirm/" + hashedUrl;
+
+            Message.Body = "\nThis is your code:" + sixDigit;
+
+            SmtpClient SmtpClient = new SmtpClient(_mailSettings.Host);
+
+            SmtpClient.EnableSsl = true;
+
+            NetworkCredential credential = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);
+            SmtpClient.UseDefaultCredentials = false;
+            SmtpClient.Credentials = credential;
+            SmtpClient.Port = 587;
+            SmtpClient.Send(Message);
+        }
+
+        /*public async Task SendEmailCODEAsync(MailRequest mailRequest, String sixDigit)
         {
             var hashedUrl = hashMail(mailRequest.ToEmail);
             string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\authcode.html";
@@ -73,7 +118,7 @@ namespace SET3_Backend.Services
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
-        }
+        }*/
 
         private string hashMail(string mail) {
             return EnryptString(mail);

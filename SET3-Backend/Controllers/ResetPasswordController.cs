@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
@@ -8,6 +9,7 @@ using SET3_Backend.Models;
 namespace SET3_Backend.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("CorsPolicy")]
     [ApiController]
     public class ResetPasswordController : ControllerBase
     {
