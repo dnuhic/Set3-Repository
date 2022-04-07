@@ -32,7 +32,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/ProductModels
-        [HttpGet, Authorize(Roles = "StockAdmin")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductModel>>> GetProductModel()
         {
             var token = Request.Headers["Authorization"];
@@ -47,7 +47,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/ProductModels/5
-        [HttpGet("{id}"), Authorize(Roles = "StockAdmin")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ProductModel>> GetProductModel(int id)
         {
             var token = Request.Headers["Authorization"];
@@ -115,7 +115,7 @@ namespace SET3_Backend.Controllers
 
         // PUT: api/ProductModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}"), Authorize(Roles = "StockAdmin")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutProductModel(int id, ProductModel productModel)
         {
             var token = Request.Headers["Authorization"];
@@ -153,7 +153,7 @@ namespace SET3_Backend.Controllers
 
         // POST: api/ProductModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost, Authorize(Roles = "StockAdmin")]
+        [HttpPost]
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
             var token = Request.Headers["Authorization"];
@@ -166,6 +166,52 @@ namespace SET3_Backend.Controllers
 
                 return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
             }
+
+            return NoContent();
+        }
+
+        // ova metoda se koristi za update/edit proizvoda kao i za brisanje 
+        // na formi za brisanje se salje taj proizvod samo sa promijenjenim atributom deleted na true
+        // i ovdje se to update
+        // provjeriti autorizaciju je li samo admin skladista ovo moze??
+        // metodu sam testirao bez autorizacije i tokena i radi, kada se poveze sa frontendom bice sve ok
+        [HttpPost("{id}")]
+        public async Task<IActionResult> PostUpdateProductModel(int id, ProductModel productModel)
+        {
+
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+
+            if (ValidateToken(token) != null)
+            {
+                if (id != productModel.Id)
+                {
+                    return BadRequest();
+                }
+
+
+                _context.Update(productModel);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+
+                    if (!ProductModelExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            else return NoContent();
+
 
             return NoContent();
         }
