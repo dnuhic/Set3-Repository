@@ -25,7 +25,7 @@ function ListItem(props) {
     }
 
     const handleEdit = () => {
-        navigate(`/form2/${props.product.id}`);
+        navigate(`/editProduct/${props.product.id}`);
 
     }
 

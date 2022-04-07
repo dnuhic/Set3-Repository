@@ -21,9 +21,9 @@ export default function AddCashRegister(props) {
         };
         const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptionsShop);
         const dataShop = await responseShop.json();
-
-        setShops(dataShop);
-        setStore(dataShop[0].id)
+        var filterDataShop = dataShop.filter(s=>!s.deleted)
+        setShops(filterDataShop);
+        setStore(filterDataShop[0].id)
 
     }, []);
 

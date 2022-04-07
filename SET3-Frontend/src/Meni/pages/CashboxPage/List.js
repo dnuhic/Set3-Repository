@@ -32,8 +32,10 @@ function List(props) {
             const newRegister = {
                 "Id": register.id,
                 "ShopId": register.shopId,
-                "Description": register.description,
-                "Deleted": true
+                "Deleted": true,
+                "Name": register.name,
+                "Description": register.description
+                
             }
 
             setDeletedRegister(newRegister);
@@ -53,7 +55,7 @@ function List(props) {
             };
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${register.id}`, requestOptions);
             console.log(response);
-
+            //ne radi
             const index = sampleData.indexOf(register, 0);
             const sampleDataCopy = sampleData;
             sampleDataCopy[index] = deletedRegister;

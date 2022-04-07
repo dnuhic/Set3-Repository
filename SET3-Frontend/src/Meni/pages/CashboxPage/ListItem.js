@@ -19,7 +19,7 @@ function ListItem(props) {
         deleteAction(props.cashbox);
     }
     const handleEdit = () => {
-
+        navigate(`/editcashRegister/${props.cashbox.id}`);
     }
 
     return (
