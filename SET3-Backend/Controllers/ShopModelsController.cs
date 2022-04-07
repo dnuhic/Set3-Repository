@@ -30,82 +30,113 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: ShopModels
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "ShopAdmin")]
         public async Task<ActionResult<IEnumerable<ShopModel>>> GetShopModel()
         {
-            return await _context.ShopModels.ToListAsync();
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+            if(ValidateToken(token) != null)
+                return await _context.ShopModels.ToListAsync();
+            return BadRequest("Bad token.");
         }
 
         // GET: ShopModels/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize(Roles = "ShopAdmin")]
         public async Task<ActionResult<ShopModel>> GetShopModel(int id)
         {
-            var shopModel = await _context.ShopModels.FindAsync(id);
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-            if (shopModel == null)
+            if (ValidateToken(token) != null)
             {
-                return NotFound();
-            }
+                var shopModel = await _context.ShopModels.FindAsync(id);
 
-            return shopModel;
+                if (shopModel == null)
+                {
+                    return NotFound();
+                }
+
+                return shopModel;
+            }
+            return BadRequest("Bad token");
         }
 
         // PUT: ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "ShopAdmin")]
         public async Task<IActionResult> PutShopModel(int id, [FromBody] ShopModel shopModel)
         {
-            if (id != shopModel.Id)
-                return BadRequest("Url id and body id do not match");
-            if (_context.StockModels.Where(s => s.Id == shopModel.StockId).Count() == 0)
-                return BadRequest("Selected wearhouse does not exist.");
-
-            _context.ShopModels.Update(shopModel);
-
-            try
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+            if (ValidateToken(token) != null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ShopModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                if (id != shopModel.Id)
+                    return BadRequest("Url id and body id do not match");
+                if (_context.StockModels.Where(s => s.Id == shopModel.StockId).Count() == 0)
+                    return BadRequest("Selected wearhouse does not exist.");
 
-            return Ok();
+                _context.ShopModels.Update(shopModel);
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ShopModelExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return Ok();
+            }
+            return BadRequest("Bad token.");
         }
 
         // POST: ShopModels
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "ShopAdmin")]
         public async Task<ActionResult<ShopModel>> PostShopModel(ShopModel shopModel)
         {
-            _context.ShopModels.Add(shopModel);
-            await _context.SaveChangesAsync();
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+            if (ValidateToken(token) != null)
+            {
+                _context.ShopModels.Add(shopModel);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetShopModel", new { id = shopModel.Id }, shopModel);
+                return CreatedAtAction("GetShopModel", new { id = shopModel.Id }, shopModel);
+            }
+            return BadRequest("Bad token.");
         }
 
         // DELETE: ShopModels/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "ShopAdmin")]
         public async Task<IActionResult> DeleteShopModel(int id)
         {
-            var shopModel = await _context.ShopModels.FindAsync(id);
-            if (shopModel == null)
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+
+            if (ValidateToken(token) != null)
             {
-                return NotFound();
+                var shopModel = await _context.ShopModels.FindAsync(id);
+                if (shopModel == null)
+                {
+                    return NotFound();
+                }
+
+                _context.ShopModels.Remove(shopModel);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.ShopModels.Remove(shopModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return BadRequest("Bad token.");
         }
 
         public class ZaBrisanjePoslovnice

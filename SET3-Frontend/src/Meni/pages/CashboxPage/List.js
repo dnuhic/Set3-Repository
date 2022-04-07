@@ -48,7 +48,7 @@ function List(props) {
         if (deletedRegister != null) {
             const requestOptions = {
                 method: "PUT",
-                headers: { "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
+                headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true, "Content-Type": "application/json" },
                 body: JSON.stringify(deletedRegister),
             };
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels/${register.id}`, requestOptions);

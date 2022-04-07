@@ -13,11 +13,21 @@ function CashboxPage(props) {
 	const [allCashRegisters, setAllCashRegisters] = useState(null);
 	const [store, setStore] = useState(null);
 
+	function getCookie(key) {
+		var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+		return b ? b.pop() : "";
+	}
+
 	const getData = async () => {
-		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`);
+		const requestOptions = {
+			method: 'GET',
+			headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+			credentials: 'same-origin'
+		};
+		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`, requestOptions);
 		const c = await responseC.json();
 
-		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`);
+		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
 		const s = await responseS.json();
 
 		const filtered = c.filter(c => c.shopId == id)

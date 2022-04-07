@@ -12,8 +12,18 @@ function StorePage(props) {
 
 	const [allStores, setAllStores] = useState(null);
 
+	function getCookie(key) {
+		var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+		return b ? b.pop() : "";
+	}
+
 	const getData = async () => {
-		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`);
+		const requestOptions = {
+			method: "GET",
+			headers: { "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
+			credentials: 'same-origin'
+		};
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels`, requestOptions);
 
 		console.log(response);
 		const data = await response.json();
