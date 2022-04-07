@@ -105,7 +105,7 @@ function App() {
                  </Routes>
             <Routes>
                 <Route path="/addCashRegister" element={<AddCashRegister/>} />
-
+                </Routes>
 		<Routes>
                 	<Route path="/addShop" element={<AddShopComponent />} />
             	</Routes>

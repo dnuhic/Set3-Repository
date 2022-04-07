@@ -127,6 +127,11 @@ const Navbar = () => {
                                     <NavLinks to='/addShop'>Add shop</NavLinks>
                                 </NavItem>
                             }
+                            {role == "ShopAdmin" &&
+                                <NavItem>
+                                <NavLinks to='/addCashRegister'>Add register</NavLinks>
+                                </NavItem>
+                            }
                             
                                 {role == "ShopAdmin" &&
                                     <NavLinks to="/stores">
