@@ -54,11 +54,15 @@ const AddProduct = () => {
             // }
         }
 
+         // TODO: OVO ZA BARCODE I QUANTITY IZMIJENITIIIIIII
         let product = {
             "StockId": getStockId(),
             "Name": document.getElementById("name").value,
             "CategoryName": document.getElementById("categories").value,
-            "Deleted": false
+            "Deleted": false,
+            "Barcode": "",
+            "BarcodeText": "",
+            "Quantity": ""
         };
 
         setNewProduct(product);

@@ -33,13 +33,18 @@ function EditProductForm() {
             }
         }
 
+        // TODO: OVO ZA BARCODE I QUANTITY IZMIJENITIIIIIII
+
         const newProduct = {
             Id: product.id,
             StockId: noviId,
             Name: document.getElementById("name").value,
             CategoryName: category,
             Price: product.price,
-            Deleted: product.deleted
+            Deleted: product.deleted,
+            Barcode: product.barcode,
+            BarcodeText: product.barcodeText,
+            Quantity: product.quantity
         };
 
         console.log("NEW PRODUCT: ");
