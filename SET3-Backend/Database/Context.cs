@@ -18,7 +18,7 @@ namespace SET3_Backend.Database
         public virtual DbSet<ShopModel> ShopModels { get; set; }
         public virtual DbSet<StockModel> StockModels { get; set; }
         public virtual DbSet<OrderModel> OrderModels { get; set; }
-        public virtual DbSet<ProductOrderIntertable> ProductOrderIntertables { get; set; }
+        public virtual DbSet<DeliveryModel> DeliveryModels { get; set; }
         public virtual DbSet<ProductShopIntertable> ProductShopIntertables { get; set; }
 
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
