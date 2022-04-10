@@ -25,8 +25,8 @@ import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
 import AddProduct from './Meni/pages/AddProductPage/AddProduct'
-import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
-
+import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError';
+import ProductToShop from './Meni/pages/ProductToShop/ProductToShop';
 function App() {
 
 
@@ -146,6 +146,11 @@ function App() {
 
             <Routes>
                 <Route path="/unauthorized" element={<UnauthorizedError />} />
+            </Routes>
+
+            <Routes>
+
+                <Route path="/productToShop" element={<ProductToShop />} />
             </Routes>
 
             </Router >
