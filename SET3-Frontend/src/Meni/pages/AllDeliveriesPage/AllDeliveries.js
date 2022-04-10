@@ -51,8 +51,10 @@ export default function AllDeliveries() {
             <div className="col my-auto">
                 <h1>Deliveries:</h1>
             </div>
-            <div className="row align-items-center justify-content-center">
-                <div className="col-12 col-md-6">
+            <div className="col mb-3">
+            </div>
+            <div className="row mx-3 align-items-center justify-content-end">
+                <div className="col-12 col-md-6 my-auto">
                     <TablePagination
                         component="div"
                         count={TESTDATA.length} // number of orders in DB 
@@ -63,7 +65,7 @@ export default function AllDeliveries() {
 
                     />
                 </div>
-                <div className="col-12 col-md-2">
+                <div className="col-6 col-md-2">
                     <select id="role" onChange={handleChangeOrder}>
                         {orderByArray.map(e => <option key={ e.id} value={e.id}>{e.description}</option>)}
                     </select>
@@ -71,9 +73,9 @@ export default function AllDeliveries() {
                 
                 
             </div>
-            <div className="col">
-                <DeliveriesTable data={data} />
-            </div>
+            
+            <DeliveriesTable data={data} />
+            
         </>
     );
 

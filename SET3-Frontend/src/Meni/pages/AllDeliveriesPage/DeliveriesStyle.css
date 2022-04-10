@@ -6,3 +6,10 @@ table {
     margin-left: 3%;
     margin-top: 5%;
 }
+.table{
+    width:95%;
+}
+.card {
+    border-radius: 2rem;
+    justify-content: center;
+}

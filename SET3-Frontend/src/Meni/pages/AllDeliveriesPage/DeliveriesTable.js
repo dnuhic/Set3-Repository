@@ -40,31 +40,35 @@ export default function DeliveriesTable(props) {
     }
 
     return (
-      <>
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map(row =>
-                        <tr key={row.id} onClick={()=>handleModalOpen(row)}>
-                            <td>{row.date}</td>
-                            <td>{trimString(row.name)}</td>
-                            <td>{row.price}</td>
-                            <td>{row.quantity}</td>
-                            <td>{getTotalPrice(row.price, row.quantity)}</td>
-                        </tr>    
-                    )}
-                </tbody>
-            </table>
-            <ModalRowView open={open} onClose={handleClose} row={selectedRow} />
-  </>
+        <>
+            <div className="card mx-3">
+                <div className="table-responsive">
+                    <table className="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map(row =>
+                                <tr key={row.id} onClick={() => handleModalOpen(row)}>
+                                    <td>{row.date}</td>
+                                    <td>{trimString(row.name)}</td>
+                                    <td>{row.price}</td>
+                                    <td>{row.quantity}</td>
+                                    <td>{getTotalPrice(row.price, row.quantity)}</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+           </div>
+           <ModalRowView open={open} onClose={handleClose} row={selectedRow} />
+        </>
         )
 }
 
