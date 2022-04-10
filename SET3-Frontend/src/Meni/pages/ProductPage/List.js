@@ -46,6 +46,7 @@ function List(props) {
         setProducts(sortedData);
     }
 
+
     useEffect(() => {
         if (product != null) {
             const newProduct = {
@@ -53,7 +54,10 @@ function List(props) {
                 "StockId": product.stockId,
                 "Name": product.name,
                 "CategoryName": product.categoryName,
-                "Deleted": true
+                "Deleted": true,
+                "Barcode": product.barcode,
+                "BarcodeText": product.barcodeText,
+                "Quantity": product.quantity
             }
 
             setDeletedProduct(newProduct); 
