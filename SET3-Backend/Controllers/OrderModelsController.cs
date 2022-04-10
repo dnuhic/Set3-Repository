@@ -102,65 +102,75 @@ namespace SET3_Backend.Controllers
         [HttpPost("order/{shopId}")] //, Authorize(Roles = "StockAdmin,Admin")
         public async Task<ActionResult<List<OrderModel>>> createOrder()
         {
-            string proba;
-            using (var reader = new StreamReader(Request.Body))
-            {
-                proba = await reader.ReadToEndAsync();
 
-                // Do something
-            }
+            //var token = Request.Headers["Authorization"];
+            //token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
-            ForAddingNewOrder unos = JsonSerializer.Deserialize<ForAddingNewOrder>(proba);
 
-            var products = unos.ProductIds;
-            var quantities = unos.Quantities;
-            var shopId = unos.ShopId;
+            //if (ValidateToken(token) != null)
+            //{
 
-            OrderModel badRequest = new OrderModel(-1, DateTime.Now, -1, -1); // da se naznaci da je nevalidno?
-            if (products.Count != quantities.Count)
-            {
-                return BadRequest(badRequest);
-
-                //ovo mora biti ispunjeno jer za Order treba nam za svaki proizvod njegova kolicina bez obzira je li to 0 ili !=0
-            }
-
-            List<OrderModel> orderModels = new List<OrderModel>();
-
-            for(int i = 0; i < quantities.Count; i++)
-            {
-                //validacija: je li kolicina u skladistu manja od kolicine koja se trazi
-                if(_context.ProductModels.Find(products[i]).Quantity < quantities[i])
+                    string proba;
+                using (var reader = new StreamReader(Request.Body))
                 {
-                    return BadRequest(badRequest); 
-                }
-                var product = await _context.ProductModels.FindAsync(products[i]);
-                product.Quantity = product.Quantity - quantities[i];
-                _context.ProductModels.Update(product); // prepravka kolicine u skladistu 
+                    proba = await reader.ReadToEndAsync();
 
-                // product shop intertable pravljenje ovdje pada
-                try
-                {
-                    var productInShop = await _context.ProductShopIntertables.Where(x => x.ShopId == shopId && x.ProductId == products[i]).FirstAsync();
-                    productInShop.Quantity = productInShop.Quantity + quantities[i];
-                    _context.ProductShopIntertables.Update(productInShop);
+                    // Do something
                 }
-                catch (Exception ex)
+
+                ForAddingNewOrder unos = JsonSerializer.Deserialize<ForAddingNewOrder>(proba);
+
+                var products = unos.ProductIds;
+                var quantities = unos.Quantities;
+                var shopId = unos.ShopId;
+
+                OrderModel badRequest = new OrderModel(-1, DateTime.Now, -1, -1); // da se naznaci da je nevalidno?
+                if (products.Count != quantities.Count)
                 {
-                    _context.ProductShopIntertables.Add(new ProductShopIntertable(shopId, products[i], quantities[i]));
+                    return BadRequest(badRequest);
+
+                    //ovo mora biti ispunjeno jer za Order treba nam za svaki proizvod njegova kolicina bez obzira je li to 0 ili !=0
                 }
+
+                List<OrderModel> orderModels = new List<OrderModel>();
+
+                for(int i = 0; i < quantities.Count; i++)
+                {
+                    //validacija: je li kolicina u skladistu manja od kolicine koja se trazi
+                    if(_context.ProductModels.Find(products[i]).Quantity < quantities[i])
+                    {
+                        return BadRequest(badRequest); 
+                    }
+                    var product = await _context.ProductModels.FindAsync(products[i]);
+                    product.Quantity = product.Quantity - quantities[i];
+                    _context.ProductModels.Update(product); // prepravka kolicine u skladistu 
+
+                    // product shop intertable pravljenje ovdje pada
+                    try
+                    {
+                        var productInShop = await _context.ProductShopIntertables.Where(x => x.ShopId == shopId && x.ProductId == products[i]).FirstAsync();
+                        productInShop.Quantity = productInShop.Quantity + quantities[i];
+                        _context.ProductShopIntertables.Update(productInShop);
+                    }
+                    catch (Exception ex)
+                    {
+                        _context.ProductShopIntertables.Add(new ProductShopIntertable(shopId, products[i], quantities[i]));
+                    }
                 
-                //var productInShop = await _context.ProductShopIntertables
+                    //var productInShop = await _context.ProductShopIntertables
 
                 
 
-                var newOrder = new OrderModel(shopId, DateTime.Now, quantities[i], products[i]);
+                    var newOrder = new OrderModel(shopId, DateTime.Now, quantities[i], products[i]);
 
-                _context.OrderModels.Add(newOrder);
-                orderModels.Add(newOrder);
+                    _context.OrderModels.Add(newOrder);
+                    orderModels.Add(newOrder);
                
-            }
-            await _context.SaveChangesAsync();
-            return orderModels;
+                }
+                await _context.SaveChangesAsync();
+                return orderModels;
+            //}
+            //else return BadRequest();
         }
 
         // DELETE: api/OrderModels/5
