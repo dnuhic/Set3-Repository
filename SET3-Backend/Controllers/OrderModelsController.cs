@@ -133,21 +133,25 @@ namespace SET3_Backend.Controllers
                 {
                     return BadRequest(badRequest); 
                 }
-                var product = _context.ProductModels.Find(products[i]);
+                var product = await _context.ProductModels.FindAsync(products[i]);
                 product.Quantity = product.Quantity - quantities[i];
                 _context.ProductModels.Update(product); // prepravka kolicine u skladistu 
 
                 // product shop intertable pravljenje ovdje pada
-                var productInShop = _context.ProductShopIntertables.Where(x => x.ShopId == shopId && x.ProductId == products[i]).First();
-                if(productInShop == null)
+                try
                 {
-                    _context.ProductShopIntertables.Add(new ProductShopIntertable(shopId, products[i], quantities[i]));
-                }
-                else
-                {
+                    var productInShop = await _context.ProductShopIntertables.Where(x => x.ShopId == shopId && x.ProductId == products[i]).FirstAsync();
                     productInShop.Quantity = productInShop.Quantity + quantities[i];
                     _context.ProductShopIntertables.Update(productInShop);
                 }
+                catch (Exception ex)
+                {
+                    _context.ProductShopIntertables.Add(new ProductShopIntertable(shopId, products[i], quantities[i]));
+                }
+                
+                //var productInShop = await _context.ProductShopIntertables
+
+                
 
                 var newOrder = new OrderModel(shopId, DateTime.Now, quantities[i], products[i]);
 
@@ -155,7 +159,7 @@ namespace SET3_Backend.Controllers
                 orderModels.Add(newOrder);
                
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return orderModels;
         }
 
