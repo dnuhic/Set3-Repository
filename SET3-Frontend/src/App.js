@@ -27,7 +27,7 @@ import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCas
 import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
-
+import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
 function App() {
 
 
@@ -151,6 +151,9 @@ function App() {
 
             <Routes>
                 <Route path="/unauthorized" element={<UnauthorizedError />} />
+            </Routes>
+            <Routes>
+                <Route path="/addDeliverie" element={<Deliveries />} />
             </Routes>
 
             </Router >
