@@ -11,5 +11,13 @@ namespace SET3_Backend.Models
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
         public int ProductId { get; set; }
+
+        public OrderModel(int shopId, DateTime date, int quantity, int productId)
+        {
+            ShopId = shopId;
+            Date = date;
+            Quantity = quantity;
+            ProductId = productId;
+        }
     }
 }
