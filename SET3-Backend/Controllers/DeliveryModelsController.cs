@@ -79,6 +79,10 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<DeliveryModel>> PostDeliveryModel(DeliveryModel deliveryModel)
         {
+            var productModel = await _context.ProductModels.FindAsync(deliveryModel.ProductId);
+            productModel.Quantity += deliveryModel.Quantity;
+            _context.Entry(productModel).State = EntityState.Modified;
+
             _context.DeliveryModels.Add(deliveryModel);
             await _context.SaveChangesAsync();
 
