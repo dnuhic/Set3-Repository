@@ -21,6 +21,7 @@ import AccessRights from './AccessRights/AccessRights';
 import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
 import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
 import StorePage from './Meni/pages/StorePage/StorePage'
+import StoreListForWearhouseAdmin from './Meni/pages/StoreListForWearhouseAdmin/StoreListForWearhouseAdmin'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
@@ -126,6 +127,10 @@ function App() {
             <Routes>
 
                 <Route path="/shops" element={<StorePage />} />
+            </Routes>
+            <Routes>
+
+                <Route path="/wearhouseadminstores" element={<StoreListForWearhouseAdmin />} />
             </Routes>
 
             <Routes>
