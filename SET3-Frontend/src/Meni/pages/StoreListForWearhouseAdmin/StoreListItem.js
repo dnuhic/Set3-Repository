@@ -12,15 +12,15 @@ import { useState, useEffect } from 'react';
 function StoreListItem(props) {
 
     let navigate = useNavigate();
-
+/*
     const handleStoreClick = () => {
             navigate(`/cashRegister/${props.store.id}`);
     }
-
+    */
     return (
         <MuiListItem
             key={props.store.id}>
-            <ListItemText primary={`${props.store.name}`} onClick={handleStoreClick} />
+            <ListItemText primary={`${props.store.name}`} />
         </MuiListItem>
     )
 }
