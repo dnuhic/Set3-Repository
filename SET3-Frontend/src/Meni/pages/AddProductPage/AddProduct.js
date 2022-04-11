@@ -62,7 +62,8 @@ const AddProduct = () => {
             "Deleted": false,
             "Barcode": "",
             "BarcodeText": "",
-            "Quantity": ""
+            "Quantity": 0,
+            "Price": 2.0
         };
 
         setNewProduct(product);
