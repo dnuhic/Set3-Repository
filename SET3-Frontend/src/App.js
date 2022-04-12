@@ -19,15 +19,17 @@ import EditProduct from './Meni/pages/EditProductPage/EditProductForm';
 import EditShopComponent from './Meni/pages/EditPoslovnicaPage/EditShopComponent';
 import AccessRights from './AccessRights/AccessRights';
 import AddCashRegister from './Meni/pages/AddCashRegister/AddCashRegister';
-import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
-import StorePage from './Meni/pages/StorePage/StorePage'
+import CashRegister from './Meni/pages/CashboxPage/CashboxPage';
+import StorePage from './Meni/pages/StorePage/StorePage';
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
-import ProductPage from './Meni/pages/ProductPage/ProductPage'
+import ProductPage from './Meni/pages/ProductPage/ProductPage';
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
-import AddProduct from './Meni/pages/AddProductPage/AddProduct'
-import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
+import AddProduct from './Meni/pages/AddProductPage/AddProduct';
+import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError';
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
-import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
+import Deliveries from './Meni/pages/AddNewDelivery/Deliveries';
+import ShippedProducts from './Meni/pages/ShippedProductsTablePage/ShippedProducts';
+
 function App() {
 
 
@@ -154,6 +156,9 @@ function App() {
             </Routes>
             <Routes>
                 <Route path="/addDeliverie" element={<Deliveries />} />
+            </Routes>
+            <Routes>
+                <Route path="/ShippedProductsTable" element={<ShippedProducts />} />
             </Routes>
 
             </Router >
