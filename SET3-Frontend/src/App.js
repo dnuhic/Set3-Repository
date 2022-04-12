@@ -25,7 +25,9 @@ import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
 import AddProduct from './Meni/pages/AddProductPage/AddProduct'
-import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError';
+import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
+import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
+import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
 import ProductToShop from './Meni/pages/ProductToShop/ProductToShop';
 function App() {
 
@@ -145,7 +147,14 @@ function App() {
             </Routes>
 
             <Routes>
+                <Route path="/allDeliveries" element={<AllDeliveries />} />
+            </Routes>
+
+            <Routes>
                 <Route path="/unauthorized" element={<UnauthorizedError />} />
+            </Routes>
+            <Routes>
+                <Route path="/addDeliverie" element={<Deliveries />} />
             </Routes>
 
             <Routes>

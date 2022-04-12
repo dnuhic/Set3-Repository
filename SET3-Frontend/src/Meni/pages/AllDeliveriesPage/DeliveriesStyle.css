@@ -1,0 +1,15 @@
+table {
+    font-style: oblique;
+    border-collapse: collapse;
+    width: 90%;
+    margin-right: 3%;
+    margin-left: 3%;
+    margin-top: 5%;
+}
+.table{
+    width:95%;
+}
+.card {
+    border-radius: 2rem;
+    justify-content: center;
+}
