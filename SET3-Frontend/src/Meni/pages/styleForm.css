@@ -144,3 +144,34 @@ option {
     background-color: #0d6efd;
     width: 100%;
 }
+
+.table {
+    margin: 0 auto;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.dropdown-basic-button {
+    margin: 0 auto;
+    width: 100%;
+    justify-content:center;
+}
+
+.form-group{
+    width:100%;
+    justify-content:center;
+}
+.btn .btn-primary .btn-block .dropdown{
+    width:100%;
+    background-color:red;
+    margin:auto;
+    justify-content:center;
+}
+.dropdown-toggle .btn .btn-primary {
+    width:80%;
+}
+h3 {
+    text-align:center;
+}
+

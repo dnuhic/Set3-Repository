@@ -28,6 +28,7 @@ import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
 import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
+import ProductToShop from './Meni/pages/ProductToShop/ProductToShop';
 function App() {
 
 
@@ -154,6 +155,11 @@ function App() {
             </Routes>
             <Routes>
                 <Route path="/addDeliverie" element={<Deliveries />} />
+            </Routes>
+
+            <Routes>
+
+                <Route path="/productToShop" element={<ProductToShop />} />
             </Routes>
 
             </Router >
