@@ -25,11 +25,19 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            initialState: { pageIndex: 0},
+            initialState: { pageIndex: 0 },
         },
         useSortBy,
         usePagination
     )
+
+    function handleFilterButtonClickRT() {
+        var filterDiv = document.getElementById("hiddenFilterDivRT")
+        if (filterDiv.style.display == 'flex')
+            filterDiv.style.display = 'none'
+        else
+            filterDiv.style.display = 'flex'
+    }
 
     function handleFilterButtonClick() {
         var filterDiv = document.getElementById("hiddenFilterDiv")
@@ -58,6 +66,9 @@ function Table({ columns, data }) {
                     &nbsp;entires
                 </div>
                 <div>
+                    <button onClick={handleFilterButtonClickRT}>
+                        <img src={require("./filter2.png")} alt="filter icon" width="23" height="23"></img>
+                    </button>
                     <button onClick={handleFilterButtonClick}>
                         <img src={require("./filter.png")} alt="filter icon" width="25" height="25"></img>
                     </button>
@@ -119,6 +130,8 @@ function ShippedProducts() {
 
     const [filtOrders, setFiltOrders] = useState([])
 
+    const [helpfulOrders, setHelpfulOrders] = useState([])
+
     const [lowPrice, setLowPrice] = useState(0);
 
     const [highPrice, setHighPrice] = useState(0);
@@ -126,6 +139,8 @@ function ShippedProducts() {
     const [namme, setNamme] = useState("");
 
     const [shoppName, setShoppName] = useState("");
+
+    const [categories, setCategories] = useState([]);
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -142,51 +157,58 @@ function ShippedProducts() {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ordermodels/orderInfo`, requestOptions);
         ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         var data = await response.json()
+
+        const responseCategory = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`, requestOptions);
+        var dataCategory = await responseCategory.json()
+
         console.log(data)
         setOrders(data)
         setFiltOrders(data)
+        setHelpfulOrders(data)
+
+        setCategories(dataCategory)
 
         setLowPrice(0)
-        setHighPrice(9999)
+        setHighPrice(10000)
 
     }, [])
 
     const columns = React.useMemo(
         () => [
-                {
-                    Header: 'Date',
-                    accessor: 'date',
-                },
-                {
-                    Header: 'Order ID',
-                    accessor: 'orderId',
-                },
-                {
-                    Header: 'Name',
-                    accessor: 'productName',
-                },
-                {
-                    Header: 'Category',
-                    accessor: 'categoryName',
-                },
-                {
-                    Header: 'Shop',
-                    accessor: 'shopName',
-                },
-                {
-                    Header: 'Price',
-                    accessor: 'price',
-                    Cell: props => <div> {props.value + " KM"} </div>
-                },
-                {
-                    Header: 'Quantity',
-                    accessor: 'quantity',
-                },
-                {
-                    Header: 'Total',
-                    accessor: 'total',
-                    Cell: props => <div> {props.value + " KM"} </div>
-                }
+            {
+                Header: 'Date',
+                accessor: 'date',
+            },
+            {
+                Header: 'Order ID',
+                accessor: 'orderId',
+            },
+            {
+                Header: 'Name',
+                accessor: 'productName',
+            },
+            {
+                Header: 'Category',
+                accessor: 'categoryName',
+            },
+            {
+                Header: 'Shop',
+                accessor: 'shopName',
+            },
+            {
+                Header: 'Price',
+                accessor: 'price',
+                Cell: props => <div> {props.value + " KM"} </div>
+            },
+            {
+                Header: 'Quantity',
+                accessor: 'quantity',
+            },
+            {
+                Header: 'Total',
+                accessor: 'total',
+                Cell: props => <div> {props.value + " KM"} </div>
+            }
         ],
         []
     )
@@ -197,18 +219,12 @@ function ShippedProducts() {
         setNamme(name);
         console.log("Ime Shopa je : " + shoppName);
         if (shoppName != "")
-            setFiltOrders(filtOrders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
-        else setFiltOrders(orders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
-    }
-
-    function dateFilter(e) {
-        /* problem sa date TIME! */
-    }
-
-    function categoryFilter(e) {
-        var category = e.target.value;
-        console.log(category);
-        setFiltOrders(orders.filter(x => x.categoryName.includes(category.toString())));
+            setFiltOrders(helpfulOrders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
+        else {
+            setFiltOrders(orders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
+            setHelpfulOrders(filtOrders);
+        }
+        clearFiltersFunction1();
     }
 
     function shopNameFilter(e) {
@@ -217,22 +233,72 @@ function ShippedProducts() {
         setShoppName(shop);
         console.log("Ime proizvoda je : " + namme);
         if (namme != "")
-            setFiltOrders(filtOrders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
-        else setFiltOrders(orders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
+            setFiltOrders(helpfulOrders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
+        else {
+            setFiltOrders(orders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
+            setHelpfulOrders(filtOrders)
+        }
+        clearFiltersFunction1();
     }
 
-    function priceFilterMin(e) {
-        setLowPrice(e.target.value);
-    }
-    function priceFilterMax(e) {
-        setHighPrice(e.target.value);
+    function applyFiltersFunction() {
+        var list = orders;
+        var low = document.getElementById("priceLow").value;
+        var high = document.getElementById("priceHigh").value;
+        var catIndex = document.getElementById("category").selectedIndex;
+        var cat = document.getElementById("category")[catIndex].value;
+        var startDate = new Date(document.getElementById("startDate").value);
+        var endDate = new Date(document.getElementById("endDate").value);
+        var name = document.getElementById("name").value;
+        var shop = document.getElementById("shop").value;
+
+        console.log(startDate);
+        console.log(endDate);
+
+        if (low == "") low = 0;
+        if (high == "") high = 10000;
+        console.log("Low: " + low);
+        console.log("High: " + high);
+        console.log(cat);
+        if (cat != "")
+            list = list.filter(x => x.categoryName.toLowerCase().includes(cat.toLowerCase()));
+        list = list.filter(x => x.total >= low && x.total <= high);
+        if (!(startDate == "Invalid Date" && endDate == "Invalid Date"))
+            list = list.filter(x => new Date(x.date) >= startDate && new Date(x.date) <= endDate);
+        /*
+        if (!(startDate == "Invalid Date" && endDate != "Invalid Date"))
+            list = list.filter(x => new Date(x.date) <= endDate);
+        if (!(endDate == "Invalid Date" && startDate != "Invalid Date"))
+            list = list.filter(x => new Date(x.date) >= startDate);
+        */
+
+        if (name != "")
+            list = list.filter(x => x.productName.toLowerCase().includes(name.toLowerCase()));
+        if (shop != "")
+            list = list.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase()));
+
+        setFiltOrders(list);
+
     }
 
-    function priceFiltering() {
-        console.log("Low: " + lowPrice);
-        console.log("High: " + highPrice);
-        var temp = orders.filter(x => x.total >= lowPrice);
-        setFiltOrders(temp.filter(y => y.total <= highPrice));
+    function clearFiltersFunction() {
+        setFiltOrders(orders);
+        document.getElementById("name").value = "";
+        document.getElementById("shop").value = "";
+        document.getElementById("startDate").value = "";
+        document.getElementById("endDate").value = "";
+        document.getElementById("category").selectedIndex = 0;
+        document.getElementById("priceLow").value = 0;
+        document.getElementById("priceHigh").value = 10000;
+    }
+
+    function clearFiltersFunction1() {
+        document.getElementById("startDate").value = "";
+        document.getElementById("endDate").value = "";
+        document.getElementById("category").selectedIndex = 0;
+        document.getElementById("priceLow").value = 0;
+        document.getElementById("priceHigh").value = 10000;
+        console.log("USLO INSALLAH");
     }
 
     return (
@@ -240,37 +306,48 @@ function ShippedProducts() {
             <h1>Orders</h1>
             <div class="mainDiv">
                 <div class="mainFilterDiv">
+                    <div id="hiddenFilterDivRT">
+                        <div>
+                            <label for="name">Filter by name&nbsp;</label>
+                            <input type="text" name="name" id="name" onChange={nameFilter}></input>
+                        </div>
+                        <div>
+                            <label for="shop">Filter by shop&nbsp;</label>
+                            <input type="text" name="shop" id="shop" onChange={shopNameFilter}></input>
+                        </div>
+                    </div>
                     <div id="hiddenFilterDiv">
                         <div id="insideHiddenFilterDiv">
                             <div>
-                                <label for="date">Filter by date&nbsp;</label>
-                                <input type="date" name="date" id="date" onChange={dateFilter}></input>
-                            </div>
-                            <div>
-                                <label for="name">Filter by name&nbsp;</label>
-                                <input type="text" name="name" id="name" onChange={nameFilter}></input>
+                                <label for="startDate">Filter by date:&nbsp;&nbsp; From&nbsp;</label>
+                                <input type="date" name="date" id="startDate"></input>
+                                <label for="endDate">&nbsp;To&nbsp;</label>
+                                <input type="date" name="date" id="endDate"></input>
                             </div>
                             <div>
                                 <label for="category">Category&nbsp;</label>
-                                <select id="category" onChange={categoryFilter}>
-                                    <option>Fruits and Vegetables</option>
+                                <select id="category">
+                                    <option></option>
+                                    {categories.map(x => <option>{x.name}</option>)}
                                 </select>
-                            </div>
-                        </div>
-                        <div id="insideHiddenFilterDiv2">
-                            <div>
-                                <label for="shop">Filter by shop&nbsp;</label>
-                                <input type="text" name="shop" id="shop" onChange={shopNameFilter}></input>
                             </div>
                             <div>
                                 <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
                                 <label for="priceLow">From&nbsp;</label>
                                 <input type="number" name="priceLow" id="priceLow"
-                                    onInput={priceFilterMin} onInput={priceFilterMin} value={lowPrice} onChange={priceFiltering}></input>
+                                    min={0} ></input>
                                 <label for="priceHigh">&nbsp;To&nbsp;</label>
                                 <input type="number" name="priceHigh" id="priceHigh"
-                                    onInput={priceFilterMax} onInput={priceFilterMax} value={highPrice} onChange={priceFiltering}></input>
+                                    max={10000} ></input>
                             </div>
+                        </div>
+                        <div id="insideHiddenFilterDiv2">
+                            <button onClick={applyFiltersFunction}>
+                                {'Apply'}
+                            </button>
+                            <button onClick={clearFiltersFunction}>
+                                {'Clear'}
+                            </button>
                         </div>
                     </div>
                 </div>
