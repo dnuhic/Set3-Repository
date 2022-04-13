@@ -41,59 +41,26 @@ function Table({ columns, data }) {
 
     return (
         <>
-            <div class="mainFilterDiv">
-                <div class="filterDiv">
-                    <div>
-                        Show&nbsp;
-                        <select
-                            value={pageSize}
-                            onChange={e => {
-                                setPageSize(Number(e.target.value))
-                            }}
-                        >
-                            {[1, 2, 3, 4].map(pageSize => (
-                                <option key={pageSize} value={pageSize}>{pageSize}
-                                </option>
-                            ))}
-                        </select>
-                        &nbsp;entires
-                    </div>
-                    <div>
-                        <button onClick={handleFilterButtonClick}>
-                            <img src={require("./filter.png")} alt="filter icon" width="25" height="25"></img>
-                        </button>
-                    </div>
+            <div class="filterDiv">
+                <div>
+                    Show&nbsp;
+                    <select
+                        value={pageSize}
+                        onChange={e => {
+                            setPageSize(Number(e.target.value))
+                        }}
+                    >
+                        {[1, 2, 3, 4].map(pageSize => (
+                            <option key={pageSize} value={pageSize}>{pageSize}
+                            </option>
+                        ))}
+                    </select>
+                    &nbsp;entires
                 </div>
-                <div id="hiddenFilterDiv">
-                    <div id="insideHiddenFilterDiv">
-                        <div>
-                            <label for="date">Filter by date&nbsp;</label>
-                            <input type="date" name="date" id="date"></input>
-                        </div>
-                        <div>
-                            <label for="name">Filter by name&nbsp;</label>
-                            <input type="text" name="name" id="name"></input>
-                        </div>
-                        <div>
-                            <label for="category">Category&nbsp;</label>
-                            <select id="category">
-                                <option>Fruits and Vegetables</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="insideHiddenFilterDiv2">
-                        <div>
-                            <label for="shop">Filter by shop&nbsp;</label>
-                            <input type="text" name="shop" id="shop"></input>
-                        </div>
-                        <div>
-                            <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
-                            <label for="priceLow">From&nbsp;</label>
-                            <input type="number" name="priceLow" id="priceLow"></input>
-                            <label for="priceHigh">&nbsp;To&nbsp;</label>
-                            <input type="number" name="priceHigh" id="priceHigh"></input>
-                        </div>
-                    </div>
+                <div>
+                    <button onClick={handleFilterButtonClick}>
+                        <img src={require("./filter.png")} alt="filter icon" width="25" height="25"></img>
+                    </button>
                 </div>
             </div>
             <table class="orderTable" {...getTableProps()}>
@@ -209,12 +176,48 @@ function ShippedProducts() {
         []
     )
 
-    
+    function test(e) {
+        console.log(e.target.value)
+        setOrders(orders.filter(order => order.orderId + "" == e.target.value))
+    }
 
     return (
         <>
             <h1>Orders</h1>
             <div class="mainDiv">
+                <div class="mainFilterDiv">
+                    <div id="hiddenFilterDiv">
+                        <div id="insideHiddenFilterDiv">
+                            <div>
+                                <label for="date">Filter by date&nbsp;</label>
+                                <input type="date" name="date" id="date"></input>
+                            </div>
+                            <div>
+                                <label for="name">Filter by name&nbsp;</label>
+                                <input type="text" name="name" id="name" onChange={ test}></input>
+                            </div>
+                            <div>
+                                <label for="category">Category&nbsp;</label>
+                                <select id="category">
+                                    <option>Fruits and Vegetables</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="insideHiddenFilterDiv2">
+                            <div>
+                                <label for="shop">Filter by shop&nbsp;</label>
+                                <input type="text" name="shop" id="shop"></input>
+                            </div>
+                            <div>
+                                <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
+                                <label for="priceLow">From&nbsp;</label>
+                                <input type="number" name="priceLow" id="priceLow"></input>
+                                <label for="priceHigh">&nbsp;To&nbsp;</label>
+                                <input type="number" name="priceHigh" id="priceHigh"></input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <Table columns={columns} data={orders} />
             </div>
         </>
