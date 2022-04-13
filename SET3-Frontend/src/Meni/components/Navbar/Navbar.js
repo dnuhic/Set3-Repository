@@ -87,7 +87,7 @@ const Navbar = () => {
                         </MenuIcon>
 
                         <NavMenu onClick={handleClick} click={click}>
-                                                        <NavItem>
+                            <NavItem>
                                 <NavLinks to='/home'> Home </NavLinks>
                             </NavItem>
                             {role && user &&
@@ -104,10 +104,15 @@ const Navbar = () => {
                                 <NavLinks to={'/twoFactorAuthentication/' + user.id}> TFA </NavLinks>
                                 </NavItem>}
 
-                            {role == "Admin" && 
-                                <NavItem>
-                                    <NavLinks to='/users'> Users </NavLinks>
-                                </NavItem>
+                            {role == "Admin" &&
+                                    <NavItem>
+                                    <svg class="bi d-block mx-auto mb-1">
+                                        <use xlinkHref="#speedometer2"></use>
+                                    </svg>
+                                    <NavLinks to='/users'>
+                                        Users
+                                    </NavLinks>
+                                    </NavItem>
                             }
 
                             {role == "Admin" &&
