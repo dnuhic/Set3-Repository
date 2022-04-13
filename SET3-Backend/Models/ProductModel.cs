@@ -13,9 +13,9 @@ namespace SET3_Backend.Models
         public bool Deleted { get; set; }
         public int Quantity { get; set; }
 
-        public string Barcode { get; set; }
+        public string  Barcode  { get; set; }
 
-        public string BarcodeText { get; set; }
+        public string  BarcodeText  { get; set; }
         public float Price { get; set; }
 
 

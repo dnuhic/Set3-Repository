@@ -1,0 +1,21 @@
+@font-face {
+    font-family: CCode128;
+    src: url("./fonts/ConnectCode128_S3_Trial.woff.ttf") format('TrueType')		
+}
+.barcode.lines {
+    font-weight: normal;
+    font-style: normal;
+    line-height: normal;
+    font-family: 'CCode128', sans-serif;
+    text-align: center;
+    font-size: 24px;
+}
+
+.barcode.numbers {
+    font-weight: normal;
+    font-style: normal;
+    line-height: normal;
+    font-family: sans-serif;
+    text-align:center;
+    font-size: 16px;
+}
