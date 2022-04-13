@@ -36,6 +36,56 @@ namespace SET3_Backend.Controllers
             return await _context.OrderModels.ToListAsync();
         }
 
+        public class OrderShopDto
+        {
+            public int OrderId { get; set; }
+            public DateTime Date { get; set; }
+            public int Quantity { get; set; }
+            public string ProductName { get; set; }
+            public string CategoryName { get; set; }
+            public float Price { get; set; }
+            public string ShopName { get; set; }
+            public float Total { get; set; }
+
+            public OrderShopDto(int orderId, DateTime date, int quantity, string productName, 
+                string categoryName, float price, string shopName)
+            {
+                OrderId = orderId;
+                Date = date;
+                Quantity = quantity;
+                ProductName = productName;
+                CategoryName = categoryName;
+                Price = price;
+                ShopName = shopName;
+                Total = Quantity * Price;
+            }
+        }
+
+        [HttpGet("orderInfo"), Authorize(Roles = "Admin,StockAdmin")]
+        public async Task<ActionResult<IEnumerable<OrderShopDto>>> GetOrderWithShopAndProduct()
+        {
+            var orders = await _context.OrderModels.ToListAsync();
+            List<OrderShopDto> orderShopDtoList = new List<OrderShopDto>();
+            try
+            {
+                orders.ForEach(order =>
+                {
+                    var product = _context.ProductModels.Find(order.ProductId);
+                    var shop = _context.ShopModels.Find(order.ShopId);
+                    if (shop == null || product == null)
+                    {
+                        throw new InvalidDataException();
+                    }
+                    orderShopDtoList.Add(new OrderShopDto(order.Id, order.Date, order.Quantity,
+                        product.Name, product.CategoryName, product.Price, shop.Name));
+                });
+                return Ok(orderShopDtoList);
+            } catch (InvalidDataException ex)
+            {
+                return BadRequest("Order shop or product does not exist.");
+            }
+        }
+
         // GET: api/OrderModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderModel>> GetOrderModel(int id)
