@@ -138,9 +138,11 @@ function NavigationBar() {
                             title="Warehouse"
                         >
                             <NavDropdown.Item href={'/products'}>Products</NavDropdown.Item>
+                            <NavDropdown.Item href={'/warehouseShops'}>Shops</NavDropdown.Item>
                             <NavDropdown.Item href={'/addProduct'}>Add new product</NavDropdown.Item>
                             <NavDropdown.Item href={'/addDelivery'}>Add delivery</NavDropdown.Item>
                             <NavDropdown.Item href={'/addOrder'}>Add order</NavDropdown.Item>
+                            
                         </NavDropdown>
                     </Nav>}
 

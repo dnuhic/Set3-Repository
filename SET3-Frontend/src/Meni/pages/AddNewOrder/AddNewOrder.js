@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useNavigate } from "react-router-dom";
 
 
 const AddNewOrder = () => {
@@ -78,8 +79,9 @@ const AddNewOrder = () => {
     }
 
     useEffect(getShops, [])
+    let navigate = useNavigate();
 
-    const handleSubmit = async () => {
+    const handleSubmit =  () => {
         const bodyObject = {
             "ShopId": shop,
             "ProductIds": productIds,
@@ -94,10 +96,14 @@ const AddNewOrder = () => {
             body: JSON.stringify(bodyObject),
             credentials: 'same-origin'
         };
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/order/${shop}`, requestOptions);
-        const data = await response.json();
-        alert('Your order has been saved!')
-        console.log(data);
+        
+        fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/order/${shop}`, requestOptions).then(response => response.json()).then(data => {
+            alert('Your order has been saved!')
+            console.log(data);
+           
+            navigate('/orders', { replace: true })
+        });
+        
     };
 
     const handleChange = (event) => {
