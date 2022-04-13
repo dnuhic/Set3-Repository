@@ -23,6 +23,7 @@ import CashRegister from './Meni/pages/CashboxPage/CashboxPage'
 import StorePage from './Meni/pages/StorePage/StorePage'
 import AddShopComponent from './Meni/pages/AddShopPage/AddShopComponent';
 import ProductPage from './Meni/pages/ProductPage/ProductPage'
+import ProductInShopPage from './Meni/pages/ProductInShopPage/ProductInShopPage'
 import EditCashRegisterComponent from './Meni/pages/EditCashRegisterPage/EditCashRegisterComponent';
 import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
@@ -160,6 +161,10 @@ function App() {
             <Routes>
 
                 <Route path="/productToShop" element={<ProductToShop />} />
+            </Routes>
+
+            <Routes>
+                <Route path="/productsInShop" element={<ProductInShopPage />} />
             </Routes>
 
             </Router >
