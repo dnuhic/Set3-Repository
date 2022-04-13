@@ -163,17 +163,20 @@ namespace SET3_Backend.Controllers
 
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
+
             var token = Request.Headers["Authorization"];
             token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
             if (ValidateToken(token) != null)
             {
+               
                 _context.ProductModels.Add(productModel);
                 await _context.SaveChangesAsync();
                 productModel = await InsertBarcode(productModel);
-                await _context.ProductModel.Update(productModel);
+                await Task.Run(() => _context.ProductModels.Update(productModel));
+                await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
+            return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
             }
 
             return NoContent();
