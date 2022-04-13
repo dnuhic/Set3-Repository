@@ -44,7 +44,7 @@ const AddNewOrder = () => {
         console.log('Duzina niza data');
         console.log(data.length);
         setId(data);
-        setProducts(data);
+        setProducts(data.filter(p=>!p.deleted));
         setQuantities(Array(data.length).fill(0))
         console.log(quantities);
        

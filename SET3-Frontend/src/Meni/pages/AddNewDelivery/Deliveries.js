@@ -31,7 +31,7 @@ export default function Deliveries() {
         console.log(response);
         const data = await response.json();
         console.log(data);
-        setProducts(data);
+        setProducts(data.filter(p => !p.deleted));
     }
 
     useEffect(getData, [])
