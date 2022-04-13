@@ -29,9 +29,8 @@ import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
 import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
+
 function App() {
-
-
     return (
             
             < Router >
@@ -128,6 +127,7 @@ function App() {
 
                 <Route path="/shops" element={<StorePage />} />
             </Routes>
+
             <Routes>
 
                 <Route path="/wearhouseadminstores" element={<StoreListForWearhouseAdmin />} />
