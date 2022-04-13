@@ -4,7 +4,15 @@ import ListItemText from '@mui/material/ListItemText';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ImageIcon from '@mui/icons-material/Image';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import { useNavigate } from "react-router-dom";
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import Badge from '@mui/material/Badge';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Divider from '@mui/material/Divider';
 
 import { useState, useEffect } from 'react';
 
@@ -31,10 +39,17 @@ function ListItem(props) {
 
 
     return (
+        <>
+        <Divider dark />
         <MuiListItem
             key={props.product.id}
             secondaryAction={
                 <div style={{ paddingLeft: 100 }}>
+                    <IconButton disabled={deleted}>
+                        <Badge badgeContent={`${props.product.quantity}`} color={!deleted ? "primary" : "secondary"}>
+                            <ShoppingCartIcon color="action" />
+                        </Badge>
+                    </IconButton>
                     <IconButton onClick={handleEdit} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
                         <EditIcon />
                     </IconButton>
@@ -44,8 +59,15 @@ function ListItem(props) {
                 </div>
             }
         >
-            <ListItemText primary={`${props.product.name} - Category: ${props.product.categoryName} `} />
+            <ListItemAvatar>
+                <Avatar>
+                    <InventoryIcon />
+                </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={`${props.product.name}`} secondary={`${props.product.categoryName}`} />
         </MuiListItem>
+        <Divider dark/>
+        </>
     )
 }
 

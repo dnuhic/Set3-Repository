@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,56 @@ namespace SET3_Backend.Controllers
         public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrderModels()
         {
             return await _context.OrderModels.ToListAsync();
+        }
+
+        public class OrderShopDto
+        {
+            public int OrderId { get; set; }
+            public DateTime Date { get; set; }
+            public int Quantity { get; set; }
+            public string ProductName { get; set; }
+            public string CategoryName { get; set; }
+            public float Price { get; set; }
+            public string ShopName { get; set; }
+            public float Total { get; set; }
+
+            public OrderShopDto(int orderId, DateTime date, int quantity, string productName, 
+                string categoryName, float price, string shopName)
+            {
+                OrderId = orderId;
+                Date = date;
+                Quantity = quantity;
+                ProductName = productName;
+                CategoryName = categoryName;
+                Price = price;
+                ShopName = shopName;
+                Total = Quantity * Price;
+            }
+        }
+
+        [HttpGet("orderInfo"), Authorize(Roles = "Admin,StockAdmin")]
+        public async Task<ActionResult<IEnumerable<OrderShopDto>>> GetOrderWithShopAndProduct()
+        {
+            var orders = await _context.OrderModels.ToListAsync();
+            List<OrderShopDto> orderShopDtoList = new List<OrderShopDto>();
+            try
+            {
+                orders.ForEach(order =>
+                {
+                    var product = _context.ProductModels.Find(order.ProductId);
+                    var shop = _context.ShopModels.Find(order.ShopId);
+                    if (shop == null || product == null)
+                    {
+                        throw new InvalidDataException();
+                    }
+                    orderShopDtoList.Add(new OrderShopDto(order.Id, order.Date, order.Quantity,
+                        product.Name, product.CategoryName, product.Price, shop.Name));
+                });
+                return Ok(orderShopDtoList);
+            } catch (InvalidDataException ex)
+            {
+                return BadRequest("Order shop or product does not exist.");
+            }
         }
 
         // GET: api/OrderModels/5
@@ -98,19 +149,19 @@ namespace SET3_Backend.Controllers
             public List<int> Quantities { get; set; }
         }
 
-        //POST: api/order/{shopId}
-        [HttpPost("order/{shopId}")] //, Authorize(Roles = "StockAdmin,Admin")
+        //POST: api/OrderModels/order/{shopId}
+        [HttpPost("order/{shopId}"), Authorize(Roles = "StockAdmin,Admin")] //
         public async Task<ActionResult<List<OrderModel>>> createOrder()
         {
 
-            //var token = Request.Headers["Authorization"];
-            //token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
 
-            //if (ValidateToken(token) != null)
-            //{
+            if (ValidateToken(token) != null)
+            {
 
-                    string proba;
+                string proba;
                 using (var reader = new StreamReader(Request.Body))
                 {
                     proba = await reader.ReadToEndAsync();
@@ -169,8 +220,8 @@ namespace SET3_Backend.Controllers
                 }
                 await _context.SaveChangesAsync();
                 return orderModels;
-            //}
-            //else return BadRequest();
+            }
+            else return BadRequest();
         }
 
         // DELETE: api/OrderModels/5
