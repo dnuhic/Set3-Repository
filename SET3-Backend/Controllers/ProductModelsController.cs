@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Net.ConnectCode.Barcode;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 
@@ -162,16 +163,20 @@ namespace SET3_Backend.Controllers
 
         public async Task<ActionResult<ProductModel>> PostProductModel(ProductModel productModel)
         {
+
             var token = Request.Headers["Authorization"];
             token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
             if (ValidateToken(token) != null)
             {
+               
                 _context.ProductModels.Add(productModel);
                 await _context.SaveChangesAsync();
                 productModel = await InsertBarcode(productModel);
-                await Task.Run(() => _context.ProductModel.Update(productModel));
-                return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
+                await Task.Run(() => _context.ProductModels.Update(productModel));
+                await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
             }
 
             return NoContent();
@@ -222,28 +227,33 @@ namespace SET3_Backend.Controllers
             }
         }
 
-        private static async Task<ProductModel> InsertBarcode(ProductModel model){
+
+        //BARCODE generating
+        private async Task<ProductModel> InsertBarcode(ProductModel model)
+        {
             string modelId = model.Id.ToString();
-            modelId = modelId.PadLeft(7-modelId.Length,'0');
+            modelId = modelId.PadLeft(7 - modelId.Length, '0');
             var category = model.CategoryName.ToUpper().ToCharArray();
-			int sum = 0;
-			foreach(char c in category)
-				sum += ((int)c)-65;
+            int sum = 0;
+            foreach (char c in category)
+                sum += ((int)c) - 65;
             string sumStr = sum.ToString();
-            sumStr = sumStr.PadLeft(7-sumStr.Length, '0');
-			BarcodeFonts bec= new BarcodeFonts();
-            bec.BarcodeType=BarcodeFonts.BarcodeEnum.Code128Auto;		
-            int num = await numberOfBarcodes(modelId+sumStr);
+            sumStr = sumStr.PadLeft(7 - sumStr.Length, '0');
+            BarcodeFonts bec = new BarcodeFonts();
+            bec.BarcodeType = BarcodeFonts.BarcodeEnum.Code128Auto;
+            int num = await numberOfBarcodes(modelId + sumStr);
             bec.Data = modelId + sumStr + num.ToString();
-			bec.encode();
-			model.Barcode=bec.EncodedData;  
-            model.BarcodeText=bec.HumanText; 
+            bec.encode();
+
+            model.Barcode = bec.EncodedData;
+            model.BarcodeText = bec.HumanText;
             return model;
         }
 
-        private async Task<int> numberOfBarcodes(string barcode){
-            var bar = barcode.Substring(0,barcode.Length-2);
-            return await context.ProductModel.Count(t => t.Barcode.Substring(0,barcode.Length-2) == bar);
+        private async Task<int> numberOfBarcodes(string barcode)
+        {
+            var bar = barcode.Substring(0, barcode.Length - 2);
+            return await _context.ProductModels.CountAsync(t => t.Barcode.Substring(0, barcode.Length - 2) == bar);
         }
     }
-}
+    }

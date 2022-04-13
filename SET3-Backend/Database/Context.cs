@@ -25,17 +25,17 @@ namespace SET3_Backend.Database
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
         }
 
-        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;'
+        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;'
         //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             //Ovaj dio koda kreira lokalnu bazu
 
 
-          
 
-           
-            
+
+
+
 
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
