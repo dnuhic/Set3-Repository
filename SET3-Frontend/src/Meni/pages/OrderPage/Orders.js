@@ -25,7 +25,7 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            initialState: { pageIndex: 0 },
+            initialState: { pageIndex: 0, pageSize: 5},
         },
         useSortBy,
         usePagination
@@ -159,6 +159,7 @@ function ShippedProducts() {
         var data = await response.json()
 
         const responseCategory = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseCategory, navigate)
         var dataCategory = await responseCategory.json()
 
         console.log(data)
@@ -215,9 +216,7 @@ function ShippedProducts() {
 
     function nameFilter(e) {
         var name = e.target.value;
-        console.log(name);
         setNamme(name);
-        console.log("Ime Shopa je : " + shoppName);
         if (shoppName != "")
             setFiltOrders(helpfulOrders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
         else {
@@ -229,9 +228,7 @@ function ShippedProducts() {
 
     function shopNameFilter(e) {
         var shop = e.target.value;
-        console.log(shop);
         setShoppName(shop);
-        console.log("Ime proizvoda je : " + namme);
         if (namme != "")
             setFiltOrders(helpfulOrders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
         else {
@@ -252,14 +249,8 @@ function ShippedProducts() {
         var name = document.getElementById("name").value;
         var shop = document.getElementById("shop").value;
 
-        console.log(startDate);
-        console.log(endDate);
-
         if (low == "") low = 0;
         if (high == "") high = 10000;
-        console.log("Low: " + low);
-        console.log("High: " + high);
-        console.log(cat);
         if (cat != "")
             list = list.filter(x => x.categoryName.toLowerCase().includes(cat.toLowerCase()));
         list = list.filter(x => x.total >= low && x.total <= high);
@@ -298,7 +289,6 @@ function ShippedProducts() {
         document.getElementById("category").selectedIndex = 0;
         document.getElementById("priceLow").value = 0;
         document.getElementById("priceHigh").value = 10000;
-        console.log("USLO INSALLAH");
     }
 
     return (
@@ -318,28 +308,29 @@ function ShippedProducts() {
                     </div>
                     <div id="hiddenFilterDiv">
                         <div id="insideHiddenFilterDiv">
+
                             <div>
                                 <label for="startDate">Filter by date:&nbsp;&nbsp; From&nbsp;</label>
                                 <input type="date" name="date" id="startDate"></input>
                                 <label for="endDate">&nbsp;To&nbsp;</label>
                                 <input type="date" name="date" id="endDate"></input>
                             </div>
-                            <div>
-                                <label for="category">Category&nbsp;</label>
-                                <select id="category">
-                                    <option></option>
-                                    {categories.map(x => <option>{x.name}</option>)}
-                                </select>
-                            </div>
-                            <div>
-                                <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
-                                <label for="priceLow">From&nbsp;</label>
-                                <input type="number" name="priceLow" id="priceLow"
-                                    min={0} ></input>
-                                <label for="priceHigh">&nbsp;To&nbsp;</label>
-                                <input type="number" name="priceHigh" id="priceHigh"
-                                    max={10000} ></input>
-                            </div>
+                                <div>
+                                    <label for="category">Category&nbsp;</label>
+                                    <select id="category">
+                                        <option></option>
+                                        {categories.map(x => <option>{x.name}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
+                                    <label for="priceLow">From&nbsp;</label>
+                                    <input type="number" name="priceLow" id="priceLow"
+                                    min={0} max={10000} ></input>
+                                    <label for="priceHigh">&nbsp;To&nbsp;</label>
+                                    <input type="number" name="priceHigh" id="priceHigh"
+                                    min={0} max={10000} ></input>
+                                </div>
                         </div>
                         <div id="insideHiddenFilterDiv2">
                             <button onClick={applyFiltersFunction}>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +61,7 @@ namespace SET3_Backend.Controllers
             }
         }
 
-        [HttpGet("orderInfo")]
+        [HttpGet("orderInfo"), Authorize(Roles = "Admin,StockAdmin")]
         public async Task<ActionResult<IEnumerable<OrderShopDto>>> GetOrderWithShopAndProduct()
         {
             var orders = await _context.OrderModels.ToListAsync();
