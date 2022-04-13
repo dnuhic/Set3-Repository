@@ -60,7 +60,7 @@ namespace SET3_Backend.Controllers
             }
         }
 
-        [HttpGet("orderWithShop")]
+        [HttpGet("orderInfo")]
         public async Task<ActionResult<IEnumerable<OrderShopDto>>> GetOrderWithShopAndProduct()
         {
             var orders = await _context.OrderModels.ToListAsync();
