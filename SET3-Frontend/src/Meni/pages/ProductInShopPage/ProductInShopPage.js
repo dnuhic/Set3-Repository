@@ -27,7 +27,8 @@ function ProductPage(props) {
 			credentials: 'same-origin'
 		};
 
-		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, requestOptions);
+		// GET: api/ProductShopIntertables/shops/id treba da ide
+		const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductShopIntertables/shops/${props.product.id}`, requestOptions);
 		ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 
 		console.log(response);

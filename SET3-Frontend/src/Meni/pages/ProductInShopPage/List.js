@@ -64,7 +64,7 @@ function List(props) {
         }
 
 
-    }, [product])
+    }, [product]) 
 
     useEffect(async () => {
         console.log(deletedProduct);

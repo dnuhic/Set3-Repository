@@ -10,8 +10,6 @@ function WearhouseAdminStoreList(props) {
     const [store, setToDelete] = useState(null);
 
 
-
-
     useEffect(() => {
         setStores(props.stores);
         console.log(stores);

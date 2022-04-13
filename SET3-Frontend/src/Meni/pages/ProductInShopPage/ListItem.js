@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react';
 function ListItem(props) {
 
     const [deleted, setDeleted] = useState(props.product.deleted);
-    let navigate = useNavigate();
+    let navigate = useNavigate(); 
 
     const { deleteAction } = props;
 
