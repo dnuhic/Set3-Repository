@@ -28,7 +28,7 @@ namespace SET3_Backend.Controllers
         {
             return await _context.ProductShopIntertables.ToListAsync();
         }
-
+        
         // GET: api/ProductShopIntertables/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductShopIntertable>> GetProductShopIntertable(int id)
@@ -41,6 +41,27 @@ namespace SET3_Backend.Controllers
             }
 
             return productShopIntertable;
+        }
+       
+        // GET: api/ProductShopIntertables/shops/5
+        [HttpGet("shops/{shopId}")]
+        public async Task<ActionResult<List<ProductModel>>> GetProductShopIntertableShopId(int shopId)
+        {
+            var productShopIntertable = await _context.ProductShopIntertables.Where(x => x.ShopId == shopId).ToListAsync();
+            List<ProductShopIntertable> shops=productShopIntertable.ToList();
+            List<ProductModel> products = new List<ProductModel> { };
+            for (int i = 0; i < shops.Count; i++)
+            {
+                  var pom=await _context.ProductModels.Where(x => x.Id ==shops[i].ProductId).ToListAsync();
+                   pom=pom.ToList();
+                  products.Add(pom[0]);
+            }
+            if (productShopIntertable == null)
+            {
+                return NotFound();
+            }
+
+            return products;
         }
 
         // PUT: api/ProductShopIntertables/5
