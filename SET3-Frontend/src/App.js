@@ -28,7 +28,7 @@ import AddProduct from './Meni/pages/AddProductPage/AddProduct'
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError'
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
 import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
-import ProductToShop from './Meni/pages/ProductToShop/ProductToShop';
+import Order from './Meni/pages/AddNewOrder/AddNewOrder';
 function App() {
 
 
@@ -159,7 +159,7 @@ function App() {
 
             <Routes>
 
-                <Route path="/productToShop" element={<ProductToShop />} />
+                <Route path="/addOrder" element={<Order />} />
             </Routes>
 
             </Router >
