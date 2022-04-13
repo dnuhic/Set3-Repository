@@ -25,7 +25,7 @@ function Table({ columns, data }) {
         {
             columns,
             data,
-            initialState: { pageIndex: 0, pageSize: 1 },
+            initialState: { pageIndex: 0},
         },
         useSortBy,
         usePagination
@@ -50,7 +50,7 @@ function Table({ columns, data }) {
                             setPageSize(Number(e.target.value))
                         }}
                     >
-                        {[1, 2, 3, 4].map(pageSize => (
+                        {[5, 10, 15, 20].map(pageSize => (
                             <option key={pageSize} value={pageSize}>{pageSize}
                             </option>
                         ))}
@@ -123,6 +123,10 @@ function ShippedProducts() {
 
     const [highPrice, setHighPrice] = useState(0);
 
+    const [namme, setNamme] = useState("");
+
+    const [shoppName, setShoppName] = useState("");
+
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
@@ -189,8 +193,12 @@ function ShippedProducts() {
 
     function nameFilter(e) {
         var name = e.target.value;
-        console.log(name)
-        setFiltOrders(orders.filter(x => x.productName.includes(name)));
+        console.log(name);
+        setNamme(name);
+        console.log("Ime Shopa je : " + shoppName);
+        if (shoppName != "")
+            setFiltOrders(filtOrders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
+        else setFiltOrders(orders.filter(x => x.productName.toLowerCase().includes(name.toLowerCase())));
     }
 
     function dateFilter(e) {
@@ -206,10 +214,12 @@ function ShippedProducts() {
     function shopNameFilter(e) {
         var shop = e.target.value;
         console.log(shop);
-        setFiltOrders(orders.filter(x => x.shopName.includes(shop)))
+        setShoppName(shop);
+        console.log("Ime proizvoda je : " + namme);
+        if (namme != "")
+            setFiltOrders(filtOrders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
+        else setFiltOrders(orders.filter(x => x.shopName.toLowerCase().includes(shop.toLowerCase())));
     }
-
-    // if filtOrders.length == orders.length then do filt from orders, else filt from filtOrders
 
     function priceFilterMin(e) {
         setLowPrice(e.target.value);
