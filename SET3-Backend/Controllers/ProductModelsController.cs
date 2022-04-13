@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Net.ConnectCode.Barcode;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 
@@ -220,5 +221,29 @@ namespace SET3_Backend.Controllers
                 return null;
             }
         }
+
+
+        //BARCODE generating
+        private static ProductModel InsertBarcode(ProductModel model, int numberOfTrys = 0)
+        {
+            string modelId = model.Id.ToString();
+            modelId = modelId.PadLeft(7 - modelId.Length, '0');
+            var category = model.CategoryName.ToUpper().ToCharArray();
+            int sum = 0;
+            foreach (char c in category)
+                sum += ((int)c) - 65;
+            string sumStr = sum.ToString();
+            sumStr = sumStr.PadLeft(7 - sumStr.Length, '0');
+            string numOfT = numberOfTrys.ToString();
+            BarcodeFonts bec = new BarcodeFonts();
+            bec.BarcodeType = BarcodeFonts.BarcodeEnum.Code128Auto;
+            bec.Data = modelId + sumStr + (numOfT.PadLeft(3 - numOfT.Length, '0'));
+            bec.encode();
+            model.Barcode = bec.EncodedData;
+            model.BarcodeText = bec.HumanText;
+            return model;
+        }    
+
+
+        }
     }
-}
