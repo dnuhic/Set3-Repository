@@ -117,6 +117,12 @@ function ShippedProducts() {
 
     const [orders, setOrders] = useState([])
 
+    const [filtOrders, setFiltOrders] = useState([])
+
+    const [lowPrice, setLowPrice] = useState(0);
+
+    const [highPrice, setHighPrice] = useState(0);
+
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
@@ -134,6 +140,11 @@ function ShippedProducts() {
         var data = await response.json()
         console.log(data)
         setOrders(data)
+        setFiltOrders(data)
+
+        setLowPrice(0)
+        setHighPrice(9999)
+
     }, [])
 
     const columns = React.useMemo(
@@ -176,9 +187,42 @@ function ShippedProducts() {
         []
     )
 
-    function test(e) {
-        console.log(e.target.value)
-        setOrders(orders.filter(order => order.orderId + "" == e.target.value))
+    function nameFilter(e) {
+        var name = e.target.value;
+        console.log(name)
+        setFiltOrders(orders.filter(x => x.productName.includes(name)));
+    }
+
+    function dateFilter(e) {
+        /* problem sa date TIME! */
+    }
+
+    function categoryFilter(e) {
+        var category = e.target.value;
+        console.log(category);
+        setFiltOrders(orders.filter(x => x.categoryName.includes(category.toString())));
+    }
+
+    function shopNameFilter(e) {
+        var shop = e.target.value;
+        console.log(shop);
+        setFiltOrders(orders.filter(x => x.shopName.includes(shop)))
+    }
+
+    // if filtOrders.length == orders.length then do filt from orders, else filt from filtOrders
+
+    function priceFilterMin(e) {
+        setLowPrice(e.target.value);
+    }
+    function priceFilterMax(e) {
+        setHighPrice(e.target.value);
+    }
+
+    function priceFiltering() {
+        console.log("Low: " + lowPrice);
+        console.log("High: " + highPrice);
+        var temp = orders.filter(x => x.total >= lowPrice);
+        setFiltOrders(temp.filter(y => y.total <= highPrice));
     }
 
     return (
@@ -190,15 +234,15 @@ function ShippedProducts() {
                         <div id="insideHiddenFilterDiv">
                             <div>
                                 <label for="date">Filter by date&nbsp;</label>
-                                <input type="date" name="date" id="date"></input>
+                                <input type="date" name="date" id="date" onChange={dateFilter}></input>
                             </div>
                             <div>
                                 <label for="name">Filter by name&nbsp;</label>
-                                <input type="text" name="name" id="name" onChange={ test}></input>
+                                <input type="text" name="name" id="name" onChange={nameFilter}></input>
                             </div>
                             <div>
                                 <label for="category">Category&nbsp;</label>
-                                <select id="category">
+                                <select id="category" onChange={categoryFilter}>
                                     <option>Fruits and Vegetables</option>
                                 </select>
                             </div>
@@ -206,19 +250,21 @@ function ShippedProducts() {
                         <div id="insideHiddenFilterDiv2">
                             <div>
                                 <label for="shop">Filter by shop&nbsp;</label>
-                                <input type="text" name="shop" id="shop"></input>
+                                <input type="text" name="shop" id="shop" onChange={shopNameFilter}></input>
                             </div>
                             <div>
                                 <label>Filter by price (Total):&nbsp;&nbsp;&nbsp;</label>
                                 <label for="priceLow">From&nbsp;</label>
-                                <input type="number" name="priceLow" id="priceLow"></input>
+                                <input type="number" name="priceLow" id="priceLow"
+                                    onInput={priceFilterMin} onInput={priceFilterMin} value={lowPrice} onChange={priceFiltering}></input>
                                 <label for="priceHigh">&nbsp;To&nbsp;</label>
-                                <input type="number" name="priceHigh" id="priceHigh"></input>
+                                <input type="number" name="priceHigh" id="priceHigh"
+                                    onInput={priceFilterMax} onInput={priceFilterMax} value={highPrice} onChange={priceFiltering}></input>
                             </div>
                         </div>
                     </div>
                 </div>
-                <Table columns={columns} data={orders} />
+                <Table columns={columns} data={filtOrders} />
             </div>
         </>
     )
