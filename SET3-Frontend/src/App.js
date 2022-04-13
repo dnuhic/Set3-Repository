@@ -34,7 +34,6 @@ import Order from './Meni/pages/AddNewOrder/AddNewOrder';
 import Orders from './Meni/pages/OrderPage/Orders';
 
 
-function App() {
 
 function App() {
     return (
