@@ -170,6 +170,8 @@ namespace SET3_Backend.Controllers
             {
                 _context.ProductModels.Add(productModel);
                 await _context.SaveChangesAsync();
+                productModel = await InsertBarcode(productModel);
+                await _context.ProductModel.Update(productModel);
 
                 return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
             }
@@ -224,7 +226,7 @@ namespace SET3_Backend.Controllers
 
 
         //BARCODE generating
-        private static ProductModel InsertBarcode(ProductModel model, int numberOfTrys = 0)
+        private async Task<ProductModel> InsertBarcode(ProductModel model)
         {
             string modelId = model.Id.ToString();
             modelId = modelId.PadLeft(7 - modelId.Length, '0');
@@ -234,16 +236,21 @@ namespace SET3_Backend.Controllers
                 sum += ((int)c) - 65;
             string sumStr = sum.ToString();
             sumStr = sumStr.PadLeft(7 - sumStr.Length, '0');
-            string numOfT = numberOfTrys.ToString();
             BarcodeFonts bec = new BarcodeFonts();
             bec.BarcodeType = BarcodeFonts.BarcodeEnum.Code128Auto;
-            bec.Data = modelId + sumStr + (numOfT.PadLeft(3 - numOfT.Length, '0'));
+            int num = await numberOfBarcodes(modelId + sumStr);
+            bec.Data = modelId + sumStr + num.ToString();
             bec.encode();
+
             model.Barcode = bec.EncodedData;
             model.BarcodeText = bec.HumanText;
             return model;
-        }    
-
-
         }
+
+        private async Task<int> numberOfBarcodes(string barcode)
+        {
+            var bar = barcode.Substring(0, barcode.Length - 2);
+            return await _context.ProductModels.CountAsync(t => t.Barcode.Substring(0, barcode.Length - 2) == bar);
+        }
+    }
     }
