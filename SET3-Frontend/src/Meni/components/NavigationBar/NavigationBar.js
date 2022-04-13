@@ -8,6 +8,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GroupIcon from '@mui/icons-material/Group';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import BookIcon from '@mui/icons-material/Book';
 
 function NavigationBar() {
     const [click, setClick] = useState(false);
@@ -137,6 +139,24 @@ function NavigationBar() {
                         >
                             <NavDropdown.Item href={'/products'}>Products</NavDropdown.Item>
                             <NavDropdown.Item href={'/addProduct'}>Add new product</NavDropdown.Item>
+                            <NavDropdown.Item href={'/addDelivery'}>Add delivery</NavDropdown.Item>
+                            <NavDropdown.Item href={'/addOrder'}>Add order</NavDropdown.Item>
+                        </NavDropdown>
+                    </Nav>}
+
+                    {(role == "Admin" || role == "StockAdmin") && <Nav activeKey={window.location.pathname}>
+                        <div className='d-flex align-content-center flex-wrap'>
+                            <AssessmentIcon style={{ color: 'white' }} />
+                        </div>
+
+                        <NavDropdown
+                            menuVariant="dark"
+                            title="Records"
+                        >
+                            <NavDropdown.Item href={'/orders'}>Orders</NavDropdown.Item>
+                            <NavDropdown.Item href={'/allDeliveries'}>Deliveries</NavDropdown.Item>
+                            //TO DO
+                            <NavDropdown.Item href={''}>Products</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>}
 

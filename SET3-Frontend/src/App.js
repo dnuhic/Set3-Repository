@@ -135,7 +135,7 @@ function App() {
 
             <Routes>
 
-                <Route path="/wearhouseadminstores" element={<StoreListForWearhouseAdmin />} />
+                <Route path="/warehouseShops" element={<StoreListForWearhouseAdmin />} />
             </Routes>
 
             <Routes>
@@ -163,7 +163,7 @@ function App() {
                 <Route path="/unauthorized" element={<UnauthorizedError />} />
             </Routes>
             <Routes>
-                <Route path="/addDeliverie" element={<Deliveries />} />
+                <Route path="/addDelivery" element={<Deliveries />} />
             </Routes>
             <Routes>
                 <Route path="/orders" element={<Orders />} />
