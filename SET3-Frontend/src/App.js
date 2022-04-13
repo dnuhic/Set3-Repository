@@ -28,8 +28,10 @@ import AddProduct from './Meni/pages/AddProductPage/AddProduct';
 import UnauthorizedError from './Meni/pages/ErrorPage/UnauthorizedError';
 import AllDeliveries from './Meni/pages/AllDeliveriesPage/AllDeliveries';
 import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
+import ProductsInShop from './Meni/pages/ProductsInAShopPage/ProductsInAShopForm'
 import Order from './Meni/pages/AddNewOrder/AddNewOrder';
 import Orders from './Meni/pages/OrderPage/Orders';
+
 
 function App() {
 
@@ -167,7 +169,14 @@ function App() {
                 <Route path="/addOrder" element={<Order />} />
             </Routes>
 
+            <Routes>
+
+                <Route path="/productsinshop/:id" element={<ProductsInShop />} />
+
+            </Routes>
+
             </Router >
+
             
         );
     

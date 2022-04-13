@@ -29,8 +29,21 @@ namespace SET3_Backend.Controllers
             return await _context.ProductShopIntertables.ToListAsync();
         }
 
-        // GET: api/ProductShopIntertables/5
         [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<ProductShopIntertable>>> GetProductShopIntertables2(int id)
+        {
+            var productShopIntertable = await _context.ProductShopIntertables.Where(x => x.ShopId == id).ToListAsync();
+
+            if (productShopIntertable == null)
+            {
+                return NotFound();
+            }
+
+            return productShopIntertable;
+        }
+
+        // GET: api/ProductShopIntertables/5
+       /* [HttpGet("{id}")]
         public async Task<ActionResult<ProductShopIntertable>> GetProductShopIntertable(int id)
         {
             var productShopIntertable = await _context.ProductShopIntertables.FindAsync(id);
@@ -41,7 +54,7 @@ namespace SET3_Backend.Controllers
             }
 
             return productShopIntertable;
-        }
+        } */
 
         // PUT: api/ProductShopIntertables/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
