@@ -30,7 +30,7 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: ShopModels
-        [HttpGet, Authorize(Roles = "ShopAdmin,Admin")]
+        [HttpGet, Authorize(Roles = "ShopAdmin,Admin,StockAdmin")]
         public async Task<ActionResult<IEnumerable<ShopModel>>> GetShopModel()
         {
             var token = Request.Headers["Authorization"];
