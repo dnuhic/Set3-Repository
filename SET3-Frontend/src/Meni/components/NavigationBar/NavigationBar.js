@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import './custom-dropdown-menu.css';
 import { Button } from '../../../globalStyles';
 import { useNavigate } from "react-router-dom";
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupIcon from '@mui/icons-material/Group';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 
 function NavigationBar() {
     const [click, setClick] = useState(false);
@@ -77,8 +81,11 @@ function NavigationBar() {
             <Container>
                 <Navbar.Brand href="/">Home</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav">
-                    {role && user && <Nav  activeKey={window.location.pathname}>
+                <Navbar.Collapse id="responsive-navbar-nav" >
+                    {role && user && <Nav activeKey={window.location.pathname}>
+                        <div className='d-flex align-content-center flex-wrap'>
+                            <SettingsIcon style={{ color: 'white' }}/>
+                        </div>
                         <NavDropdown
                             menuVariant="dark"
                             title="Options"
@@ -89,7 +96,11 @@ function NavigationBar() {
                         </NavDropdown>
                     </Nav>}
 
-                    {role=="Admin" && <Nav activeKey={window.location.pathname}>
+                    {role == "Admin" && <Nav activeKey={window.location.pathname}>
+                        <div className='d-flex align-content-center flex-wrap'>
+                            <GroupIcon style={{ color: 'white' }} />
+                        </div>
+                        
                         <NavDropdown
                             menuVariant="dark"
                             title="Users"
@@ -101,6 +112,10 @@ function NavigationBar() {
                     </Nav>}
 
                     {(role == "Admin" || role == "ShopAdmin") && <Nav activeKey={window.location.pathname}>
+                        <div className='d-flex align-content-center flex-wrap'>
+                            <ShoppingCartIcon style={{ color: 'white' }} />
+                        </div>
+                        
                         <NavDropdown
                             menuVariant="dark"
                             title="Shop"
@@ -112,6 +127,10 @@ function NavigationBar() {
                     </Nav>}
 
                     {(role == "Admin" || role == "StockAdmin") && <Nav activeKey={window.location.pathname}>
+                        <div className='d-flex align-content-center flex-wrap'>
+                            <WarehouseIcon style={{ color: 'white' }} />
+                        </div>
+                        
                         <NavDropdown
                             menuVariant="dark"
                             title="Warehouse"

@@ -52,7 +52,7 @@ function ProductPage(props) {
 
 				{allProducts &&
 					<>
-						<h1> Products </h1>
+					<p className="text-left pl-m m-0" style={{fontSize: 40}}> Products </p>
 						<List products={allProducts} />
 					</>}
 				{!allProducts && <h1>Loading...</h1>}

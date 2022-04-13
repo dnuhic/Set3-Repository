@@ -149,19 +149,19 @@ namespace SET3_Backend.Controllers
             public List<int> Quantities { get; set; }
         }
 
-        //POST: api/order/{shopId}
-        [HttpPost("order/{shopId}")] //, Authorize(Roles = "StockAdmin,Admin")
+        //POST: api/OrderModels/order/{shopId}
+        [HttpPost("order/{shopId}"), Authorize(Roles = "StockAdmin,Admin")] //
         public async Task<ActionResult<List<OrderModel>>> createOrder()
         {
 
-            //var token = Request.Headers["Authorization"];
-            //token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
+            var token = Request.Headers["Authorization"];
+            token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
 
-            //if (ValidateToken(token) != null)
-            //{
+            if (ValidateToken(token) != null)
+            {
 
-                    string proba;
+                string proba;
                 using (var reader = new StreamReader(Request.Body))
                 {
                     proba = await reader.ReadToEndAsync();
@@ -220,8 +220,8 @@ namespace SET3_Backend.Controllers
                 }
                 await _context.SaveChangesAsync();
                 return orderModels;
-            //}
-            //else return BadRequest();
+            }
+            else return BadRequest();
         }
 
         // DELETE: api/OrderModels/5
