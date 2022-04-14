@@ -14,6 +14,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Box from '@mui/material/Box';
 import { ListItemAvatar, Avatar } from '@mui/material';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import { useNavigate } from "react-router-dom";
 
 
 const AddNewOrder = () => {
@@ -46,7 +47,7 @@ const AddNewOrder = () => {
         console.log('Duzina niza data');
         console.log(data.length);
         setId(data);
-        setProducts(data);
+        setProducts(data.filter(p=>!p.deleted));
         setQuantities(Array(data.length).fill(0))
         console.log(quantities);
        
@@ -81,8 +82,9 @@ const AddNewOrder = () => {
     }
 
     useEffect(getShops, [])
+    let navigate = useNavigate();
 
-    const handleSubmit = async () => {
+    const handleSubmit =  () => {
         const bodyObject = {
             "ShopId": shop,
             "ProductIds": productIds,
@@ -97,10 +99,14 @@ const AddNewOrder = () => {
             body: JSON.stringify(bodyObject),
             credentials: 'same-origin'
         };
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/order/${shop}`, requestOptions);
-        const data = await response.json();
-        alert('Your order has been saved!')
-        console.log(data);
+        
+        fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/order/${shop}`, requestOptions).then(response => response.json()).then(data => {
+            alert('Your order has been saved!')
+            console.log(data);
+           
+            navigate('/orders', { replace: true })
+        });
+        
     };
 
     const handleChange = (event) => {

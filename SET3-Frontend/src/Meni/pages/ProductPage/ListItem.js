@@ -15,6 +15,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Divider from '@mui/material/Divider';
 
 import { useState, useEffect } from 'react';
+import BarcodeComponent from './Barcode';
 
 function ListItem(props) {
 
@@ -66,6 +67,7 @@ function ListItem(props) {
             </ListItemAvatar>
             <ListItemText primary={`${props.product.name}`} secondary={`${props.product.categoryName}`} />
         </MuiListItem>
+        <BarcodeComponent barcode={props.product.barcode} barcodeText={props.product.barcodeText}/>
         <Divider dark/>
         </>
     )
