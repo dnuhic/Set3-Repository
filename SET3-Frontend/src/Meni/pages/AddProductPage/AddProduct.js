@@ -138,12 +138,10 @@ const AddProduct = () => {
                 </div>
                 <div className="col">
                     <label className="form-label" for="category">Category</label>
-                    <input
-                        id="categories"
-                        type="text"
-                        className="form-control"
-                        placeholder="Category"
-                    />
+                    <select className="form-select" name="categories" id="categories">
+                        {categories && categories.length &&
+                            categories.map(q => <option>{q.name}</option>)}
+                    </select>
                 </div>
                 <div className="col">
                     <label className="form-label" for="stock">Stock</label>
