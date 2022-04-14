@@ -126,7 +126,7 @@ const AddProduct = () => {
 
     return (
         <Box sx={{
-            width: '30%',
+            width: '40%',
             padding: '20px',
             height: '40%',
             bgcolor: '#a8c0c0',

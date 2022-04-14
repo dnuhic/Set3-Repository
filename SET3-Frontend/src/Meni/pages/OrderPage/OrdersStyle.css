@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     margin: auto;
-    width: 70%;
+    width: 100%;
 }
 
     .mainDiv button {

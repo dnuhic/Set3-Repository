@@ -72,7 +72,7 @@ namespace SET3_Backend.Controllers
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString()));
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString()));
                 _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString()));
-                _context.CategoryModels.Add(new CategoryModel(CategoryType.Other.ToString()));
+                
             }
 
             if (!_context.StockModels.Any())

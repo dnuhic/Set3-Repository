@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { useNavigate } from "react-router-dom";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import Box from '@mui/material/Box';
-
+import { Button } from '../../../globalStyles';
 
 function EditProductForm() {
 
@@ -132,7 +132,7 @@ function EditProductForm() {
 
     return (
         <Box sx={{
-            width: '30%',
+            width: '40%',
             padding: '20px',
             height: '40%',
             bgcolor: '#a8c0c0',
@@ -171,15 +171,16 @@ function EditProductForm() {
                                 </select>
                             </div>
                         </div>
-                        <div>Don't see the category you need?</div>
+                    </div>
+                </div>
                         <button
                             type="button"
                             onClick={createCategory}
                         >
                             Create new category
                         </button>
-                    </div>
-                </div>
+                    
+                
                 <div className="row">
                     <div className="col">
 

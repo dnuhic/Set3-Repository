@@ -294,7 +294,7 @@ function ShippedProducts() {
 
     return (
         <Box sx={{
-            width: '50%',
+            width: '70%',
             padding: '20px',
             height: '40%',
             bgcolor: '#a8c0c0',

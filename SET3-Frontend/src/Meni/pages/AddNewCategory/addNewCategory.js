@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
 import Box from '@mui/material/Box';
+import { Button } from '../../../globalStyles';
 
 
 const AddCategory = () => {
@@ -86,12 +87,13 @@ const AddCategory = () => {
                 });
             document.getElementById("name").value = "";
             alert('Action completed!');
+            
         }
     }, [newCategory]);
 
     return (
         <Box sx={{
-            width: '30%',
+            width: '40%',
             padding: '20px',
             height: '40%',
             bgcolor: '#a8c0c0',
@@ -117,12 +119,12 @@ const AddCategory = () => {
                             />
                         </div>
                     </div>
-                    <button
+                    <Button
                         type="button"
                         onClick={createCategory}
                     >
                         Add category
-                    </button>
+                    </Button>
                 </form>
             </div>
         </Box>
