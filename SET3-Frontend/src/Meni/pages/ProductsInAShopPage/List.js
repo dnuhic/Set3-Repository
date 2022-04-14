@@ -73,7 +73,6 @@ function List(props) {
                 bgcolor: 'background.paper',
                 position: 'relative',
                 overflow: 'auto',
-                maxHeight: 300,
                 borderRadius: 10,
             }}>
                 <MuiList sx={{

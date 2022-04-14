@@ -98,10 +98,12 @@ function List(props) {
                 bgcolor: 'background.paper',
                 position: 'relative',
                 overflow: 'auto',
-                maxHeight: 300,
                 borderRadius: 10,
             }}>
-                <MuiList>
+                <MuiList sx={{
+                    padding: 0,
+                    maxHeight: '2000px',
+                }}>
                     {listComponents}
                 </MuiList>
             </Box >

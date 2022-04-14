@@ -20,7 +20,11 @@ function StoreListItem(props) {
     }
     
     return (
-        <MuiListItem
+            <MuiListItem
+                sx={{
+                    padding: 0,
+                    maxHeight: '2000px',
+                }}
             key={props.store.id}>
             <ListItemAvatar>
                 <Avatar>

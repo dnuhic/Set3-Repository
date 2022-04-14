@@ -44,7 +44,7 @@ function ProductPage(props) {
 		<Box sx={{
 			width: '30%',
 			padding: '20px',
-			height: '40%',
+			height: 'auto',
 			bgcolor: '#a8c0c0',
 			boxShadow: 16,
 			borderRadius: '0 0 20px 20px',
