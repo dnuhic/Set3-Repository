@@ -126,6 +126,9 @@ function EditProductForm() {
     const handleStockChange = (e) => {
         setStock(e.target.value)
     }
+    const createCategory = () => {
+        navigate('/addnewcategory');
+    }
 
     return (
         <Box sx={{
@@ -168,6 +171,13 @@ function EditProductForm() {
                                 </select>
                             </div>
                         </div>
+                        <div>Don't see the category you need?</div>
+                        <button
+                            type="button"
+                            onClick={createCategory}
+                        >
+                            Create new category
+                        </button>
                     </div>
                 </div>
                 <div className="row">

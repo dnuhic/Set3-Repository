@@ -32,7 +32,7 @@ import Deliveries from './Meni/pages/AddNewDelivery/Deliveries'
 import ProductsInShop from './Meni/pages/ProductsInAShopPage/ProductsInAShopForm'
 import Order from './Meni/pages/AddNewOrder/AddNewOrder';
 import Orders from './Meni/pages/OrderPage/Orders';
-
+import AddCategory from './Meni/pages/AddNewCategory/addNewCategory';
 
 
 function App() {
@@ -177,6 +177,12 @@ function App() {
             <Routes>
 
                 <Route path="/productsinshop/:id" element={<ProductsInShop />} />
+
+            </Routes>
+
+            <Routes>
+
+                <Route path="/addnewcategory" element={<AddCategory />} />
 
             </Routes>
 

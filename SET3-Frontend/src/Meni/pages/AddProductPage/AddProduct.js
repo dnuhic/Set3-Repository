@@ -120,6 +120,10 @@ const AddProduct = () => {
         }
     }, [newProduct]);
 
+    const createCategory = () => {
+        navigate('/addnewcategory');
+    }
+
     return (
         <Box sx={{
             width: '30%',
@@ -154,7 +158,14 @@ const AddProduct = () => {
                         {categories && categories.length &&
                             categories.map(q => <option>{q.name}</option>)}
                     </select>
-                </div>
+                    </div>
+                    <div>Don't see the category you need?</div>
+                    <button
+                        type="button"
+                        onClick={createCategory}
+                    >
+                        Create new category
+                    </button>
                 <div className="col">
                     <label className="form-label" for="stock">Stock</label>
                     <select className="form-select" name="stock" id="stock">
