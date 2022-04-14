@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import { useNavigate } from "react-router-dom";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import Box from '@mui/material/Box';
 
 
 function EditProductForm() {
@@ -127,7 +128,17 @@ function EditProductForm() {
     }
 
     return (
-        <>
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {categories &&  stocks && < form className="unos">
                 <div className="col">
                     <h1>Edit product</h1>
@@ -175,7 +186,6 @@ function EditProductForm() {
                 </div>
                 <button
                     type="button"
-                    className="btn btn-primary"
                     onClick={editProduct}
                 >
                     Edit product
@@ -184,7 +194,7 @@ function EditProductForm() {
             </form>}
             {(!categories || !stocks) && <h1>Loading...</h1>}
            
-        </>
+        </Box>
 
     );
 }

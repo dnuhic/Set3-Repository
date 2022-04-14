@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import "bootstrap/dist/css/bootstrap.css";
-//import '../styleForm.css';
+import '../styleForm.css';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 export default function AddCashRegister(props) {
     const navigate = useNavigate()
@@ -75,7 +75,17 @@ export default function AddCashRegister(props) {
     }
 
     return (
-        <>
+        <Box sx = {{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {
                 shops && <form className="unos">
                     <div className="col">
@@ -114,7 +124,6 @@ export default function AddCashRegister(props) {
 
                     <button
                         type="button"
-                        className="btn btn-primary"
                         onClick={handleSubmit}
                     >
                         Add
@@ -125,6 +134,6 @@ export default function AddCashRegister(props) {
             {
                 !shops && <h1>Loading...</h1>
             }
-        </>
+        </Box>
         );
 }

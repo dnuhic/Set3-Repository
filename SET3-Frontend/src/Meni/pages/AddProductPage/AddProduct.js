@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.css";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 const AddProduct = () => {
 
@@ -120,6 +121,17 @@ const AddProduct = () => {
     }, [newProduct]);
 
     return (
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
         <div className="container">
             <form className="unos">
                 <div className="col">
@@ -153,13 +165,13 @@ const AddProduct = () => {
                 </div>
                 <button
                     type="button"
-                    className="btn btn-primary"
                     onClick={createProduct}
                 >
                     Add product
                 </button>
             </form>
-        </div>
+            </div>
+        </Box>
     )
 }
 

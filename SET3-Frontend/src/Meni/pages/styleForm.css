@@ -4,10 +4,6 @@
     box-sizing: border-box;
 }
 
-body {
-    background: #d8e0e8;
-}
-
 
 .form-container {
     display: flex;
@@ -78,7 +74,7 @@ body {
                 padding: 4px 10px;
                 border: none;
                 border-radius: 2px;
-                background-color: #0d6efd;
+                background-color: #577591;
                 color: white;
                 font-weight: 400;
                 cursor: pointer;
@@ -113,7 +109,7 @@ p {
     border-radius: 3px;
     border: 1px solid #353535;
     color: white;
-    background-color: #0d6efd;
+    background-color: #577591;
     width: 100%;
 }
 
@@ -124,7 +120,7 @@ p {
     border-radius: 3px;
     border: 1px solid #353535;
     color: white;
-    background-color: #0d6efd;
+    background-color: #577591;
     width: 100%;
 }
 
@@ -135,13 +131,13 @@ p {
     border-radius: 3px;
     border: 1px solid #353535;
     color: white;
-    background-color: #0d6efd;
+    background-color: #577591;
     width: 100%;
 }
 
 option {
     color: white;
-    background-color: #0d6efd;
+    background-color: #577591;
     width: 100%;
 }
 
@@ -150,6 +146,10 @@ option {
     width: 100%;
     margin-top: auto;
     margin-bottom: auto;
+}
+
+button {
+    background-color: #577591
 }
 
 .dropdown-basic-button {

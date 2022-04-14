@@ -3,6 +3,7 @@ import { useTable, useSortBy, usePagination } from 'react-table'
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
 import './OrdersStyle.css'
+import Box from '@mui/material/Box';
 
 
 function Table({ columns, data }) {
@@ -292,7 +293,17 @@ function ShippedProducts() {
     }
 
     return (
-        <>
+        <Box sx={{
+            width: '50%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             <h1>Orders</h1>
             <div class="mainDiv">
                 <div class="mainFilterDiv">
@@ -344,7 +355,7 @@ function ShippedProducts() {
                 </div>
                 <Table columns={columns} data={filtOrders} />
             </div>
-        </>
+        </Box>
     )
 }
 

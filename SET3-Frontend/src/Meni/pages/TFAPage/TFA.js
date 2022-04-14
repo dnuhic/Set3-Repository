@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../styleForm.css';
 import TFAConfirm from "../TFAConfirmPage/TFAConfirm";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import Box from '@mui/material/Box';
 
 const TFA = () => {
     const [user, setUser] = useState(null);

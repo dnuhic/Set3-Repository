@@ -6,6 +6,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import { ListItemAvatar, Avatar } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import StoreIcon from '@mui/icons-material/Store';
 
 import { useState, useEffect } from 'react';
 
@@ -59,6 +62,11 @@ function ListItem(props) {
                 </div>
             }
         >
+            <ListItemAvatar>
+                <Avatar>
+                    <StoreIcon />
+                </Avatar>
+            </ListItemAvatar>
             <ListItemText primary={`${props.store.name}`} onClick={handleStoreClick} />
         </MuiListItem>
     )

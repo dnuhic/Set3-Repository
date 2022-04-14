@@ -5,7 +5,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
-
+import { ListItemAvatar, Avatar } from '@mui/material';
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 import { useState, useEffect } from 'react';
 
 function ListItem(props) {
@@ -36,6 +37,11 @@ function ListItem(props) {
                 </div>
             }
         >
+            <ListItemAvatar>
+                <Avatar>
+                    <LaptopChromebookIcon />
+                </Avatar>
+            </ListItemAvatar>
             <ListItemText primary={`${props.cashbox.description}`} />
         </MuiListItem>
     )

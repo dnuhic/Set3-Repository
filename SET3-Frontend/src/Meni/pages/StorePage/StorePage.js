@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import List from './List';
 import { useState, useEffect } from 'react';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
+import Box from '@mui/material/Box';
 
 function StorePage(props) {
 
@@ -39,11 +40,21 @@ function StorePage(props) {
 
 
 	return (
+		<Box sx={{
+			width: '30%',
+			padding: '20px',
+			height: '40%',
+			bgcolor: '#a8c0c0',
+			boxShadow: 16,
+			borderRadius: '0 0 20px 20px',
+			position: 'relative',
+			overflow: 'auto',
+			margin: 'auto'
+		}}>
 		<div style={{
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			height: '90vh'
 		}}
 		>
 
@@ -58,7 +69,8 @@ function StorePage(props) {
 
 			</div>
 
-		</div>
+			</div>
+			</Box>
 	)
 }
 

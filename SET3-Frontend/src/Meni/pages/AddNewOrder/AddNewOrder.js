@@ -11,6 +11,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import { ListItemAvatar, Avatar } from '@mui/material';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 
 
 const AddNewOrder = () => {
@@ -130,7 +133,17 @@ const AddNewOrder = () => {
 
 
     return (
-        <>
+        <Box sx={{
+            width: '60%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {products && <>
                 <h1>New Order</h1>
                 <h3></h3>
@@ -160,7 +173,7 @@ const AddNewOrder = () => {
                     <Button onClick={handleSubmit}>Create order</Button>
                 </ButtonGroup>
                 <h1></h1>
-                <List sx={{ width: '80%', margin: 'auto', bgcolor: 'background.paper' }}>
+                <List sx={{ width: '80%', margin: 'auto', bgcolor: 'background.paper', borderRadius: '15px'}}>
                     {products && products.map((product, index) => {
 
                         return (
@@ -178,8 +191,18 @@ const AddNewOrder = () => {
                                     },
                                 }}
                             >
-                                <ListItemButton role={undefined} dense>
-                                    <ListItemIcon>
+                                <ListItemButton role={undefined} dense
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
+                                    <ListItemAvatar>
+                                        <Avatar>
+                                            <MarkunreadMailboxIcon />
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemIcon className="col-3">
                                         <TextField
                                             type="number"
                                             edge="start"
@@ -190,9 +213,9 @@ const AddNewOrder = () => {
                                             onChange={event =>handleQuantity(index, event.target.value) }
                                         />
                                     </ListItemIcon>
-                                    <ListItemText primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
-                                    <ListItemText primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
-                                    <ListItemText primaryTypographyProps={{ fontSize: '17px' }} primary={product.quantity} />
+                                    <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
+                                    <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
+                                    <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.quantity} />
                                 </ListItemButton>
                             </ListItem>
                         );
@@ -200,7 +223,7 @@ const AddNewOrder = () => {
                 </List>
             </>}
             {!products && <h1>Loading...</h1>}
-        </>
+        </Box>
 
     );
 

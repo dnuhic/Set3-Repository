@@ -1,4 +1,5 @@
 import { emphasize } from '@mui/material';
+import Box from '@mui/material/Box';
 import React, {
     Component, useState, useEffect, useCallback
 } from 'react';
@@ -60,7 +61,7 @@ const ForgotPassword = () => {
             
     }, [EmailProvided])
 
-        return (
+    return (
             <div className="form-container">
                 <div name="myForm" className="form-wrap" >
                     <h1>Forgot Password</h1>

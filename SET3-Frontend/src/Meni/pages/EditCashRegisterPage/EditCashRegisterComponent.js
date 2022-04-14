@@ -6,6 +6,7 @@ import '../styleForm.css';
 import { Update } from '@mui/icons-material';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 const EditCashRegister = () => {
 
@@ -103,7 +104,17 @@ const EditCashRegister = () => {
     }, [updatedCashRegister]);
 
     return (
-        <>
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {cashRegister && <>
                 <form className="unos">
                     <div className="col">
@@ -144,7 +155,6 @@ const EditCashRegister = () => {
                     </div>
                     <button
                         type="button"
-                        className="btn btn-primary"
                         onClick={editCashRegister}
                     >
                         Edit
@@ -156,7 +166,7 @@ const EditCashRegister = () => {
             {
                 !(cashRegister) && <h1>Loading...</h1>
             }
-        </>
+        </Box>
 
     );
 }

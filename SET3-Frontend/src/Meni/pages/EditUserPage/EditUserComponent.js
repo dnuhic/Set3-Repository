@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../styleForm.css';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 const EditUserComponent = () => {
     // Dobavljanje korisnika iz baze i postavljanje inicijalnih vrijednosti:
@@ -162,7 +163,17 @@ const EditUserComponent = () => {
     }
 
     return (
-    <>
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
         { user && roles && role && <>
             <form className="unos">
                 <div className="col">
@@ -227,7 +238,6 @@ const EditUserComponent = () => {
                 
                 <button
                     type="button"
-                    className="btn btn-primary"
                     onClick={editUser}
                 >
                     Edit
@@ -248,7 +258,6 @@ const EditUserComponent = () => {
                 </div>
                 <button
                     type="button"
-                    className="btn btn-primary"
                     onClick={changePassword}
                 >
                     Change password
@@ -264,7 +273,7 @@ const EditUserComponent = () => {
             {
                 !(user && roles && role) && <h1>Loading...</h1> 
             }
-        </>
+        </Box>
     );
 
     function hasNumber(myString) {

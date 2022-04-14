@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import TFAConfirm from '../TFAConfirmPage/TFAConfirm';
+import Box from '@mui/material/Box';
 
 const Login = () => {
 
@@ -84,9 +85,9 @@ const Login = () => {
             {buttonClicked && <TFAConfirm email={Email} password={Password} />}
             {!buttonClicked && <div className="container-forma">
                 {error && <div className="greska">Pogresan unos. Ponovite!</div>}
-                <h1>Login</h1>
+                
                 <form className="forma" onSubmit={handleSumbit}>
-
+                    <h1 className="text-left pl-m m-0" style={{ fontSize: 40, color: 'white' }}> Log In </h1>
                     <label>Email: </label>
                     <input
                         type="email"

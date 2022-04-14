@@ -6,7 +6,11 @@ import ListItemText from '@mui/material/ListItemText';
 import React, { useState, useEffect, useCallback } from 'react';
 import TextField from '@mui/material/TextField';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import Button from '@mui/material/Button';
+import '../styleForm.css';
+import Box from '@mui/material/Box';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import { ListItemAvatar, Avatar } from '@mui/material';
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
 
 export default function Deliveries() {
 
@@ -99,7 +103,17 @@ export default function Deliveries() {
 
 
     return (
-        <>
+        <Box sx={{
+            width: '60%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto',
+        }}>
             {products && <>
                 <h1>New Delivery</h1>
                 <h3></h3>
@@ -110,10 +124,10 @@ export default function Deliveries() {
                     '& > *': {
                         m: 1,
                     },}}>
-                    <Button onClick={handleSubmit}>Create delivery</Button>
+                    <button onClick={handleSubmit}>Create delivery</button>
                 </ButtonGroup>
                 <h1></h1>
-                <List sx={{ width: '80%', margin: 'auto', bgcolor: 'background.paper' }}>
+                <List sx={{ width: '80%', margin: 'auto', bgcolor: 'background.paper', borderRadius: '15px',}}>
                 {products.map((product) => {
 
                     return (
@@ -129,10 +143,23 @@ export default function Deliveries() {
                                 '&:last-child td, &:last-child th': {
                                     border: 0,
                                 },
+                                display: 'flex',
+                                justifyContent: 'space-between',
                             }}
                         >
-                            <ListItemButton role={undefined} dense>
-                                <ListItemIcon>
+                            <ListItemButton role={undefined} dense
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}
+
+                            >
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        <LocalShippingIcon />
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemIcon className="col-3">
                                     <TextField
                                         type="number"
                                         edge="start"
@@ -142,8 +169,8 @@ export default function Deliveries() {
                                         sx={{ m: 1, width: '10ch', marginRight: '50px' }}
                                     />
                                 </ListItemIcon>
-                                <ListItemText primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
-                                <ListItemText primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
+                                <ListItemText className="col-4" primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
+                                <ListItemText className="col-2" primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
                             </ListItemButton>
                         </ListItem>
                     );
@@ -151,7 +178,7 @@ export default function Deliveries() {
                 </List>
                 </>}
             {!products && <h1>Loading...</h1>}
-        </>
+        </Box>
         
     );
 }

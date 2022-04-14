@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import '../styleForm.css';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 const EditShopComponent = () => {
     // Dobavljanje poslovnice iz baze i postavljanje inicijalnih vrijednosti
@@ -131,7 +132,17 @@ const EditShopComponent = () => {
     }, [updatedShop]);
 
     return (
-        <>
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {shop && <>
                 <form className="unos" id="form">
                     <div className="col">
@@ -177,7 +188,6 @@ const EditShopComponent = () => {
                     </div>
                     <button
                         type="button"
-                        className="btn btn-primary"
                         onClick={editShop}
                     >
                         Edit
@@ -188,7 +198,7 @@ const EditShopComponent = () => {
             {
                 !(shop) && <h1>Loading...</h1>
             }
-        </>
+        </Box>
     );
 
 };

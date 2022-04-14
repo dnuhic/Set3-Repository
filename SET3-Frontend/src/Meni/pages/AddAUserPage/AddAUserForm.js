@@ -1,8 +1,9 @@
 import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
-import "bootstrap/dist/css/bootstrap.css";
+import { Button } from '../../../globalStyles';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
+import Box from '@mui/material/Box';
 
 const AddAUserForm = () => {
 
@@ -162,7 +163,16 @@ const AddAUserForm = () => {
     }
     console.log(pass)
     return (
-        <>
+        <Box sx={{
+            width: '30%',
+            height: '20%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
             {roles && role && questions && users && <form className="unos">
                 <div className="col">
                     <h1>Create new user</h1>
@@ -231,13 +241,11 @@ const AddAUserForm = () => {
                     placeholder="Your answer"
                 />
 
-                <button
-                    type="button"
-                    className="btn btn-primary"
+                <Button
                     onClick={newUser}
                 >
                     Create user
-                </button>
+                </Button>
                 <div className="col"></div>
                 <div className="col"></div>
                 <div className="col"></div>
@@ -247,7 +255,7 @@ const AddAUserForm = () => {
             {
                 !(roles && role && users && questions) && <h1>Loading...</h1>
             }
-            </>
+        </Box>
        
     );
 

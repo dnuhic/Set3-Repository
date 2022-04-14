@@ -1,6 +1,7 @@
 import { Alert } from 'bootstrap';
 import React, { Component, useState, useEffect, useCallback } from 'react';
 import "bootstrap/dist/css/bootstrap.css";
+import Box from '@mui/material/Box';
 
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
@@ -107,6 +108,17 @@ const AddShopComponent = () => {
     }
 
     return (
+        <Box sx={{
+            width: '30%',
+            padding: '20px',
+            height: '40%',
+            bgcolor: '#a8c0c0',
+            boxShadow: 16,
+            borderRadius: '0 0 20px 20px',
+            position: 'relative',
+            overflow: 'auto',
+            margin: 'auto'
+        }}>
         <form className="unos">
             <div className="col">
                 <h1>Create new shop</h1>
@@ -151,7 +163,6 @@ const AddShopComponent = () => {
 
                 <button
                     type="button"
-                    className="btn btn-primary"
                     onClick={addShop}
                 >
                     Add
@@ -159,7 +170,7 @@ const AddShopComponent = () => {
             </div>
 
         </form>
-
+            </Box>
     );
 };
 

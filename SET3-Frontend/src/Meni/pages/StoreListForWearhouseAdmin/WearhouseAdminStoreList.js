@@ -50,6 +50,7 @@ function WearhouseAdminStoreList(props) {
                 position: 'relative',
                 overflow: 'auto',
                 maxHeight: 300,
+                borderRadius: 10,
             }}>
                 <MuiList>
                     {listComponents}

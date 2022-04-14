@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import '../styleForm.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import Box from '@mui/material/Box';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 

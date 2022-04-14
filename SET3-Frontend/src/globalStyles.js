@@ -20,7 +20,6 @@ margin-right: auto;
 margin-left: auto;
 padding-right: 50px;
 padding-left: 50px;
-background-color: #D8E0E8;
 
 
 
@@ -37,7 +36,37 @@ padding-left: 30px;
 
 export const Button = styled.button`
 border-radius: 4px;
-background: ${({ primary }) => (primary ? '#8994A4' : '#96A7BF')};
+background: ${({ primary }) => (primary ? '#577591' : '#577591')};
+
+white-space: nowrap;
+padding: ${({ big }) => (big ? '12px 64px' : '10px 20px')};
+color: #fff;
+font-size: ${({ fontBig }) => (fontBig ? '20px' : '16px')};
+outline: none;
+border: none;
+cursor: pointer;
+
+
+
+
+
+&:hover {
+transition: all 0.3s ease-out;
+color: #000;
+background: ${({ primary }) => (primary ? '#577591' : '577591')};
+}
+
+@media screen and (max-width: 960px) {
+width: 100%;
+
+
+}
+
+`;
+
+export const button = styled.button`
+border-radius: 4px;
+background: ${({ primary }) => (primary ? '#577591' : '#577591')};
 
 white-space: nowrap;
 padding: ${({ big }) => (big ? '12px 64px' : '10px 20px')};
@@ -64,6 +93,7 @@ width: 100%;
 }
 
 `;
+
 
 
 

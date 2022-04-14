@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import DeliveriesTable from "./DeliveriesTable";
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule";
 import { useNavigate } from "react-router-dom";
+import Box from '@mui/material/Box';
 
 export default function AllDeliveries() {
   const [page, setPage] = React.useState(0);
@@ -127,10 +128,20 @@ export default function AllDeliveries() {
         alert(err.message);
         console.log("Error: ", err.message);
       });
-  };
+    };
 
   return (
-    <>
+      <Box sx={{
+          width: '60%',
+          padding: '20px',
+          height: '40%',
+          bgcolor: '#a8c0c0',
+          boxShadow: 16,
+          borderRadius: '0 0 20px 20px',
+          position: 'relative',
+          overflow: 'auto',
+          margin: 'auto'
+      }}>
       <div className="col my-auto">
         <h1>Deliveries:</h1>
       </div>
@@ -158,7 +169,7 @@ export default function AllDeliveries() {
       </div>
 
       <DeliveriesTable data={dataToShow} />
-    </>
+    </Box>
   );
 }
 
