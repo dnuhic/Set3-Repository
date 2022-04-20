@@ -7,7 +7,7 @@ using System.Threading;
 namespace SeleniumTesting
 {
     [TestClass]
-    public class EditUserTest
+    public class DeleteShopTest
     {
         static IWebDriver driver;
 
@@ -33,28 +33,20 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void EditUser()
+        public void DeleteShop()
         {
             try
             {
-                string editUserUrl = "https://localhost:3000/users/4";
-                driver.Navigate().GoToUrl(editUserUrl);
+                string usersUrl = "https://localhost:3000/shops/";
+                driver.Navigate().GoToUrl(usersUrl);
                 Thread.Sleep(500);
-                IWebElement editUserForma = driver.FindElement(By.XPath("//input[contains(@id,'firstName')]"));
-                editUserForma.Clear();
-                editUserForma.SendKeys("Test");
-                Thread.Sleep(200);
-                IWebElement editUserForma2 = driver.FindElement(By.XPath("//input[contains(@id,'lastName')]"));
-                editUserForma2.Clear();
-                editUserForma2.SendKeys("Admin");
-                Thread.Sleep(200);
-                IWebElement editUserForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
-                editUserForma3.Click();
-                Thread.Sleep(200);
+                IWebElement deleteDugme = driver.FindElement(By.XPath("//*[@id='root']/div/div/div/div/ul/li[3]/div[3]/div/button[2]"));
+                deleteDugme.Click();
+                Thread.Sleep(500);
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Changes have been saved succesfully!");
+                Assert.AreEqual(e.Message, "Action completed!");
             }
 
         }

@@ -7,7 +7,7 @@ using System.Threading;
 namespace SeleniumTesting
 {
     [TestClass]
-    public class EditUserTest
+    public class AddShopTest
     {
         static IWebDriver driver;
 
@@ -18,6 +18,7 @@ namespace SeleniumTesting
             string urlstranice = "https://localhost:3000/";
             driver.Navigate().GoToUrl(urlstranice);
             Thread.Sleep(200);
+            //Inicijalni login
             IWebElement buttonLogin = driver.FindElement(By.XPath("//button[contains(.,'Log in')]"));
             buttonLogin.Click();
             Thread.Sleep(200);
@@ -33,28 +34,25 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void EditUser()
+        public void AddShop()
         {
             try
             {
-                string editUserUrl = "https://localhost:3000/users/4";
-                driver.Navigate().GoToUrl(editUserUrl);
+                string addShopUrl = "https://localhost:3000/addShop/";
+                driver.Navigate().GoToUrl(addShopUrl);
                 Thread.Sleep(500);
-                IWebElement editUserForma = driver.FindElement(By.XPath("//input[contains(@id,'firstName')]"));
-                editUserForma.Clear();
-                editUserForma.SendKeys("Test");
+                IWebElement addShopForma = driver.FindElement(By.XPath("//input[contains(@id,'ime')]"));
+                addShopForma.SendKeys("ProdavnicaTest2");
                 Thread.Sleep(200);
-                IWebElement editUserForma2 = driver.FindElement(By.XPath("//input[contains(@id,'lastName')]"));
-                editUserForma2.Clear();
-                editUserForma2.SendKeys("Admin");
+                IWebElement addShopForma2 = driver.FindElement(By.Id("adresa"));
+                addShopForma2.SendKeys("AdresaTest2");
                 Thread.Sleep(200);
-                IWebElement editUserForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
-                editUserForma3.Click();
-                Thread.Sleep(200);
+                IWebElement addShopConfirm = driver.FindElement(By.XPath("//button[contains(.,'Add')]"));
+                addShopConfirm.Click();
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Changes have been saved succesfully!");
+                Assert.AreEqual(e.Message, "Shop was succesfully added!");
             }
 
         }

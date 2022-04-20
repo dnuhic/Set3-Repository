@@ -7,7 +7,7 @@ using System.Threading;
 namespace SeleniumTesting
 {
     [TestClass]
-    public class EditUserTest
+    public class EditShopTest
     {
         static IWebDriver driver;
 
@@ -33,23 +33,23 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void EditUser()
+        public void EditShop()
         {
             try
             {
-                string editUserUrl = "https://localhost:3000/users/4";
+                string editUserUrl = "https://localhost:3000/editshop/3";
                 driver.Navigate().GoToUrl(editUserUrl);
                 Thread.Sleep(500);
-                IWebElement editUserForma = driver.FindElement(By.XPath("//input[contains(@id,'firstName')]"));
-                editUserForma.Clear();
-                editUserForma.SendKeys("Test");
+                IWebElement editShopForma = driver.FindElement(By.XPath("//input[contains(@id,'name')]"));
+                editShopForma.Clear();
+                editShopForma.SendKeys("ProdavnicaTestPromjena");
                 Thread.Sleep(200);
-                IWebElement editUserForma2 = driver.FindElement(By.XPath("//input[contains(@id,'lastName')]"));
-                editUserForma2.Clear();
-                editUserForma2.SendKeys("Admin");
+                IWebElement editShopForma2 = driver.FindElement(By.XPath("//input[contains(@id,'address')]"));
+                editShopForma2.Clear();
+                editShopForma2.SendKeys("AdresaTestPromjena");
                 Thread.Sleep(200);
-                IWebElement editUserForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
-                editUserForma3.Click();
+                IWebElement editShopForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
+                editShopForma3.Click();
                 Thread.Sleep(200);
             }
             catch (Exception e)

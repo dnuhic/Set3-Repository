@@ -33,14 +33,14 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void AddUser()
+        public void DeleteUser()
         {
             try
             {
                 string usersUrl = "https://localhost:3000/users/";
                 driver.Navigate().GoToUrl(usersUrl);
                 Thread.Sleep(500);
-                IWebElement deleteDugme = driver.FindElement(By.XPath("//*[@id='root']/div/div/div/div/ul/li[5]/div[3]/div/button[2]"));
+                IWebElement deleteDugme = driver.FindElement(By.XPath("//*[@id='root']/div/div/div/div/ul/li[4]/div[3]/div/button[2]"));
                 deleteDugme.Click();
                 Thread.Sleep(500);
             }
