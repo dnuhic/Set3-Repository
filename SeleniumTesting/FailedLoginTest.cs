@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System;
 using System.Threading;
 
 namespace SeleniumTesting
@@ -23,23 +24,29 @@ namespace SeleniumTesting
         [TestMethod]
         public void NeuspjesanLogin()
         {
-            IWebElement buttonLogin = driver.FindElement(By.ClassName("navbar-nav"));
-            buttonLogin.Click();
-            Thread.Sleep(200);
+            try
+            {
+                IWebElement buttonLogin = driver.FindElement(By.ClassName("navbar-nav"));
+                buttonLogin.Click();
+                Thread.Sleep(200);
 
-            IWebElement buttonEmail = driver.FindElement(By.CssSelector("input[type='email']"));
-            buttonEmail.SendKeys("testadmin@gmail.com");
-            Thread.Sleep(200);
+                IWebElement buttonEmail = driver.FindElement(By.CssSelector("input[type='email']"));
+                buttonEmail.SendKeys("testadmin@gmail.com");
+                Thread.Sleep(200);
 
-            IWebElement buttonPassword = driver.FindElement(By.CssSelector("input[type='password']"));
-            buttonPassword.SendKeys("pogresanpassword");
-            Thread.Sleep(200);
+                IWebElement buttonPassword = driver.FindElement(By.CssSelector("input[type='password']"));
+                buttonPassword.SendKeys("pogresanpassword");
+                Thread.Sleep(200);
 
-            IWebElement buttonConfirm = driver.FindElement(By.ClassName("button-block"));
-            buttonConfirm.Click();
-            Thread.Sleep(200);
+                IWebElement buttonConfirm = driver.FindElement(By.ClassName("button-block"));
+                buttonConfirm.Click();
+                Thread.Sleep(200);
 
-            //assert za pogresne podatke za login (log error)
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Wrong log in information");
+            }
         }
 
     }
