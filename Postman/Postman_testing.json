@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "fe21746d-2a78-4262-bf5b-fd9f7027a10f",
+    "name": "StockModel",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GetStockModel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "tests[\"Status code is 200\"] = responseCode.code === 200;",
+              "",
+              "tests[\"Body matches string\"] = responseBody.has(\"id\");",
+              "",
+              ""
+            ],
+            "id": "11e46a01-2fec-4e9f-b897-ae6b7e03ae13"
+          }
+        }
+      ],
+      "_postman_id": "d19db827-8db1-4005-86ef-7087f8a9a64e",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://localhost:7194/api/StockModels/"
+      },
+      "response": []
+    },
+    {
+      "name": "PostStockModel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "tests[\"Status code is 201\"] = responseCode.code === 201;",
+              "",
+              "tests[\"Body matches string\"] = responseBody.has(\"id\");",
+              "tests[\"Body matches string\"] = responseBody.has(\"name\");",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "postman.setEnvironmentVariable(\"idStock\", jsonData.id);"
+            ],
+            "id": "d5d95564-dd3c-48bd-9489-2bb4597e4127"
+          }
+        }
+      ],
+      "_postman_id": "a815d379-b592-4354-ba2f-d437285e0de2",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n       \n        \"name\": \"new stock\"\n    }",
+          "options": {}
+        },
+        "url": "https://localhost:7194/api/StockModels/"
+      },
+      "response": []
+    },
+    {
+      "name": "GetOneStockModel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "tests[\"Status code is 200\"] = responseCode.code === 200;",
+              "",
+              "tests[\"Body matches string\"] = responseBody.has(\"id\");",
+              "",
+              "tests[\"Body matches name\"] = responseBody.has(\"new stock\");"
+            ],
+            "id": "ad8fb7dc-8118-4bbe-8d79-5a1af3c48b59"
+          }
+        }
+      ],
+      "_postman_id": "68822496-eee1-4394-af4e-8f78300ee080",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://localhost:7194/api/StockModels/{{idStock}}"
+      },
+      "response": []
+    },
+    {
+      "name": "PutStockModel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "tests[\"Status code is 204\"] = responseCode.code === 204;"
+            ],
+            "id": "0e67c74f-cdb2-48d2-9db9-27927a5762b6"
+          }
+        }
+      ],
+      "_postman_id": "1e270b6d-693d-4331-a868-7fb7ecafcb7d",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "",
+            "value": "",
+            "disabled": true
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n        \"id\" : {{idStock}},\n        \"name\": \"new stock 2\"\n    }",
+          "options": {}
+        },
+        "url": "https://localhost:7194/api/StockModels/{{idStock}}"
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteStockModel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "tests[\"Status code is 204\"] = responseCode.code === 204;"
+            ],
+            "id": "63439eaa-def4-482f-8919-158be0dd6a82"
+          }
+        }
+      ],
+      "_postman_id": "7e90a0c8-b1d8-4677-bd59-27472285d557",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "https://localhost:7194/api/StockModels/{{idStock}}"
+      },
+      "response": []
+    }
+  ]
+}
