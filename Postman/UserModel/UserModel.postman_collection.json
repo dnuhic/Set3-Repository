@@ -1,0 +1,341 @@
+{
+	"info": {
+		"_postman_id": "686a1c94-f8b1-47cc-bc5c-69d93bc25ba4",
+		"name": "UserModel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", jsonData.result);",
+							"",
+							"// const cookieJar = pm.cookies.jar();",
+							"// cookieJar.get(\"localhost\",\"jwt\", (error, cookies)=>{",
+							"//     postman.setEnvironmentVariable(\"nesto\", coo.jwt);",
+							"// });",
+							"",
+							"var token1 = postman.getResponseCookie(\"jwt\");",
+							"postman.setEnvironmentVariable(\"nesto\", token1);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\": \"admin@gmail.com\",\n        \"password\":\"password\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7194/authentication/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateUserTestMethod",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var user = pm.response.json()[0];",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check data types\", function () {",
+							"    pm.expect(user.id).to.be.a(\"number\");",
+							"    pm.expect(user.email).to.be.a(\"string\");",
+							"    pm.expect(user.questionId).to.be.a(\"number\");",
+							"    pm.expect(user.roleName).to.be.a(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Confirm delivery contains all expected keys\", function () {",
+							"    pm.expect(user).to.have.all.keys(\"id\",\"email\",\"firstName\",\"lastName\", \"password\", \"questionId\", \"answer\", \"deleted\", \"roleName\", \"tfa\");",
+							"});",
+							"",
+							"pm.test(\"Delivery response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"id\": { \"type\": \"number\" },",
+							"            \"email\": { \"type\": \"string\" },",
+							"            \"firstName\": { \"type\": \"string\" },",
+							"            \"questionId\": { \"type\": \"number\" }",
+							"        }",
+							"    };",
+							"    pm.expect(user).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/authentication/add",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateFirstData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/authentication/createFirstData",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						"createFirstData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserIdFromToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var user = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check data types\", function () {",
+							"    pm.expect(user.id).to.be.a(\"number\");",
+							"    pm.expect(user.email).to.be.a(\"string\");",
+							"    pm.expect(user.questionId).to.be.a(\"number\");",
+							"    pm.expect(user.roleName).to.be.a(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Confirm delivery contains all expected keys\", function () {",
+							"    pm.expect(user).to.have.all.keys(\"id\",\"email\",\"firstName\",\"lastName\", \"password\", \"questionId\", \"answer\", \"deleted\", \"roleName\", \"tfa\");",
+							"});",
+							"",
+							"pm.test(\"Delivery response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"id\": { \"type\": \"number\" },",
+							"            \"email\": { \"type\": \"string\" },",
+							"            \"firstName\": { \"type\": \"string\" },",
+							"            \"questionId\": { \"type\": \"number\" }",
+							"        }",
+							"    };",
+							"    pm.expect(user).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"UserEmail\", jsonData.email);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:7194/authentication/getUserId",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						"getUserId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUserTFA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var tfa = pm.response.json()[0];",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Delivery response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"result\": { \"type\": \"string\" }",
+							"        }",
+							"    };",
+							"    pm.expect(tfa).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/authentication/getUserTFA/{{UserEmail}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						"getUserTFA",
+						"{{UserEmail}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var user = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check data types\", function () {",
+							"    pm.expect(user.role).to.be.a(\"string\");",
+							"});",
+							"",
+							"pm.test(\"Confirm delivery contains all expected keys\", function () {",
+							"    pm.expect(user).to.have.all.keys(\"role\");",
+							"});",
+							"",
+							"pm.test(\"Delivery response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"role\": { \"type\": \"string\" }",
+							"        }",
+							"    };",
+							"    pm.expect(user).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{nesto}}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7194/authentication/getusertoken",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"authentication",
+						"getusertoken"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
