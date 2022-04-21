@@ -11,6 +11,8 @@ The application also supports notifications of user activities (for example: exe
 
 https://set3front.azurewebsites.net/
 
+Deployed by - [Omerović Muhamed](https://github.com/momerovic4)  
+
 **Project managers**
 - [Begović Amila](https://github.com/abegovic6)  
 - [Kaleta Senija](https://github.com/Senija)  
