@@ -50,17 +50,6 @@ namespace SeleniumTesting
                 IWebElement addShopConfirm = driver.FindElement(By.XPath("//button[contains(.,'Add')]"));
                 addShopConfirm.Click();
                 Thread.Sleep(500);
-                string addShopUrl2 = "https://localhost:3000/addShop/";
-                driver.Navigate().GoToUrl(addShopUrl2);
-                Thread.Sleep(500);
-                IWebElement addShopForma21 = driver.FindElement(By.XPath("//input[contains(@id,'ime')]"));
-                addShopForma21.SendKeys("ProdavnicaTest2");
-                Thread.Sleep(200);
-                IWebElement addShopForma22 = driver.FindElement(By.Id("adresa"));
-                addShopForma22.SendKeys("AdresaTest2");
-                Thread.Sleep(200);
-                IWebElement addShopConfirm2 = driver.FindElement(By.XPath("//button[contains(.,'Add')]"));
-                addShopConfirm.Click();
             }
             catch (Exception e)
             {
