@@ -37,9 +37,12 @@ namespace SeleniumTesting
         {
             try
             {
-                string editUserUrl = "https://localhost:3000/users/4";
+                string editUserUrl = "https://localhost:3000/users";
                 driver.Navigate().GoToUrl(editUserUrl);
                 Thread.Sleep(500);
+                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'Test Admin2 ')]//parent::div//following-sibling::div//button[1]"));
+                editDugme.Click();
+                Thread.Sleep(1000);
                 IWebElement editUserForma = driver.FindElement(By.XPath("//input[contains(@id,'firstName')]"));
                 editUserForma.Clear();
                 editUserForma.SendKeys("Test");

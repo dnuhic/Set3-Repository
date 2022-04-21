@@ -40,7 +40,7 @@ namespace SeleniumTesting
                 string usersUrl = "https://localhost:3000/shops/";
                 driver.Navigate().GoToUrl(usersUrl);
                 Thread.Sleep(500);
-                IWebElement deleteDugme = driver.FindElement(By.XPath("//*[@id='root']/div/div/div/div/ul/li[3]/div[3]/div/button[2]"));
+                IWebElement deleteDugme = driver.FindElement(By.XPath("//span[contains(.,'ProdavnicaTestPromjena')]//parent::div//following-sibling::div//button[2]"));
                 deleteDugme.Click();
                 Thread.Sleep(500);
             }

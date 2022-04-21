@@ -37,9 +37,12 @@ namespace SeleniumTesting
         {
             try
             {
-                string editUserUrl = "https://localhost:3000/editshop/3";
-                driver.Navigate().GoToUrl(editUserUrl);
+                string editShopsUrl = "https://localhost:3000/shops";
+                driver.Navigate().GoToUrl(editShopsUrl);
                 Thread.Sleep(500);
+                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'ProdavnicaTest2')]//parent::div//following-sibling::div//button[1]"));
+                editDugme.Click();
+                Thread.Sleep(1000);
                 IWebElement editShopForma = driver.FindElement(By.XPath("//input[contains(@id,'name')]"));
                 editShopForma.Clear();
                 editShopForma.SendKeys("ProdavnicaTestPromjena");

@@ -38,11 +38,11 @@ namespace SeleniumTesting
         {
             try
             {
-                string addShopUrl = "https://localhost:3000/addCashRegister/";
-                driver.Navigate().GoToUrl(addShopUrl);
+                string addRegisterUrl = "https://localhost:3000/addCashRegister";
+                driver.Navigate().GoToUrl(addRegisterUrl);
                 Thread.Sleep(500);
-                IWebElement addRegisterForma = driver.FindElement(By.XPath("//*[@id='role']/option[2]"));
-                addRegisterForma.Click();
+                IWebElement prodavnicaClick = driver.FindElement(By.XPath("//select[contains(.,'ProdavnicaTest2')]"));
+                prodavnicaClick.Click();
                 Thread.Sleep(200);
                 IWebElement addRegisterForma2 = driver.FindElement(By.Id("nazivKase"));
                 addRegisterForma2.SendKeys("KasaTest");
