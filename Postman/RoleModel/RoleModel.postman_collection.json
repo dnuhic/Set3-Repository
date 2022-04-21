@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "b99cec19-013e-44a8-872a-de21a318fb51",
+		"name": "RoleModel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetRoleModel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var role = pm.response.json()[0];",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check data types\", function () {",
+							"    pm.expect(role.id).to.be.a(\"number\");",
+							"    pm.expect(role.roleName).to.be.a(\"string\");",
+							"    pm.expect(role.readAccess).to.be.a(\"boolean\");",
+							"    pm.expect(role.writeAccess).to.be.a(\"boolean\");",
+							"    pm.expect(role.deleteAccess).to.be.a(\"boolean\");",
+							"});",
+							"",
+							"pm.test(\"Confirm role contains all expected keys\", function () {",
+							"    pm.expect(role).to.have.all.keys(\"id\",\"roleName\",\"readAccess\",\"writeAccess\",",
+							"        \"deleteAccess\");",
+							"});",
+							"",
+							"pm.test(\"Role response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"id\": { \"type\": \"number\" },",
+							"            \"roleName\": { \"type\": \"string\" },",
+							"            \"readAccess\": { \"type\": \"boolean\" },",
+							"            \"writeAccess\": { \"type\": \"boolean\" },",
+							"            \"deleteAccess\": { \"type\": \"boolean\" }",
+							"        }",
+							"    };",
+							"    pm.expect(role).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/api/RoleModels",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"api",
+						"RoleModels"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all roles",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7194/api/RoleModels",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7194",
+							"path": [
+								"api",
+								"RoleModels"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 21 Apr 2022 02:28:11 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 1,\n        \"roleName\": \"User\",\n        \"readAccess\": true,\n        \"writeAccess\": false,\n        \"deleteAccess\": false\n    },\n    {\n        \"id\": 2,\n        \"roleName\": \"Admin\",\n        \"readAccess\": true,\n        \"writeAccess\": true,\n        \"deleteAccess\": true\n    },\n    {\n        \"id\": 3,\n        \"roleName\": \"ShopAdmin\",\n        \"readAccess\": true,\n        \"writeAccess\": true,\n        \"deleteAccess\": true\n    },\n    {\n        \"id\": 4,\n        \"roleName\": \"StockAdmin\",\n        \"readAccess\": true,\n        \"writeAccess\": true,\n        \"deleteAccess\": true\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "PostRoleModel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"id\");",
+							"tests[\"Body matches string\"] = responseBody.has(\"roleName\");",
+							"tests[\"Body matches string\"] = responseBody.has(\"readAccess\");",
+							"tests[\"Body matches string\"] = responseBody.has(\"writeAccess\");",
+							"tests[\"Body matches string\"] = responseBody.has(\"deleteAccess\");",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"idRole\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"roleName\": \"Admina\",\n        \"readAccess\": true,\n        \"writeAccess\": true,\n        \"deleteAccess\": true\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7194/api/RoleModels",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"api",
+						"RoleModels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOneRoleModel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var role = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check data types\", function () {",
+							"    pm.expect(role.id).to.be.a(\"number\");",
+							"    pm.expect(role.roleName).to.be.a(\"string\");",
+							"    pm.expect(role.readAccess).to.be.a(\"boolean\");",
+							"    pm.expect(role.writeAccess).to.be.a(\"boolean\");",
+							"    pm.expect(role.deleteAccess).to.be.a(\"boolean\");",
+							"});",
+							"",
+							"pm.test(\"Confirm role contains all expected keys\", function () {",
+							"    pm.expect(role).to.have.all.keys(\"id\",\"roleName\",\"readAccess\",\"writeAccess\",",
+							"        \"deleteAccess\");",
+							"});",
+							"",
+							"pm.test(\"Role response matches expected JSON schema\", function () {",
+							"    var schema = {",
+							"        \"properties\": {",
+							"            \"id\": { \"type\": \"number\" },",
+							"            \"roleName\": { \"type\": \"string\" },",
+							"            \"readAccess\": { \"type\": \"boolean\" },",
+							"            \"writeAccess\": { \"type\": \"boolean\" },",
+							"            \"deleteAccess\": { \"type\": \"boolean\" }",
+							"        }",
+							"    };",
+							"    pm.expect(role).to.have.jsonSchema(schema);",
+							"});",
+							"",
+							"pm.test(\"Check a value from the response headers\", () => {",
+							"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/api/RoleModels/{{idRole}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"api",
+						"RoleModels",
+						"{{idRole}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutRoleModel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\" : {{idRole}},\n        \"roleName\": \"Adminica\",\n        \"readAccess\": true,\n        \"writeAccess\": true,\n        \"deleteAccess\": true\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7194/api/RoleModels/{{idRole}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"api",
+						"RoleModels",
+						"{{idRole}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRoleModel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7194/api/RoleModels/{{idRole}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7194",
+					"path": [
+						"api",
+						"RoleModels",
+						"{{idRole}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
