@@ -6,7 +6,7 @@ namespace SET3_Backend.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
         public bool Done { get; set; }
         public int ShopId { get; set; }
         public int UserId { get; set; }
@@ -15,10 +15,9 @@ namespace SET3_Backend.Models
         {
         }
 
-        public UserOrderModel(int id, DateTime createdDate, bool done, int shopId, int userId)
+        public UserOrderModel(DateTime updatedDate, bool done, int shopId, int userId)
         {
-            Id = id;
-            CreatedDate = createdDate;
+            UpdatedDate = updatedDate;
             Done = done;
             ShopId = shopId;
             UserId = userId;
