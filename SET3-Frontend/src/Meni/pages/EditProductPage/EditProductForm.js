@@ -17,7 +17,7 @@ function EditProductForm() {
     const [name, setName] = useState("");
     const [stock, setStock] = useState(null);
     const [category, setCategory] = useState(null);    
-
+    const [price, setPrice] = useState(null);
     const [stocks, setStocks] = useState(null);
     const [categories, setCategories] = useState(null);   
 
@@ -41,7 +41,8 @@ function EditProductForm() {
             StockId: noviId,
             Name: document.getElementById("name").value,
             CategoryName: category,
-            Price: product.price,
+            //Price: product.price,
+            Price: document.getElementById("price").value,
             Deleted: product.deleted,
             Barcode: product.barcode,
             BarcodeText: product.barcodeText,
@@ -81,6 +82,7 @@ function EditProductForm() {
 
         setProduct(dataProduct);
         setName(dataProduct.name);
+        setPrice(dataProduct.price);
         setStock(noviName);
         setCategory(dataProduct.categoryName);
         setCategories(dataCategories);
@@ -120,6 +122,9 @@ function EditProductForm() {
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
+    const handlePriceChange = (event) => {
+        setPrice(event.target.value);
+    };
     const handleCategoryChange = (e) => {
         setCategory(e.target.value)
     }
@@ -155,6 +160,15 @@ function EditProductForm() {
                                 className="form-control"
                                 placeholder="Product name"
                                 onChange={handleNameChange}
+                            />
+
+
+                            <input value={price}
+                                id="price"
+                                type="text"
+                                className="form-control"
+                                placeholder="Product price"
+                                onChange={handlePriceChange}
                             />
                         </div>
                     </div>

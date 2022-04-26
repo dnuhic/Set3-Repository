@@ -11,10 +11,10 @@ namespace SET3_Backend.Models
         public int PDV { get; set; }
 
 
-        public CategoryModel(string name, int pdv)
+        public CategoryModel(string name)
         {
             Name = name;
-            PDV = pdv;
+            
         }
     }
 

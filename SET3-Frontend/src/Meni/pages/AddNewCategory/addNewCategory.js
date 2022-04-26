@@ -5,6 +5,10 @@ import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
 import Box from '@mui/material/Box';
 import { Button } from '../../../globalStyles';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form } from "react-bootstrap";
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 
 const AddCategory = () => {
@@ -12,7 +16,13 @@ const AddCategory = () => {
     const navigate = useNavigate()
     const [categories, setCategories] = useState(null)
     const [newCategory, setNewCategory] = useState(null)
+    const [val, setVal] = useState('')
 
+    const options = [
+        { name: "5%", id: 1 },
+        { name: "17%", id: 2 },
+        { name: "22%", id: 3 }
+    ];
 
 
     function getCookie(key) {
@@ -119,6 +129,18 @@ const AddCategory = () => {
                             />
                         </div>
                     </div>
+
+
+                    <div className="App container">
+                        <label className="form-label" for="name">PDV</label>
+                           <Form.Select value={val} onChange={(e) => setVal(e.target.value)}>
+                            {options.map((o) => {
+                                const { name, id } = o;
+                                return <option value={id}>{name}</option>;
+                            })}
+                        </Form.Select>
+                    </div>
+
                     <Button
                         type="button"
                         onClick={createCategory}
