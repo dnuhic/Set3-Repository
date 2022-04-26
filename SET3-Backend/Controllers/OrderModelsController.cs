@@ -40,14 +40,14 @@ namespace SET3_Backend.Controllers
         {
             public int OrderId { get; set; }
             public DateTime Date { get; set; }
-            public int Quantity { get; set; }
+            public double Quantity { get; set; }
             public string ProductName { get; set; }
             public string CategoryName { get; set; }
             public float Price { get; set; }
             public string ShopName { get; set; }
-            public float Total { get; set; }
+            public double Total { get; set; }
 
-            public OrderShopDto(int orderId, DateTime date, int quantity, string productName, 
+            public OrderShopDto(int orderId, DateTime date, double quantity, string productName, 
                 string categoryName, float price, string shopName)
             {
                 OrderId = orderId;
@@ -146,7 +146,7 @@ namespace SET3_Backend.Controllers
         {
             public int ShopId { get; set; }
             public List<int> ProductIds { get; set; }
-            public List<int> Quantities { get; set; }
+            public List<double> Quantities { get; set; }
         }
 
         //POST: api/OrderModels/order/{shopId}
@@ -187,8 +187,9 @@ namespace SET3_Backend.Controllers
 
                 for(int i = 0; i < quantities.Count; i++)
                 {
+                    if (quantities[i] == 0) break;
                     //validacija: je li kolicina u skladistu manja od kolicine koja se trazi
-                    if(_context.ProductModels.Find(products[i]).Quantity < quantities[i])
+                    if(_context.ProductModels.Find(products[i]).Quantity.CompareTo(quantities[i]) < 0)
                     {
                         return BadRequest(badRequest); 
                     }

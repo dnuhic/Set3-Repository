@@ -23,6 +23,8 @@ namespace SET3_Backend.Database
         public virtual DbSet<UserOrderModel> UserOrderModels { get; set; }
         public virtual DbSet<ProductUserOrderIntertable> ProductUserOrderIntertables { get; set; }
 
+        public virtual DbSet<MeasuringUnit> MeasuringUnits { get; set; }
+
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
         }

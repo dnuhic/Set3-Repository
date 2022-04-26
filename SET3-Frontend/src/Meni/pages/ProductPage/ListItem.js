@@ -11,8 +11,10 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import { useNavigate } from "react-router-dom";
 import WarehouseIcon from '@mui/icons-material/Warehouse';
 import Badge from '@mui/material/Badge';
+import ScaleIcon from '@mui/icons-material/Scale';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
 import { useState, useEffect } from 'react';
 import BarcodeComponent from './Barcode';
@@ -49,6 +51,12 @@ function ListItem(props) {
                     <IconButton disabled={deleted}>
                         <Badge badgeContent={`${props.product.quantity}`} color={!deleted ? "primary" : "secondary"}>
                             <ShoppingCartIcon color="action" />
+                        </Badge>
+                    </IconButton>
+                    <IconButton disabled={deleted}>
+                        <Badge color={!deleted ? "primary" : "secondary"}>
+                            
+                            <Typography>{`${props.product.measuringUnit}`}</Typography>
                         </Badge>
                     </IconButton>
                     <IconButton onClick={handleEdit} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
