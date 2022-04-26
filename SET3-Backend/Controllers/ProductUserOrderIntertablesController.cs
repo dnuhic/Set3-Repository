@@ -117,7 +117,7 @@ namespace SET3_Backend.Controllers
             foreach(var productUserOrderIntertable in productUserOrderIntertables)
             {
                 var product = allProductModels.Find(p => p.Id == productUserOrderIntertable.ProductId);
-                billItems.Add(new BillItem(product.Name, product.Quantity, "OVO PROMIJENITI KAD SE MERGA", 0.17, product.Price));
+                billItems.Add(new BillItem(product.Name, productUserOrderIntertable.Quantity, "OVO PROMIJENITI KAD SE MERGA", 0.17, product.Price));
 
             }
 
