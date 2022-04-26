@@ -11,7 +11,7 @@ const AddProduct = () => {
     const [categories, setCategories] = useState(null)
     const [stocks, setStocks] = useState(null)
     const [newProduct, setNewProduct] = useState(null)
-
+    const [newPrice, setNewPrice] = useState(null)
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -45,6 +45,7 @@ const AddProduct = () => {
         if (stocks != null) {
             if (document.getElementById("name").value == "" ||
                 document.getElementById("categories").value == "" ||
+                document.getElementById("price").value == "" ||
                 document.getElementById("stock").value == "") {
                 alert("All fields must not be empty!");
                 return;
@@ -64,7 +65,7 @@ const AddProduct = () => {
             "Barcode": "",
             "BarcodeText": "",
             "Quantity": 0,
-            "Price": 2.0
+            "Price": document.getElementById("price").value
         };
 
         setNewProduct(product);
@@ -102,7 +103,7 @@ const AddProduct = () => {
 
     useEffect(async () => {
         if (document.getElementById("name").value != "" && document.getElementById("categories").value != "" &&
-            document.getElementById("stock").value != "") {
+            document.getElementById("stock").value != "" && document.getElementById("price").value != "" ) {
 
             const postRequest = {
                 method: 'POST',
@@ -149,7 +150,14 @@ const AddProduct = () => {
                             type="text"
                             className="form-control"
                             placeholder="Product name"
-                        />
+                            />
+                            <label className="form-label" for="price">Product price</label>
+                            <input
+                                id="price"
+                                type="text"
+                                className="form-control"
+                                placeholder="Product price"
+                            />
                     </div>
                 </div>
                 <div className="col">
@@ -172,7 +180,8 @@ const AddProduct = () => {
                         {stocks && stocks.length &&
                             stocks.map(q => <option>{q.name}</option>)
                         }
-                    </select>
+                        </select>
+
                 </div>
                 <button
                     type="button"
