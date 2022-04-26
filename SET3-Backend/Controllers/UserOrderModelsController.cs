@@ -68,17 +68,19 @@ namespace SET3_Backend.Controllers
         {
             public int ShopId { get; set; }
             public int UserId { get; set; }
+            public int CashRegisterId { get; set; }
             public List<ProductQuantityDto> ProductQuantitys { get; set; }
 
             public UserOrderDto()
             {
             }
 
-            public UserOrderDto(int shopId, int userId, List<ProductQuantityDto> productQuantitys)
+            public UserOrderDto(int shopId, int userId, int cashRegisterId, List<ProductQuantityDto> productQuantitys)
             {
                 ShopId = shopId;
                 UserId = userId;
                 this.ProductQuantitys = productQuantitys;
+                CashRegisterId = cashRegisterId;
             }
         }
 
@@ -118,7 +120,7 @@ namespace SET3_Backend.Controllers
         public async Task<ActionResult<UserOrderModel>> SaveUserOrder([FromBody] UserOrderDto userOrderDto)
         {
             //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, false, userOrderDto.ShopId, userOrderDto.UserId);
+            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, false, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
             _context.UserOrderModels.Add(userOrder);
             await _context.SaveChangesAsync();
 
@@ -138,7 +140,7 @@ namespace SET3_Backend.Controllers
         public async Task<IActionResult> FinishUserOrder([FromBody] UserOrderDto userOrderDto)
         {
             //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, true, userOrderDto.ShopId, userOrderDto.UserId);
+            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, true, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
             _context.UserOrderModels.Add(userOrder);
             await _context.SaveChangesAsync();
 
