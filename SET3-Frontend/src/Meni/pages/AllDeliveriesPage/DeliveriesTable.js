@@ -39,6 +39,10 @@ export default function DeliveriesTable(props) {
         setOpen(true);
     }
 
+    const getQuantity = function (data) {
+        return data.quantity + " " + data.measuringUnit;
+    }
+
     return (
         <>
             <div className="card mx-3">
@@ -60,6 +64,7 @@ export default function DeliveriesTable(props) {
                                     <td>{row.date}</td>
                                     <td>{trimString(row.name)}</td>
                                     <td>{row.price}</td>
+                                    <td>{getQuantity(row)}</td>
                                     <td>{row.quantity}</td>
                                     <td>{row.measuringUnit}</td>
                                     <td>{getTotalPrice(row.price, row.quantity)}</td>

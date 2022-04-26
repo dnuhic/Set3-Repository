@@ -58,6 +58,7 @@ namespace SET3_Backend.Controllers
                 CategoryName = categoryName;
                 Price = price;
                 ShopName = shopName;
+                Total = Quantity * Price;
                 UnitOfMeasurement = unitOfMeasurement;
             }
 
@@ -203,7 +204,7 @@ namespace SET3_Backend.Controllers
 
                 for(int i = 0; i < quantities.Count; i++)
                 {
-                    if (quantities[i] == 0) break;
+                    if (quantities[i] == 0) continue;
                     //validacija: je li kolicina u skladistu manja od kolicine koja se trazi
                     if(_context.ProductModels.Find(products[i]).Quantity.CompareTo(quantities[i]) < 0)
                     {
