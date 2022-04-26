@@ -101,6 +101,35 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
+        // GET: api/ProductUserOrderIntertables/bill
+        [HttpGet("bill")]
+        public async Task<ActionResult<BillModel>> GetBill(BillGetData billGetData)
+        {
+            UserOrderModel model = await _context.UserOrderModels.FindAsync(billGetData.UserOrderId);
+            UserModel userModel = await _context.UserModels.FindAsync(billGetData.CurrentUserId);
+            ShopModel shopModel = await _context.ShopModels.FindAsync(billGetData.ShopId);
+            CashRegisterModel cashRegisterModel = await _context.CashRegisterModels.FindAsync(billGetData.CashRegisterId);
+            List<ProductModel> allProductModels = await _context.ProductModels.ToListAsync();
+
+            List<BillItem> billItems = new List<BillItem>();
+            List<ProductUserOrderIntertable> productUserOrderIntertables = await _context.ProductUserOrderIntertables.ToListAsync();
+            productUserOrderIntertables = productUserOrderIntertables.FindAll(x => x.UserOrderId == billGetData.UserOrderId);
+            foreach(var productUserOrderIntertable in productUserOrderIntertables)
+            {
+                var product = allProductModels.Find(p => p.Id == productUserOrderIntertable.ProductId);
+                billItems.Add(new BillItem(product.Name, product.Quantity, "OVO PROMIJENITI KAD SE MERGA", 0.17, product.Price));
+
+            }
+
+            BillInfo billInfo = new BillInfo(model.Id.ToString(), model.UpdatedDate.ToString(), shopModel.Name,shopModel.Adress, cashRegisterModel.Name);
+            BillSupplier billSupplier = new BillSupplier(userModel.FirstName, userModel.LastName, userModel.Email);
+
+            return new BillModel(billInfo, billItems, billSupplier);
+
+            
+
+        }
+
         private bool ProductUserOrderIntertableExists(int id)
         {
             return _context.ProductUserOrderIntertables.Any(e => e.Id == id);
