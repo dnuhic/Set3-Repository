@@ -64,7 +64,7 @@ const AddProduct = () => {
             "Barcode": "",
             "BarcodeText": "",
             "Quantity": 0,
-            "Price": 2.0
+            "Price": document.getElementById("price").value
         };
 
         setNewProduct(product);
@@ -173,7 +173,18 @@ const AddProduct = () => {
                             stocks.map(q => <option>{q.name}</option>)
                         }
                     </select>
-                </div>
+                    </div>
+                    <div className="col">
+                        <div className="form-group">
+                            <label className="form-label" for="price">Product price </label>
+                            <input
+                                id="price"
+                                type="text"
+                                className="form-control"
+                                placeholder="BAM"
+                            />
+                        </div>
+                    </div>
                 <button
                     type="button"
                     onClick={createProduct}

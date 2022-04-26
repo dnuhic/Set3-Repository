@@ -15,6 +15,7 @@ function EditProductForm() {
     const [updatedProduct, setUpdatedProduct] = useState(null);
 
     const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
     const [stock, setStock] = useState(null);
     const [category, setCategory] = useState(null);    
 
@@ -41,7 +42,7 @@ function EditProductForm() {
             StockId: noviId,
             Name: document.getElementById("name").value,
             CategoryName: category,
-            Price: product.price,
+            Price: document.getElementById("price").value,
             Deleted: product.deleted,
             Barcode: product.barcode,
             BarcodeText: product.barcodeText,
@@ -85,6 +86,7 @@ function EditProductForm() {
         setCategory(dataProduct.categoryName);
         setCategories(dataCategories);
         setStocks(dataStocks);
+        setPrice(dataProduct.price);
         console.log(dataProduct);
     };
 
@@ -119,6 +121,9 @@ function EditProductForm() {
 
     const handleNameChange = (event) => {
         setName(event.target.value);
+    };
+    const handlePriceChange = (event) => {
+        setPrice(event.target.value);
     };
     const handleCategoryChange = (e) => {
         setCategory(e.target.value)
@@ -195,6 +200,21 @@ function EditProductForm() {
                         </div>
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col">
+                        <div className="form-group">
+                            <label className="form-label" for="price">Product price</label>
+                            <input value={price}
+                                id="price"
+                                type="text"
+                                className="form-control"
+                                placeholder="BAM"
+                                onChange={handlePriceChange}
+                            />
+                        </div>
+                    </div>
+                </div>
+
                 <button
                     type="button"
                     onClick={editProduct}
