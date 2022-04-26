@@ -101,8 +101,8 @@ namespace SET3_Backend.Controllers
             return NoContent();
         }
 
-        // GET: api/ProductUserOrderIntertables/bill
-        [HttpGet("bill")]
+        // POST: api/ProductUserOrderIntertables/bill
+        [HttpPost("bill")]
         public async Task<ActionResult<BillModel>> GetBill(BillGetData billGetData)
         {
             UserOrderModel model = await _context.UserOrderModels.FindAsync(billGetData.UserOrderId);
