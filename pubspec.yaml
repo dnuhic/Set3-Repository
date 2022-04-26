@@ -32,10 +32,18 @@ dependencies:
   dotted_line: ^2.0.2
   pdf: ^3.7.4
   flutter_svg: ^1.0.3
+  # save file
+  path_provider: ^2.0.1
+  # open pdf document
+  open_file: ^3.1.0
+  # format dates for invoice
+  intl: ^0.17.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
