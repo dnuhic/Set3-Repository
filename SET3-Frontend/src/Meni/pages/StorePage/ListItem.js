@@ -9,6 +9,7 @@ import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { ListItemAvatar, Avatar } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import StoreIcon from '@mui/icons-material/Store';
+import InfoIcon from '@mui/icons-material/Info';
 
 import { useState, useEffect } from 'react';
 
@@ -59,6 +60,9 @@ function ListItem(props) {
                     <IconButton onClick={handleDelete} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
                         <DeleteForeverIcon />
                     </IconButton>
+                    <IconButton onClick={handleStoreClick} disabled={deleted} color={!deleted ? "primary" : "secondary"}>
+                        <InfoIcon />
+                    </IconButton>
                 </div>
             }
         >
@@ -67,7 +71,7 @@ function ListItem(props) {
                     <StoreIcon />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={`${props.store.name}`} onClick={handleStoreClick} />
+            <ListItemText primary={`${props.store.name}`} />
         </MuiListItem>
     )
 }

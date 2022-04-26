@@ -117,6 +117,10 @@ const AddNewOrder = () => {
     };
 
     const handleQuantity = (id, value) => {
+        if (products[id].measuringUnit === 'Units' && (value % 1) != 0) {
+            alert('Quantity in units must be integer')
+            return
+        }
         if (Number(value) < 0) {
             alert('Quantity must be above zero!')
             return;
@@ -219,6 +223,7 @@ const AddNewOrder = () => {
                                             onChange={event =>handleQuantity(index, event.target.value) }
                                         />
                                     </ListItemIcon>
+                                    <ListItemText className="col-4" primaryTypographyProps={{ fontSize: '17px' }} primary={product.measuringUnit} />
                                     <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
                                     <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
                                     <ListItemText className="col-3" primaryTypographyProps={{ fontSize: '17px' }} primary={product.quantity} />
