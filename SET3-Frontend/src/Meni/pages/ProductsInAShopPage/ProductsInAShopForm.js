@@ -83,7 +83,7 @@ function ProductsInAShopForm() {
 
 				{allProducts &&
 					<>
-						<h1 className="text-left pl-m m-0" style={{ fontSize: 40 }}> Products in this shop { shop.name}</h1>
+						{shop && <h1 className="text-left pl-m m-0" style={{ fontSize: 40 }}> Products in this shop {shop.name}</h1>}
 					<List products={allProducts} />
 					</>}
 				{!allProducts && <h1>Loading...</h1>}
