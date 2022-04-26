@@ -143,6 +143,8 @@ function ShippedProducts() {
 
     const [categories, setCategories] = useState([]);
 
+    const [unitOfMeasurement, setUnitOfMeasurement] = useState([]);
+
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
@@ -163,12 +165,17 @@ function ShippedProducts() {
         ResponseCheckModule.unauthorizedResponseCheck(responseCategory, navigate)
         var dataCategory = await responseCategory.json()
 
+        const responseUnitOfMeasurement = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/MeasuringUnits`, requestOptions);
+        ResponseCheckModule.unauthorizedResponseCheck(responseCategory, navigate)
+        var dataUnitOfMeasurement = await responseUnitOfMeasurement.json()
+
         console.log(data)
         setOrders(data)
         setFiltOrders(data)
         setHelpfulOrders(data)
 
         setCategories(dataCategory)
+        setUnitOfMeasurement(dataUnitOfMeasurement)
 
         setLowPrice(0)
         setHighPrice(10000)
@@ -205,6 +212,10 @@ function ShippedProducts() {
             {
                 Header: 'Quantity',
                 accessor: 'quantity',
+            },
+            {
+                Header: 'Unit of measurement',
+                accessor: 'unitOfMeasurement',
             },
             {
                 Header: 'Total',
@@ -294,7 +305,7 @@ function ShippedProducts() {
 
     return (
         <Box sx={{
-            width: '70%',
+            width: '80%',
             padding: '20px',
             height: '40%',
             bgcolor: '#a8c0c0',
@@ -331,6 +342,13 @@ function ShippedProducts() {
                                     <select id="category">
                                         <option></option>
                                         {categories.map(x => <option>{x.name}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                <label for="unitOfMeasurement">Unit Of Measurement&nbsp;</label>
+                                <select id="unitOfMeasurement">
+                                        <option></option>
+                                    {unitOfMeasurement.map(x => <option>{x.measuringUnitName}</option>)}
                                     </select>
                                 </div>
                                 <div>

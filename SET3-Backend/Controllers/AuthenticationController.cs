@@ -80,6 +80,23 @@ namespace SET3_Backend.Controllers
                 _context.StockModels.Add(new StockModel("Warehouse"));
             }
 
+            if (!_context.MeasuringUnits.Any())
+            {
+                MeasuringUnit units = new MeasuringUnit(MeasuringUnitName.Units.ToString());
+                _context.MeasuringUnits.Add(units);
+                MeasuringUnit grams = new MeasuringUnit(MeasuringUnitName.Grams.ToString());
+                _context.MeasuringUnits.Add(grams);
+                MeasuringUnit kilograms = new MeasuringUnit(MeasuringUnitName.Kilograms.ToString());
+                _context.MeasuringUnits.Add(kilograms);
+                MeasuringUnit milliliters = new MeasuringUnit(MeasuringUnitName.Milliliters.ToString());
+                _context.MeasuringUnits.Add(milliliters);
+                MeasuringUnit liters = new MeasuringUnit(MeasuringUnitName.Liters.ToString());
+                _context.MeasuringUnits.Add(liters);
+                MeasuringUnit jars = new MeasuringUnit(MeasuringUnitName.Jars.ToString());
+                _context.MeasuringUnits.Add(jars);
+
+            }
+
             await _context.SaveChangesAsync();
             return Ok();
         }

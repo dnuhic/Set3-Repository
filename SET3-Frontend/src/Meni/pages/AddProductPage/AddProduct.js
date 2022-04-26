@@ -10,6 +10,7 @@ const AddProduct = () => {
     const navigate = useNavigate()
     const [categories, setCategories] = useState(null)
     const [stocks, setStocks] = useState(null)
+    const [measuringUnits, setMeasuringUnits] = useState(null)
     const [newProduct, setNewProduct] = useState(null)
 
 
@@ -64,7 +65,8 @@ const AddProduct = () => {
             "Barcode": "",
             "BarcodeText": "",
             "Quantity": 0,
-            "Price": 2.0
+            "Price": 2.0,
+            "MeasuringUnit": document.getElementById("measuringUnits").value
         };
 
         setNewProduct(product);
@@ -94,6 +96,12 @@ const AddProduct = () => {
         const kategorije = await responseKategorije.json();
         setCategories(kategorije);
         console.log(kategorije);
+
+        const responseMeasuringUnits = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/MeasuringUnits`)
+        ResponseCheckModule.unauthorizedResponseCheck(responseMeasuringUnits, navigate)
+        const jedinice = await responseMeasuringUnits.json();
+        setMeasuringUnits(jedinice);
+        console.log(jedinice);
         //const nizString = skladista.map((s) => s.name);
         //console.log(nizString);
         //setStocks(nizString);
@@ -158,14 +166,20 @@ const AddProduct = () => {
                         {categories && categories.length &&
                             categories.map(q => <option>{q.name}</option>)}
                     </select>
-                    </div>
+                 </div>
                     <div>Don't see the category you need?</div>
-                    <button
+                <button
                         type="button"
-                        onClick={createCategory}
-                    >
+                        onClick={createCategory}>
                         Create new category
-                    </button>
+                </button>
+                <div className="col">
+                        <label className="form-label" for="measuringUnits">Choose a measuring unit for product</label>
+                        <select className="form-select" name="measuringUnits" id="measuringUnits">
+                            {measuringUnits && measuringUnits.length &&
+                                measuringUnits.map(q => <option>{q.measuringUnitName}</option>)}
+                        </select>
+                </div>
                 <div className="col">
                     <label className="form-label" for="stock">Stock</label>
                     <select className="form-select" name="stock" id="stock">
