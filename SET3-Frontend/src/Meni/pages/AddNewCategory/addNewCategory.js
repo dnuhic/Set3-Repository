@@ -87,7 +87,7 @@ const AddCategory = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
                 credentials: 'same-origin',
-                body: JSON.stringify(newCategory)
+                body: JSON.stringify(newCategory,pdv)
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_URL}api/CategoryModels`, postRequest)

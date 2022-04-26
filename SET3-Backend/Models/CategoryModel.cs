@@ -4,17 +4,18 @@ namespace SET3_Backend.Models
 {
     public class CategoryModel
     {
+        public CategoryModel() {}
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
 
         public int PDV { get; set; }
 
-
-        public CategoryModel(string name)
+        
+        public CategoryModel(string name, int pdv)
         {
             Name = name;
-            
+            PDV = pdv;
         }
     }
 

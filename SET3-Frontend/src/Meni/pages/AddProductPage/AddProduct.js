@@ -109,7 +109,7 @@ const AddProduct = () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', "Authorization": "bearer " + getCookie("jwt"), "Access-Control-Allow-Credentials": true },
                 credentials: 'same-origin',
-                body: JSON.stringify(newProduct)
+                body: JSON.stringify(newProduct, (document.getElementById("PDV").value / 100) * document.getElementById("price").value + document.getElementById("price").value)
             };
 
             fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, postRequest)
