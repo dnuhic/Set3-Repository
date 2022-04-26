@@ -46,9 +46,23 @@ namespace SET3_Backend.Controllers
             public float Price { get; set; }
             public string ShopName { get; set; }
             public double Total { get; set; }
+            public string UnitOfMeasurement { get; set; }
 
-            public OrderShopDto(int orderId, DateTime date, double quantity, string productName, 
-                string categoryName, float price, string shopName)
+            public OrderShopDto(int orderId, DateTime date, double quantity, string productName, string categoryName, 
+                float price, string shopName, string unitOfMeasurement)
+            {
+                OrderId = orderId;
+                Date = date;
+                Quantity = quantity;
+                ProductName = productName;
+                CategoryName = categoryName;
+                Price = price;
+                ShopName = shopName;
+                UnitOfMeasurement = unitOfMeasurement;
+            }
+
+            /*public OrderShopDto(int orderId, DateTime date, double quantity, string productName, 
+                string categoryName, float price, string shopName, string )
             {
                 OrderId = orderId;
                 Date = date;
@@ -58,7 +72,9 @@ namespace SET3_Backend.Controllers
                 Price = price;
                 ShopName = shopName;
                 Total = Quantity * Price;
-            }
+            }*/
+
+
         }
 
         [HttpGet("orderInfo"), Authorize(Roles = "Admin,StockAdmin")]
@@ -77,7 +93,7 @@ namespace SET3_Backend.Controllers
                         throw new InvalidDataException();
                     }
                     orderShopDtoList.Add(new OrderShopDto(order.Id, order.Date, order.Quantity,
-                        product.Name, product.CategoryName, product.Price, shop.Name));
+                        product.Name, product.CategoryName, product.Price, shop.Name, product.MeasuringUnit));
                 });
                 return Ok(orderShopDtoList);
             } catch (InvalidDataException ex)
