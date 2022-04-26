@@ -114,6 +114,7 @@ export default function AllDeliveries() {
               id: deliveryData[i].id,
               date: deliveryData[i].date,
               quantity: deliveryData[i].quantity,
+              measuringUnit:productData[i].measuringUnit,
               name: productData[i].name,
               price: `$${productData[i].price}`,
               total: deliveryData[i].quantity * productData[i].price,
@@ -132,7 +133,7 @@ export default function AllDeliveries() {
 
   return (
       <Box sx={{
-          width: '60%',
+          width: '80%',
           padding: '20px',
           height: '40%',
           bgcolor: '#a8c0c0',

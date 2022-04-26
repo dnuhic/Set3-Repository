@@ -2,17 +2,21 @@
 
 namespace SET3_Backend.Models
 {
-    public class ProductShopIntertable
+    public class ProductUserOrderIntertable
     {
         [Key]
         public int Id { get; set; }
-        public int ShopId { get; set; }
+        public int UserOrderId { get; set; }
         public int ProductId { get; set; }
         public double Quantity { get; set; }
 
-        public ProductShopIntertable(int shopId, int productId, double quantity)
+        public ProductUserOrderIntertable()
         {
-            ShopId = shopId;
+        }
+
+        public ProductUserOrderIntertable(int userOrderId, int productId, double quantity)
+        {
+            UserOrderId = userOrderId;
             ProductId = productId;
             Quantity = quantity;
         }

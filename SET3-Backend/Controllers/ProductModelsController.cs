@@ -170,10 +170,12 @@ namespace SET3_Backend.Controllers
             if (ValidateToken(token) != null)
             {
                
-                _context.ProductModels.Add(productModel);
-                await _context.SaveChangesAsync();
+                
+                //await _context.SaveChangesAsync();
                 productModel = await InsertBarcode(productModel);
-                await Task.Run(() => _context.ProductModels.Update(productModel));
+                _context.ProductModels.Add(productModel);
+                //await Task.Run(() => _context.ProductModels.Update(productModel));
+                //_context.ProductModels.Update(productModel);
                 await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
