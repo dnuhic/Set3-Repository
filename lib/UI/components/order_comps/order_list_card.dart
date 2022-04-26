@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tasklist/UI/components/order_comps/cart_counter.dart';
 import 'package:tasklist/constants.dart';
+import 'package:tasklist/edit_order_page.dart';
 
+import '../../../main.dart';
 import '../../../size_config.dart';
 
-class CartCard extends StatelessWidget {
-  const CartCard({
+class OrdersCard extends StatelessWidget {
+  const OrdersCard({
     Key key,
   }) : super(key: key);
 
@@ -32,7 +35,7 @@ class CartCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   //border: Border.all(color: Color(0xfff3c526e), width: 2)
                 ),
-                child: Icon(Icons.inventory, color: Colors.white, size: 30,)
+                child: Icon(Icons.shopify, color: Colors.white, size: 30,)
               ),
             ),
           ),
@@ -41,21 +44,45 @@ class CartCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Jabuka 1kg",
+                "Order 1",
                 style: TextStyle(color: Colors.black, fontSize: 20),
                 maxLines: 2,
               ),
               SizedBox(height: 10),
               Text.rich(
                 TextSpan(
-                  text: "100KM",
+                  text: "Finished: False",
                   style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),
                 ),
               )
             ],
           ),
           Spacer(),
-          CartCounter(),
+          Material(
+              color: Colors.transparent,
+              child: IconButton(
+                color: Color(0xfff3c526e).withAlpha(200),
+                splashColor: Color(0xfff3c526e).withAlpha(200),
+                splashRadius: 10,
+                icon: Icon(Icons.send, color: Color(0xfff3c526e).withAlpha(200), size: 30,),
+                onPressed: () {
+                },
+              ),
+            ),
+            Spacer(),
+            Material(
+              color: Colors.transparent,
+              child: IconButton(
+                color: Color(0xfff3c526e).withAlpha(200),
+                splashColor: Color(0xfff3c526e).withAlpha(200),
+                splashRadius: 10,
+                icon: Icon(Icons.edit, color: Color(0xfff3c526e).withAlpha(200), size: 30,),
+                onPressed: () {
+                 
+                 Navigator.push(context, new MaterialPageRoute(builder: (context) => MyHomePage(4)));
+                },
+              ),
+            ),
         ],
       ),
     );

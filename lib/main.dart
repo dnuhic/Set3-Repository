@@ -8,6 +8,7 @@ import 'package:tasklist/reciept_page.dart';
 
 import 'UI/background/background.dart';
 import 'login_page.dart';
+import 'orders_list_page.dart';
 //import 'login_page.dart';
 
 void main() {
@@ -31,6 +32,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  int selectedIndex;
+
+  MyHomePage(this.selectedIndex);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -46,6 +51,17 @@ class _MyHomePageState extends State<MyHomePage> {
       });
       pageController.jumpToPage(index);
     }
+
+    @override
+    void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageController = PageController(initialPage: widget.selectedIndex);
+    setState(() {
+        if(widget.selectedIndex < 4) _selectedIndex = widget.selectedIndex;
+        else _selectedIndex = 1;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
         controller: pageController,
         children: [
           OrderPage(),
-          EditOrderPage(),
+          OdersListPage(),
           CategoriesPage(),
-          RecieptPage()
+          RecieptPage(),
+          EditOrderPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
-          BottomNavigationBarItem(icon: Icon(Icons.create_rounded), label: "Edir Order"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
           BottomNavigationBarItem(icon: Icon(Icons.category), label: "Categories"),
           BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Receipt"),
         ],

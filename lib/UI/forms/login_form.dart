@@ -83,7 +83,7 @@ class _LoginFormState extends State<LoginForm> {
                   onTap: (() {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
+                      MaterialPageRoute(builder: (context) => MyHomePage(0)),
                     );
                   }),
                   child: Container(

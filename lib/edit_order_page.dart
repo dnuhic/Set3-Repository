@@ -30,11 +30,12 @@ class EditOrderPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Products",
+                    "Edit Order",
                     style: TextStyle(fontWeight: FontWeight.w200 ,color: Colors.black, fontSize: 26)
                   ),
                 ),
-                Expanded(
+                Container(
+                  height: size.height*0.55,
                   child: Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(5)),
@@ -96,8 +97,9 @@ class EditOrderPage extends StatelessWidget {
                     ),
                   ),
                 ),
+                Spacer(),
                 Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(6.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Color(0xfff3c526e),
@@ -105,14 +107,27 @@ class EditOrderPage extends StatelessWidget {
                     ),
                     onPressed: () {},
                     child: Text(
-                    "Update Order",
+                    "Save Order",
+                    style: Theme.of(context).textTheme.headline4.copyWith(fontWeight: FontWeight.w200 ,color: Colors.white)
+                  ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xfff3c526e),
+                      minimumSize: const Size.fromHeight(50), // NEW
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                    "Delete Order",
                     style: Theme.of(context).textTheme.headline4.copyWith(fontWeight: FontWeight.w200 ,color: Colors.white)
                   ),
                   ),
                 ),
               ],
             )
-            
           ],
         ),
       ),
