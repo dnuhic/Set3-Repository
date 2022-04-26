@@ -34,9 +34,10 @@ namespace SET3_Backend.Controllers
             public string Barcode { get; set; }
             public string BarcodeText { get; set; }
             public float Price { get; set; }
+            public string MeasuringUnit { get; set; }
 
             public ProductWithShopQuantityDto(int productId, string name, string categoryName,
-                double quantity, string barcode, string barcodeText, float price)
+                double quantity, string barcode, string barcodeText, float price, string measuringUnit)
             {
                 ProductId = productId;
                 Name = name;
@@ -45,6 +46,7 @@ namespace SET3_Backend.Controllers
                 Barcode = barcode;
                 BarcodeText = barcodeText;
                 Price = price;
+                MeasuringUnit = measuringUnit;
             }
         }
 
@@ -106,7 +108,7 @@ namespace SET3_Backend.Controllers
                     Tuple<int, double> quantityTuple = productIds.Where(productId => productId.Item1 == product.Id).FirstOrDefault();
                     if (quantityTuple == null)
                         throw new ArgumentException("Greska (Placeholder)");
-                    productsDto.Add(new ProductWithShopQuantityDto(product.Id, product.Name, product.CategoryName, quantityTuple.Item2, product.Barcode, product.BarcodeText, product.Price));
+                    productsDto.Add(new ProductWithShopQuantityDto(product.Id, product.Name, product.CategoryName, quantityTuple.Item2, product.Barcode, product.BarcodeText, product.Price, product.MeasuringUnit));
                 });
             } catch (Exception ex)
             {
