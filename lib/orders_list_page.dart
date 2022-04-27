@@ -32,7 +32,7 @@ class _OdersListPageState extends State<OdersListPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Orders",
+                    "orders",
                     style: TextStyle(fontWeight: FontWeight.w200 ,color: Colors.black, fontSize: 26)
                   ),
                 ),
