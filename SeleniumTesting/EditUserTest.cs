@@ -40,7 +40,7 @@ namespace SeleniumTesting
                 string editUserUrl = "https://localhost:3000/users";
                 driver.Navigate().GoToUrl(editUserUrl);
                 Thread.Sleep(500);
-                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'Test Admin2 ')]//parent::div//following-sibling::div//button[1]"));
+                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'Test Admin ')]//parent::div//following-sibling::div//button[1]"));
                 editDugme.Click();
                 Thread.Sleep(1000);
                 IWebElement editUserForma = driver.FindElement(By.XPath("//input[contains(@id,'firstName')]"));
@@ -49,7 +49,7 @@ namespace SeleniumTesting
                 Thread.Sleep(200);
                 IWebElement editUserForma2 = driver.FindElement(By.XPath("//input[contains(@id,'lastName')]"));
                 editUserForma2.Clear();
-                editUserForma2.SendKeys("Admin");
+                editUserForma2.SendKeys("AdminPromjena");
                 Thread.Sleep(200);
                 IWebElement editUserForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
                 editUserForma3.Click();

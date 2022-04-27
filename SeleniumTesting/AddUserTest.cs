@@ -44,10 +44,10 @@ namespace SeleniumTesting
                 addUserForma.SendKeys("Test");
                 Thread.Sleep(200);
                 IWebElement addUserForma2 = driver.FindElement(By.Id("prezime"));
-                addUserForma2.SendKeys("Admin2");
+                addUserForma2.SendKeys("Admin");
                 Thread.Sleep(200);
                 IWebElement addUserForma3 = driver.FindElement(By.Id("e-mail"));
-                addUserForma3.SendKeys("testadmin2@gmail.com");
+                addUserForma3.SendKeys("testadmin@gmail.com");
                 Thread.Sleep(200);
                 IWebElement addUserForma4 = driver.FindElement(By.Id("password"));
                 addUserForma4.SendKeys("12345678");

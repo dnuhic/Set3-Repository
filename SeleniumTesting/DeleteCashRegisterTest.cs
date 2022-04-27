@@ -4,11 +4,10 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
 
-//ISPRAVITI KADA SE URADI MERGE ZA CIJENE
 namespace SeleniumTesting
 {
     [TestClass]
-    public class EditProductTest
+    public class DeleteCashRegisterTest
     {
         static IWebDriver driver;
 
@@ -34,27 +33,23 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void EditProduct()
+        public void DeleteCashRegister()
         {
             try
             {
-                string editProductUrl = "https://localhost:3000/products";
-                driver.Navigate().GoToUrl(editProductUrl);
+                string shopsUrl = "https://localhost:3000/shops/";
+                driver.Navigate().GoToUrl(shopsUrl);
                 Thread.Sleep(500);
-                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'ProizvodTest')]//parent::div//following-sibling::div//button[3]"));
-                editDugme.Click();
+                IWebElement infoDugme = driver.FindElement(By.XPath("//span[contains(.,'ProdavnicaTestPromjena')]//parent::div//following-sibling::div//button[3]"));
+                infoDugme.Click();
+                Thread.Sleep(500);
+                IWebElement deleteDugme = driver.FindElement(By.XPath("//span[contains(.,'DeskripcijaTestPromjena')]//parent::div//following-sibling::div//button[2]"));
+                deleteDugme.Click();
                 Thread.Sleep(1000);
-                IWebElement editProductForma = driver.FindElement(By.XPath("//input[contains(@id,'name')]"));
-                editProductForma.Clear();
-                editProductForma.SendKeys("ProizvodTestPromjena");
-                Thread.Sleep(200);
-                IWebElement editShopForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit product')]"));
-                editShopForma3.Click();
-                Thread.Sleep(200);
             }
             catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Changes have been saved succesfully!");
+                Assert.AreEqual(e.Message, "Action completed!");
             }
 
         }

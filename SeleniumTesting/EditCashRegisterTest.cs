@@ -4,11 +4,10 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
 
-//ISPRAVITI KADA SE URADI MERGE ZA CIJENE
 namespace SeleniumTesting
 {
     [TestClass]
-    public class EditProductTest
+    public class EditCashRegisterTest
     {
         static IWebDriver driver;
 
@@ -34,23 +33,30 @@ namespace SeleniumTesting
         }
 
         [TestMethod]
-        public void EditProduct()
+        public void EditCashRegister()
         {
             try
             {
-                string editProductUrl = "https://localhost:3000/products";
-                driver.Navigate().GoToUrl(editProductUrl);
+                string editShopsUrl = "https://localhost:3000/shops";
+                driver.Navigate().GoToUrl(editShopsUrl);
                 Thread.Sleep(500);
-                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'ProizvodTest')]//parent::div//following-sibling::div//button[3]"));
+                IWebElement infoDugme = driver.FindElement(By.XPath("//span[contains(.,'ProdavnicaTest')]//parent::div//following-sibling::div//button[3]"));
+                infoDugme.Click();
+                Thread.Sleep(1000);
+                IWebElement editDugme = driver.FindElement(By.XPath("//span[contains(.,'DeskripcijaTest')]//parent::div//following-sibling::div//button[1]"));
                 editDugme.Click();
                 Thread.Sleep(1000);
-                IWebElement editProductForma = driver.FindElement(By.XPath("//input[contains(@id,'name')]"));
-                editProductForma.Clear();
-                editProductForma.SendKeys("ProizvodTestPromjena");
+                IWebElement editRegisterForma = driver.FindElement(By.XPath("//input[contains(@id,'cashRegisterName')]"));
+                editRegisterForma.Clear();
+                editRegisterForma.SendKeys("KasaTestPromjena");
                 Thread.Sleep(200);
-                IWebElement editShopForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit product')]"));
-                editShopForma3.Click();
+                IWebElement editRegisterForma2 = driver.FindElement(By.XPath("//textarea[contains(@id,'cashRegisterDescription')]"));
+                editRegisterForma2.Clear();
+                editRegisterForma2.SendKeys("DeskripcijaTestPromjena");
                 Thread.Sleep(200);
+                IWebElement editRegisterForma3 = driver.FindElement(By.XPath("//button[contains(.,'Edit')]"));
+                editRegisterForma3.Click();
+                Thread.Sleep(1000);
             }
             catch (Exception e)
             {

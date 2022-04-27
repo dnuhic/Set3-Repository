@@ -38,8 +38,8 @@ namespace SeleniumTesting
         {
             try
             {
-                string addShopUrl = "https://localhost:3000/addProduct/";
-                driver.Navigate().GoToUrl(addShopUrl);
+                string addProductUrl = "https://localhost:3000/addProduct/";
+                driver.Navigate().GoToUrl(addProductUrl);
                 Thread.Sleep(500);
                 IWebElement addProductForma = driver.FindElement(By.XPath("//input[contains(@id,'name')]"));
                 addProductForma.SendKeys("ProizvodTest");
@@ -47,8 +47,12 @@ namespace SeleniumTesting
                 IWebElement addProductForma2 = driver.FindElement(By.XPath("//*[@id='categories']/option[2]"));
                 addProductForma2.Click();
                 Thread.Sleep(200);
+                IWebElement addProductForma3 = driver.FindElement(By.XPath("//*[@id='measuringUnits']/option[2]"));
+                addProductForma3.Click();
+                Thread.Sleep(200);
                 IWebElement addProductConfirm = driver.FindElement(By.XPath("//button[contains(.,'Add product')]"));
-                addProductConfirm.Click();
+                addProductConfirm.SendKeys(Keys.Enter);
+                Thread.Sleep(200);
             }
             catch (Exception e)
             {

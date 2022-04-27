@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Threading;
 
+//ISPRAVITI KADA SE URADI MERGE ZA CIJENE
 namespace SeleniumTesting
 {
     [TestClass]
@@ -40,7 +41,7 @@ namespace SeleniumTesting
                 string usersUrl = "https://localhost:3000/products";
                 driver.Navigate().GoToUrl(usersUrl);
                 Thread.Sleep(500);
-                IWebElement deleteDugme = driver.FindElement(By.XPath("//span[contains(.,'ProizvodTestPromjena')]//parent::div//following-sibling::div//button[3]"));
+                IWebElement deleteDugme = driver.FindElement(By.XPath("//span[contains(.,'ProizvodTestPromjena')]//parent::div//following-sibling::div//button[4]"));
                 deleteDugme.Click();
                 Thread.Sleep(500);
             }
