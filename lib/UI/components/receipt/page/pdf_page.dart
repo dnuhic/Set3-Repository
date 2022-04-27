@@ -58,7 +58,7 @@ class _PdfPageState extends State<PdfPage> {
 
     final response = await http.post(
       Uri.parse(
-          'https://192.168.1.2:7194/api/ProductUserOrderIntertables/bill'),
+          'https://10.0.2.2:7194/api/ProductUserOrderIntertables/bill'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

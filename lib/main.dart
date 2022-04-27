@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
@@ -13,7 +16,10 @@ import 'orders_list_page.dart';
 
 void main() {
   runApp(MyApp());
+  HttpOverrides.global = new PostHttpOverrides();
 }
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -107,5 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class PostHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
