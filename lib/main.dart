@@ -1,21 +1,39 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:tasklist/categories_page.dart';
 import 'package:tasklist/edit_order_page.dart';
-import 'package:tasklist/order_page.dart';
+import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
 
 import 'UI/background/background.dart';
+import 'UI/components/createOrder/new_order_page.dart';
 import 'login_page.dart';
 import 'orders_list_page.dart';
 //import 'login_page.dart';
 
+
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() {
+  HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  static getBaseUrl() {
+    return "https://10.0.2.2:7194";
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -58,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-        if(widget.selectedIndex < 4) _selectedIndex = widget.selectedIndex;
+        if(widget.selectedIndex < 2) _selectedIndex = widget.selectedIndex;
         else _selectedIndex = 1;
       });
   }
@@ -86,19 +104,16 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
+          NewOrderPage(),
           OrderPage(),
-          OdersListPage(),
-          CategoriesPage(),
-          RecieptPage(),
           EditOrderPage(),
+
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.category), label: "Categories"),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt), label: "Receipt"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),

@@ -32,9 +32,9 @@ class BillInfo {
     return BillInfo(
         number: json["number"],
         date: json["date"],
-        cashRegister: json["storeName"],
+        storeName: json["storeName"],
         adress: json["storeAdress"],
-        storeName: json["cashRegister"]);
+        cashRegister: json["cashRegister"]);
   }
 }
 
