@@ -55,9 +55,12 @@ function List(props) {
                 "Name": product.name,
                 "CategoryName": product.categoryName,
                 "Deleted": true,
+                "Quantity": product.quantity,
                 "Barcode": product.barcode,
                 "BarcodeText": product.barcodeText,
-                "Quantity": product.quantity
+                "Price": product.price,
+                "MeasuringUnit": product.measuringUnit
+               
             }
 
             setDeletedProduct(newProduct); 
