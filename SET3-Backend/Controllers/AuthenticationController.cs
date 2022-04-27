@@ -155,6 +155,35 @@ namespace SET3_Backend.Controllers
             return new TFAModel(token);
         }
 
+        [EnableCors("CorsPolicy")]
+        [HttpPost("mobile")]
+        public async Task<ActionResult<TFAModel>> LoginForMobile(UserDto userDto)
+        {
+
+            Console.WriteLine("inside post");
+            if (userDto == null) new TFAModel("ERROR");
+            UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
+            var sha = SHA256.Create();
+            var passwordHash = Encoding.ASCII.GetString(sha.ComputeHash(Encoding.ASCII.GetBytes(userDto.Password)));
+            Console.WriteLine(passwordHash);
+            Console.WriteLine(userDto.Password);
+            if (user == null || !passwordHash.Equals(user.Password))
+            {
+                return new TFAModel("ERROR");
+            }
+            //user.Question = await _context.SecurityQuestionModels.FindAsync(user.QuestionId);
+            //string token = CreateToken(user);
+
+            //CookieOptions cookieOptions = new CookieOptions();
+            //cookieOptions.Secure = false;
+            //cookieOptions.HttpOnly = false;
+            //cookieOptions.Expires = DateTime.UtcNow.AddMinutes(30);
+            //cookieOptions.SameSite = SameSiteMode.None;
+            //Response.Cookies.Append("jwt", token, cookieOptions);
+
+            return new TFAModel(user.Id.ToString());
+        }
+
         protected string CreateToken(UserModel user)
         {
             List<Claim> claims = new List<Claim>

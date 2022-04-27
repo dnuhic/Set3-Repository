@@ -34,9 +34,10 @@ namespace SET3_Backend.Controllers
             public string Barcode { get; set; }
             public string BarcodeText { get; set; }
             public float Price { get; set; }
+            public string MeasuringUnit { get; set; }
 
             public ProductWithShopQuantityDto(int productId, string name, string categoryName,
-                double quantity, string barcode, string barcodeText, float price)
+                double quantity, string barcode, string barcodeText, float price, string measuringUnit)
             {
                 ProductId = productId;
                 Name = name;
@@ -45,6 +46,7 @@ namespace SET3_Backend.Controllers
                 Barcode = barcode;
                 BarcodeText = barcodeText;
                 Price = price;
+                MeasuringUnit = measuringUnit;
             }
         }
 
@@ -68,17 +70,19 @@ namespace SET3_Backend.Controllers
         {
             public int ShopId { get; set; }
             public int UserId { get; set; }
+            public int CashRegisterId { get; set; }
             public List<ProductQuantityDto> ProductQuantitys { get; set; }
 
             public UserOrderDto()
             {
             }
 
-            public UserOrderDto(int shopId, int userId, List<ProductQuantityDto> productQuantitys)
+            public UserOrderDto(int shopId, int userId, int cashRegisterId, List<ProductQuantityDto> productQuantitys)
             {
                 ShopId = shopId;
                 UserId = userId;
                 this.ProductQuantitys = productQuantitys;
+                CashRegisterId = cashRegisterId;
             }
         }
 
@@ -104,7 +108,7 @@ namespace SET3_Backend.Controllers
                     Tuple<int, double> quantityTuple = productIds.Where(productId => productId.Item1 == product.Id).FirstOrDefault();
                     if (quantityTuple == null)
                         throw new ArgumentException("Greska (Placeholder)");
-                    productsDto.Add(new ProductWithShopQuantityDto(product.Id, product.Name, product.CategoryName, quantityTuple.Item2, product.Barcode, product.BarcodeText, product.Price));
+                    productsDto.Add(new ProductWithShopQuantityDto(product.Id, product.Name, product.CategoryName, quantityTuple.Item2, product.Barcode, product.BarcodeText, product.Price, product.MeasuringUnit));
                 });
             } catch (Exception ex)
             {
@@ -118,7 +122,7 @@ namespace SET3_Backend.Controllers
         public async Task<ActionResult<UserOrderModel>> SaveUserOrder([FromBody] UserOrderDto userOrderDto)
         {
             //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, false, userOrderDto.ShopId, userOrderDto.UserId);
+            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, false, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
             _context.UserOrderModels.Add(userOrder);
             await _context.SaveChangesAsync();
 
@@ -138,7 +142,7 @@ namespace SET3_Backend.Controllers
         public async Task<IActionResult> FinishUserOrder([FromBody] UserOrderDto userOrderDto)
         {
             //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, true, userOrderDto.ShopId, userOrderDto.UserId);
+            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, true, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
             _context.UserOrderModels.Add(userOrder);
             await _context.SaveChangesAsync();
 
