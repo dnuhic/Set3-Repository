@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:tasklist/UI/components/createOrder/product.dart';
 import 'package:tasklist/UI/components/createOrder/saved_order_body.dart';
 import 'package:tasklist/UI/components/createOrder/shop.dart';
+import 'package:tasklist/main.dart';
 
 import '../orders/api.services.dart';
 
@@ -185,7 +186,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                   productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                               }
                               if(items.isNotEmpty) {
-                                SavedOrderBody body = SavedOrderBody(1, selectedShop.id, 1, productQuantitys);
+                                SavedOrderBody body = SavedOrderBody(MyApp.userId, selectedShop.id, 1, productQuantitys);
                                 APIServices.sendOrder(body, "save").then((value) => print("gotovo"));
                               }
                             },
@@ -214,7 +215,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                   productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                               }
                               if(items.isNotEmpty) {
-                                SavedOrderBody body = SavedOrderBody(1, selectedShop.id, 1, productQuantitys);
+                                SavedOrderBody body = SavedOrderBody(MyApp.userId, selectedShop.id, 1, productQuantitys);
                                 APIServices.sendOrder(body, "finish").then((value) => print("gotovo"));
                               }
                             },

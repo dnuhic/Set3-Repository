@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:pdf/pdf.dart';
-import 'package:tasklist/categories_page.dart';
 import 'package:tasklist/edit_order_page.dart';
 import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
@@ -30,10 +28,13 @@ void main() {
   runApp(MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
   static getBaseUrl() {
     return "https://10.0.2.2:7194";
   }
+  static int userId;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-        if(widget.selectedIndex < 2) _selectedIndex = widget.selectedIndex;
+        if(widget.selectedIndex < 4) _selectedIndex = widget.selectedIndex;
         else _selectedIndex = 1;
       });
   }

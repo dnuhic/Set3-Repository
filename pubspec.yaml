@@ -39,6 +39,8 @@ dependencies:
   # format dates for invoice
   intl: ^0.17.0
   http: ^0.13.4
+  dio: ^4.0.6
+  requests: ^4.1.0
 
 dev_dependencies:
   flutter_test:
