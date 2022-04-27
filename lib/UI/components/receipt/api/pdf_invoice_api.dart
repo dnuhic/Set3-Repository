@@ -189,9 +189,9 @@ class PdfInvoiceApi {
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Address', value: invoice.info.storeName),
+          buildSimpleText(title: 'Store', value: invoice.info.storeName),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Paypal', value: invoice.info.cashRegister),
+          buildSimpleText(title: 'Address', value: invoice.info.adress),
         ],
       );
 
