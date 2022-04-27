@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
   static getBaseUrl() {
     return "https://10.0.2.2:7194";
   }
+  static int userId;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

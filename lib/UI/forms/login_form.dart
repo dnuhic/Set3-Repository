@@ -114,13 +114,15 @@ class _LoginFormState extends State<LoginForm> {
                     
                     //if there is no error, get the user's accesstoken and pass it to HomeScreen
                     if (status["result"] != "ERROR") {
+                      print(status["result"]);
+                      MyApp.userId = int.parse(status["result"]);
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => MyHomePage(0)),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Error: Pogrešan email ili password'),
+                        content: Text('Error: Incorrect email or password.'),
                         backgroundColor: Colors.red.shade300,
                       ));
                     }
@@ -169,7 +171,7 @@ Future<Response> login(String email, String password) async {
   
   try{
     Response response = await Requests.post(
-      'https://10.0.2.2:7194/Authentication',
+      MyApp.getBaseUrl() + '/Authentication/mobile',
       body: {'email': email, 'password': password},
       headers: {
         "Content-Type": "application/json; charset=UTF-8", 
@@ -177,8 +179,6 @@ Future<Response> login(String email, String password) async {
       },
       bodyEncoding: RequestBodyEncoding.JSON,
     );
-
-
     return response;
   }
   catch (e) {
