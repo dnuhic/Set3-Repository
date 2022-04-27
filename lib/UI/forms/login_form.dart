@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
+import 'package:tasklist/login_page.dart';
 import 'package:tasklist/main.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
+  
   const LoginForm({Key key}) : super(key: key);
 
   @override
@@ -15,6 +17,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -38,6 +41,11 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
         ),
+        isLoading ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.green),
+                      ),
+                    ) :
         SizedBox(
           height: 150,
           child: Stack(
@@ -97,35 +105,43 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: (() async {
-                    final email = _email.text;
-                    final password = _password.text;
+                    
+                    
 
-                    developer.log(email);
-                    developer.log(password);
+                    setState(() {
+                      isLoading = true;
+                    });
 
                     final res = await login(
-                      email,
-                      password,
+                      _email.text,
+                      _password.text,
                     );
 
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    setState(() {
+                      isLoading = false;
+                    });
 
                     final status = jsonDecode(res.content());
-                    
-                    //if there is no error, get the user's accesstoken and pass it to HomeScreen
+                
+                 //if there is no error, get the user's accesstoken and pass it to HomeScreen
                     if (status["result"] != "ERROR") {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => MyHomePage(0)),
                       );
                     } else {
+                      
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Error: Pogrešan email ili password'),
                         backgroundColor: Colors.red.shade300,
                       ));
                     }
+                    
                   }),
-                  child: Container(
+                  child: 
+                    
+
+                  Container(
                     margin: const EdgeInsets.only(right: 15),
                     height: 80,
                     width: 80,
@@ -183,5 +199,51 @@ Future<Response> login(String email, String password) async {
   }
   catch (e) {
     developer.log(e);
+  }
+}
+
+class StringWidget extends StatelessWidget {
+  final Future<Response> str;
+  String email;
+  String password;
+
+  StringWidget({Key key, this.str, this.email, this.password}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: FutureBuilder<Response>(
+        future: str,
+        builder: (context, AsyncSnapshot<Response> snapshot) {
+          switch (snapshot.connectionState) {
+            
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return Center(child: CircularProgressIndicator());
+            case ConnectionState.done:
+              
+              final status = jsonDecode(snapshot.data.content());
+                
+                 //if there is no error, get the user's accesstoken and pass it to HomeScreen
+                if (status["result"] != "ERROR") {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyHomePage(0)),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Error: Pogrešan email ili password'),
+                    backgroundColor: Colors.red.shade300,
+                  ));
+                }
+                return Text("");
+            default:
+              return Text("");
+
+          }
+          
+        },
+      ),
+    );
   }
 }
