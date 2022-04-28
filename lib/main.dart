@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
 import 'package:tasklist/edit_order_page.dart';
 import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
@@ -77,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-        if(widget.selectedIndex < 4) _selectedIndex = widget.selectedIndex;
+        if(widget.selectedIndex < 3) _selectedIndex = widget.selectedIndex;
         else _selectedIndex = 1;
       });
   }
@@ -105,16 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
-          NewOrderPage(),
           OrderPage(),
-          EditOrderPage(),
-
+          NewOrderPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),

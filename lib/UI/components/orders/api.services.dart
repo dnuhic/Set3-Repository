@@ -10,9 +10,9 @@ import '../createOrder/saved_order_body.dart';
 class APIServices {
   String baseUrl = "https://10.0.2.2:7206";
 
-  static Future fetchUserOrder() async {
+  static Future fetchUserOrder(int id) async {
     return await http
-        .get(Uri.parse(MyApp.getBaseUrl() + '/api/UserOrderModels'));
+        .get(Uri.parse(MyApp.getBaseUrl() + '/api/UserOrderModels/myuserorders/' + id.toString()));
   }
 
   static Future fetchStores() async {
@@ -33,6 +33,31 @@ class APIServices {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(body));
+  }
+
+  static Future sendOrderEdit(SavedOrderBody body, String action, int userOrderId) async {
+    return await http
+        .put(Uri.parse(
+        MyApp.getBaseUrl() + '/api/userordermodels/' + action + "/" + userOrderId.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(body));
+  }
+
+  static Future deleteOrder(int id) async {
+    return await http
+        .delete(Uri.parse(MyApp.getBaseUrl() + '/api/userordermodels/' + id.toString()));
+  }
+
+  static Future fetchCashRegistersFromShop(int id) async {
+    return await http
+        .get(Uri.parse(MyApp.getBaseUrl() + '/api/cashregistermodels/cashregisterfromshop/' + id.toString()));
+  }
+
+  static Future fetchProductsFromUserOrder(int id) async {
+    return await http
+        .get(Uri.parse(MyApp.getBaseUrl() + '/api/userordermodels/savedUserOrderProducts/' + id.toString()));
   }
 }
 
