@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
 
 import 'dart:convert';
 
@@ -24,10 +25,13 @@ class _OrderPageState extends State<OrderPage> {
 
   // This widget is the root of your application.
   _getOrders() {
-    APIServices.fetchUserOrder().then((response) {
+    APIServices.fetchUserOrder(MyApp.userId).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         orders = list.map((model) => UserOrderModel.fromJson(model)).toList();
+        orders.sort((a,b) {
+          return DateTime.parse(b.UpdatedDate).compareTo(DateTime.parse(a.UpdatedDate));
+        });
       });
     });
   }
@@ -44,16 +48,22 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
-        if (orders.isNotEmpty) {
           return Column(
             children: <Widget>[
-              const Card(
-                color: Colors.white70,
+              Container(
+                alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text("My orders", style: TextStyle(fontSize: 17)),
+                  padding: const EdgeInsets.only(bottom: 5, top: 10, right: 10, left: 10),
+                  child: Text("My orders:", style: TextStyle(fontSize: 20)),
                 ),
               ),
+              // const Card(
+              //   color: Colors.white70,
+              //   child: Padding(
+              //     padding: EdgeInsets.all(16.0),
+              //     child: Text("My orders", style: TextStyle(fontSize: 17)),
+              //   ),
+              // ),
               Expanded(
                 child: ListView.separated(
                     itemBuilder: (context, index) {
@@ -61,16 +71,21 @@ class _OrderPageState extends State<OrderPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)),
                         child: ListTile(
-                          title: Text("Order " + orders[index].Id.toString()),
+                          title: Text("Order ID: #" + orders[index].Id.toString()),
                           leading: Icon(Icons.shopping_cart),
-                          subtitle: Text(orders[index]
-                              .UpdatedDate
-                              .toString()
-                              .substring(0, 10)),
+                          subtitle: Text(DateTime.parse(orders[index].UpdatedDate).day.toString()
+                              + "/" + DateTime.parse(orders[index].UpdatedDate).month.toString() + "/"
+                              + DateTime.parse(orders[index].UpdatedDate).year.toString() + " "
+                              + DateTime.parse(orders[index].UpdatedDate).hour.toString() + ":"
+                              + DateTime.parse(orders[index].UpdatedDate).minute.toString()),
                           dense: true,
                           //show if order is done
                           trailing:
                           orderDone(orders[index]),
+                          onTap: () {
+                            if(orders[index].done == false)
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrderPage(orders[index])));
+                          },
                         ),
                       );
                     },
@@ -83,13 +98,6 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ],
           );
-        } else {
-          return Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
       }),
     );
   }
@@ -99,11 +107,6 @@ class _OrderPageState extends State<OrderPage> {
     if (order.Done == true) {
       return FittedBox(
         child: Row(children: [
-          Icon(
-            Icons.done,
-            color: Colors.green,
-            size: 40.0,
-          ),
           IconButton(
               onPressed: () async {
                 print("TU sam");
@@ -113,16 +116,21 @@ class _OrderPageState extends State<OrderPage> {
 
                 PdfApi.openFile(pdfFile);
               },
-              icon: Icon(Icons.receipt)),
+              icon: Icon(Icons.receipt_long_outlined)),
+          Icon(
+            Icons.download_done,
+            color: Colors.green,
+            size: 30.0,
+          ),
         ]),
       );
     } else {
       return FittedBox(
         child: Row(children: [
           Icon(
-            Icons.pending,
+            Icons.pending_actions,
             color: Colors.grey,
-            size: 40.0,
+            size: 30.0,
           ),
         ]),
       );
