@@ -42,6 +42,12 @@ namespace SET3_Backend.Controllers
             return BadRequest("Bad token.");
         }
 
+        [HttpGet("cashRegisterFromShop/{id}")]
+        public async Task<ActionResult<IEnumerable<CashRegisterModel>>> GetCashRegisterFromShop(int id)
+        {
+            return await _context.CashRegisterModels.Where(cashRegister => cashRegister.ShopId == id).ToListAsync();
+        }
+
         // GET: api/CashRegisterModels/5
         [HttpGet("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
         public async Task<ActionResult<CashRegisterModel>> GetCashRegisterModel(int id)
