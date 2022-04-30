@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:requests/requests.dart';
 import 'package:tasklist/main.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../../Database.dart';
+import 'cash_register.dart';
+import 'loginservice.dart';
+import 'shop.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key key}) : super(key: key);
@@ -15,6 +22,40 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+
+  List<CashRegister> cashRegisters = [];
+
+  List<Shop> shops = [];
+
+  Shop selectedShop;
+
+  CashRegister selectedRegister;
+
+  _getShops() {
+    LoginService.fetchStores().then((response) => setState(() {
+          Iterable list = json.decode(response.body);
+          shops = list.map((model) => Shop.fromJson(model)).toList();
+          selectedShop = shops[0];
+
+          LoginService.fetchCashRegistersFromShop(selectedShop.id)
+              .then((response) {
+            setState(() {
+              Iterable list = json.decode(response.body);
+              print("Lista kasa:" + list.toString());
+              cashRegisters =
+                  list.map((model) => CashRegister.fromJson(model)).toList();
+              selectedRegister = cashRegisters[0];
+            });
+          });
+        }));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getShops();
+  }
 
   @override
   void dispose() {
@@ -66,30 +107,76 @@ class _LoginFormState extends State<LoginForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 16, right: 32),
-                      child: TextField(
-                        controller: _email,
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(fontSize: 20),
-                          border: InputBorder.none,
-                          icon: Icon(Icons.account_circle_rounded),
-                          hintText: "Email",
-                        ),
-                      ),
-                    ),
+                        margin: const EdgeInsets.only(left: 16, right: 32),
+                        child: DropdownButtonFormField<Shop>(
+                          decoration: InputDecoration(
+                              // enabledBorder: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.circular(12),
+                              //   borderSide: BorderSide(width: 0, color: Colors.blue),
+                              // ),
+                              ),
+                          value: selectedShop,
+                          items: shops
+                              .map((shop) => DropdownMenuItem<Shop>(
+                                    value: shop,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.store,
+                                          color: Colors.black,
+                                        ),
+                                        Text(" " + shop.name,
+                                            style: TextStyle(fontSize: 18)),
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (shop) => {
+                            LoginService.fetchCashRegistersFromShop(shop.id)
+                                .then((response) {
+                              setState(() {
+                                Iterable list = json.decode(response.body);
+                                print("Lista kasa:" + list.toString());
+                                cashRegisters = list
+                                    .map(
+                                        (model) => CashRegister.fromJson(model))
+                                    .toList();
+                                selectedRegister = cashRegisters[0];
+                              });
+                            }),
+                            setState(() => {selectedShop = shop}),
+                          },
+                        )),
                     Container(
-                      margin: const EdgeInsets.only(left: 16, right: 32),
-                      child: TextField(
-                        controller: _password,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(fontSize: 22),
-                          border: InputBorder.none,
-                          icon: Icon(Icons.account_circle_rounded),
-                          hintText: "Password",
-                        ),
-                      ),
-                    ),
+                        margin: const EdgeInsets.only(left: 16, right: 32),
+                        child: DropdownButtonFormField<CashRegister>(
+                          decoration: InputDecoration(
+                              // enabledBorder: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.circular(12),
+                              //   borderSide: BorderSide(width: 0, color: Colors.blue),
+                              // ),
+                              ),
+                          value: selectedRegister,
+                          items: cashRegisters
+                              .map((cashRegister) =>
+                                  DropdownMenuItem<CashRegister>(
+                                    value: cashRegister,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          TablerIcons.cash,
+                                          color: Colors.black,
+                                        ),
+                                        Text(" " + cashRegister.name,
+                                            style: TextStyle(fontSize: 18)),
+                                      ],
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (cashRegister) => {
+                            setState(() => {selectedRegister = cashRegister}),
+                          },
+                        )),
                   ],
                 ),
               ),
@@ -97,7 +184,19 @@ class _LoginFormState extends State<LoginForm> {
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
                   onTap: (() async {
-                    final email = _email.text;
+                    final shopId = selectedShop.id;
+                    final registerId = selectedRegister.id;
+
+                    print('Shop: ${shopId} Register: ${registerId}');
+                    final register = InstalledRegister(1, registerId, shopId);
+                    await SQLiteDbProvider.db.update(register);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyHomePage(0)),
+                    );
+
+                    /*final email = _email.text;
                     final password = _password.text;
 
                     developer.log(email);
@@ -111,7 +210,7 @@ class _LoginFormState extends State<LoginForm> {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
                     final status = jsonDecode(res.content());
-                    
+
                     //if there is no error, get the user's accesstoken and pass it to HomeScreen
                     if (status["result"] != "ERROR") {
                       print(status["result"]);
@@ -125,7 +224,7 @@ class _LoginFormState extends State<LoginForm> {
                         content: Text('Error: Incorrect email or password.'),
                         backgroundColor: Colors.red.shade300,
                       ));
-                    }
+                    }*/
                   }),
                   child: Container(
                     margin: const EdgeInsets.only(right: 15),
@@ -168,20 +267,18 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 Future<Response> login(String email, String password) async {
-  
-  try{
+  try {
     Response response = await Requests.post(
       MyApp.getBaseUrl() + '/Authentication/mobile',
       body: {'email': email, 'password': password},
       headers: {
-        "Content-Type": "application/json; charset=UTF-8", 
-        "Access-Control-Allow-Credentials": true.toString() 
+        "Content-Type": "application/json; charset=UTF-8",
+        "Access-Control-Allow-Credentials": true.toString()
       },
       bodyEncoding: RequestBodyEncoding.JSON,
     );
     return response;
-  }
-  catch (e) {
+  } catch (e) {
     developer.log(e);
   }
 }
