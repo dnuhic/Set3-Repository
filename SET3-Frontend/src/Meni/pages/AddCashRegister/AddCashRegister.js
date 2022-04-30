@@ -41,7 +41,8 @@ export default function AddCashRegister(props) {
                 "Name": document.getElementById("nazivKase").value,
                 "Description": document.getElementById("opis").value,
                 "ShopId": store,
-                "Deleted": false
+                "Deleted": false,
+                "Installed": false
             }
 
             setCreateRegister(newRegister);

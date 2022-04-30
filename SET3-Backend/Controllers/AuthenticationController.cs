@@ -184,6 +184,30 @@ namespace SET3_Backend.Controllers
             return new TFAModel(user.Id.ToString());
         }
 
+        [EnableCors("CorsPolicy")]
+        [HttpGet("installRegister/{id}")]
+        public async Task<ActionResult<TFAModel>> LogInCashRegister(int id)
+        {
+            CashRegisterModel? cashRegister = await _context.CashRegisterModels.FindAsync(id);
+            cashRegister.Installed = true;
+            if(cashRegister == null)
+            {
+                return new TFAModel("ERROR");
+            }
+
+            _context.CashRegisterModels.Update(cashRegister);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return new TFAModel("ERROR");
+            }
+
+            return new TFAModel("INSTALLED");
+        }
+
         protected string CreateToken(UserModel user)
         {
             List<Claim> claims = new List<Claim>
