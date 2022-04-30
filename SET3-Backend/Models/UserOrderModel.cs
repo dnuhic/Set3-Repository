@@ -11,18 +11,20 @@ namespace SET3_Backend.Models
         public int ShopId { get; set; }
         public int UserId { get; set; }
         public int CashRegisterId { get; set; }
+        public int TableId  { get; set; }
 
         public UserOrderModel()
         {
         }
 
-        public UserOrderModel(DateTime updatedDate, bool done, int shopId, int userId, int cashRegisterId)
+        public UserOrderModel(DateTime updatedDate, bool done, int shopId, int userId, int cashRegisterId, int tableId)
         {
             UpdatedDate = updatedDate;
             Done = done;
             ShopId = shopId;
             UserId = userId;
             CashRegisterId = cashRegisterId;
+            TableId = tableId;
         }
     }
 }

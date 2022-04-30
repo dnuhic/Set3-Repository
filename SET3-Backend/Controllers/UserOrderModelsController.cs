@@ -71,18 +71,20 @@ namespace SET3_Backend.Controllers
             public int ShopId { get; set; }
             public int UserId { get; set; }
             public int CashRegisterId { get; set; }
+            public int TableId { get; set; }
             public List<ProductQuantityDto> ProductQuantitys { get; set; }
 
             public UserOrderDto()
             {
             }
 
-            public UserOrderDto(int shopId, int userId, int cashRegisterId, List<ProductQuantityDto> productQuantitys)
+            public UserOrderDto(int shopId, int userId, int cashRegisterId, int tableId, List<ProductQuantityDto> productQuantitys)
             {
                 ShopId = shopId;
                 UserId = userId;
-                this.ProductQuantitys = productQuantitys;
                 CashRegisterId = cashRegisterId;
+                TableId = tableId;
+                ProductQuantitys = productQuantitys;
             }
         }
 
@@ -144,11 +146,17 @@ namespace SET3_Backend.Controllers
             return productsDto;
         }
 
-        [HttpPost("save")]
-        public async Task<ActionResult<UserOrderModel>> SaveUserOrder([FromBody] UserOrderDto userOrderDto)
+        private async Task<UserOrderModel> PostUserOrder(UserOrderDto userOrderDto, bool finish)
         {
             //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, false, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
+            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, finish, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId, userOrderDto.TableId);
+            TableModel table = await _context.TableModels.FindAsync(userOrderDto.TableId);
+            if (finish)
+                table.Taken = false;
+            else
+                table.Taken = true;
+            _context.TableModels.Update(table);
+
             _context.UserOrderModels.Add(userOrder);
             await _context.SaveChangesAsync();
 
@@ -159,28 +167,24 @@ namespace SET3_Backend.Controllers
             });
 
             await _context.ProductUserOrderIntertables.AddRangeAsync(products);
+
             await _context.SaveChangesAsync();
 
+            return userOrder;
+        }
+
+        [HttpPost("save")]
+        public async Task<ActionResult<UserOrderModel>> SaveUserOrder([FromBody] UserOrderDto userOrderDto)
+        {
+
+            UserOrderModel userOrder = await PostUserOrder(userOrderDto, false);
             return CreatedAtAction("GetUserOrderModel", new { id = userOrder.Id }, userOrder);
         }
 
         [HttpPost("finish")]
         public async Task<IActionResult> FinishUserOrder([FromBody] UserOrderDto userOrderDto)
         {
-            //treba dodati provjere za quantity
-            UserOrderModel userOrder = new UserOrderModel(DateTime.Now, true, userOrderDto.ShopId, userOrderDto.UserId, userOrderDto.CashRegisterId);
-            _context.UserOrderModels.Add(userOrder);
-            await _context.SaveChangesAsync();
-
-            List<ProductUserOrderIntertable> products = new List<ProductUserOrderIntertable>();
-            userOrderDto.ProductQuantitys.ForEach(productQuantity =>
-            {
-                products.Add(new ProductUserOrderIntertable(userOrder.Id, productQuantity.ProductId, productQuantity.Quantity));
-            });
-
-            await _context.ProductUserOrderIntertables.AddRangeAsync(products);
-            await _context.SaveChangesAsync();
-
+            UserOrderModel userOrder = await PostUserOrder(userOrderDto, true);
             return CreatedAtAction("GetUserOrderModel", new { id = userOrder.Id }, userOrder);
         }
 
@@ -191,12 +195,18 @@ namespace SET3_Backend.Controllers
 
             List<ProductWithShopAndChosenQuantityDto> productsDto = new List<ProductWithShopAndChosenQuantityDto>();
 
-            List<ProductShopIntertable> productShops = await _context.ProductShopIntertables.Where(productShop => productShop.ShopId == userOrderModel.ShopId).ToListAsync();
-            IEnumerable<Tuple<int, double>> productIds = productShops.Select(productShop => new Tuple<int, double>(productShop.ProductId, productShop.Quantity));
+            List<ProductShopIntertable> productShops = await _context.ProductShopIntertables
+                .Where(productShop => productShop.ShopId == userOrderModel.ShopId).ToListAsync();
+
+            IEnumerable<Tuple<int, double>> productIds = productShops
+                .Select(productShop => new Tuple<int, double>(productShop.ProductId, productShop.Quantity));
 
 
-            List<ProductUserOrderIntertable> userOrderProducts = await _context.ProductUserOrderIntertables.Where(userOrderProduct => userOrderProduct.UserOrderId == id).ToListAsync();
-            IEnumerable<Tuple<int, double>> chosenQuantityProducts = userOrderProducts.Select(userOrderProduct => new Tuple<int, double>(userOrderProduct.ProductId, userOrderProduct.Quantity));
+            List<ProductUserOrderIntertable> userOrderProducts = await _context.ProductUserOrderIntertables
+                .Where(userOrderProduct => userOrderProduct.UserOrderId == id).ToListAsync();
+
+            IEnumerable<Tuple<int, double>> chosenQuantityProducts = userOrderProducts
+                .Select(userOrderProduct => new Tuple<int, double>(userOrderProduct.ProductId, userOrderProduct.Quantity));
 
             List<ProductModel> products = await _context.ProductModels.ToListAsync();
             
@@ -232,7 +242,21 @@ namespace SET3_Backend.Controllers
         [HttpGet("myuserorders/{id}")]
         public async Task<ActionResult<IEnumerable<UserOrderModel>>> GetUserOrderModels(int id)
         {
-            return await _context.UserOrderModels.Where(userOrderModel => userOrderModel.UserId == id).ToListAsync();
+            return await _context.UserOrderModels.Where(userOrderModel => userOrderModel.CashRegisterId == id && userOrderModel.Done == true).ToListAsync();
+        }
+
+        // GET: api/UserOrderModels/5
+        [HttpGet("userOrderFromTable/{id}")]
+        public async Task<ActionResult<UserOrderModel>> GetUserOrderModelFromTable(int id)
+        {
+            var userOrderModel = await _context.UserOrderModels.Where(x => x.TableId == id && x.Done == false).FirstOrDefaultAsync();
+
+            if (userOrderModel == null)
+            {
+                return NotFound();
+            }
+
+            return userOrderModel;
         }
 
         // GET: api/UserOrderModels/5
@@ -249,8 +273,7 @@ namespace SET3_Backend.Controllers
             return userOrderModel;
         }
 
-        [HttpPut("save/{id}")]
-        public async Task<IActionResult> EditUserOrderModelSave(int id, [FromBody] UserOrderDto userOrderDto)
+        private async Task<IActionResult> PutUserOrder(int id, [FromBody] UserOrderDto userOrderDto, bool finished)
         {
             UserOrderModel userOrderModel = await _context.UserOrderModels.FindAsync(id);
 
@@ -258,8 +281,18 @@ namespace SET3_Backend.Controllers
             userOrderModel.ShopId = userOrderDto.ShopId;
             userOrderModel.UpdatedDate = DateTime.Now;
             userOrderModel.CashRegisterId = userOrderDto.CashRegisterId;
-            userOrderModel.Done = false;
+            userOrderModel.Done = finished;
+            userOrderModel.TableId = userOrderDto.TableId;
+            
+
+            TableModel table = await _context.TableModels.FindAsync(userOrderDto.TableId);
+            if (finished)
+                table.Taken = false;
+            else
+                table.Taken = true;
+
             _context.UserOrderModels.Update(userOrderModel);
+            _context.TableModels.Update(table);
 
             try
             {
@@ -291,83 +324,51 @@ namespace SET3_Backend.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut("save/{id}")]
+        public async Task<IActionResult> EditUserOrderModelSave(int id, [FromBody] UserOrderDto userOrderDto)
+        {
+            return PutUserOrder(id, userOrderDto, false).Result;
         }
 
         [HttpPut("finish/{id}")]
         public async Task<IActionResult> EditUserOrderModelFinish(int id, [FromBody] UserOrderDto userOrderDto)
         {
-            UserOrderModel userOrderModel = await _context.UserOrderModels.FindAsync(id);
-
-            userOrderModel.UserId = userOrderDto.UserId;
-            userOrderModel.ShopId = userOrderDto.ShopId;
-            userOrderModel.UpdatedDate = DateTime.Now;
-            userOrderModel.CashRegisterId = userOrderDto.CashRegisterId;
-            userOrderModel.Done = true;
-            _context.UserOrderModels.Update(userOrderModel);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                List<ProductUserOrderIntertable> productUserOrderIntertables = await _context.ProductUserOrderIntertables
-                    .Where(productUserOrderIntertable => productUserOrderIntertable.UserOrderId == id).ToListAsync();
-                _context.ProductUserOrderIntertables.RemoveRange(productUserOrderIntertables);
-                await _context.SaveChangesAsync();
-
-                List<ProductUserOrderIntertable> products = new List<ProductUserOrderIntertable>();
-                userOrderDto.ProductQuantitys.ForEach(productQuantity =>
-                {
-                    products.Add(new ProductUserOrderIntertable(id, productQuantity.ProductId, productQuantity.Quantity));
-                });
-
-                await _context.ProductUserOrderIntertables.AddRangeAsync(products);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserOrderModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return PutUserOrder(id, userOrderDto, true).Result;
         }
 
 
         // PUT: api/UserOrderModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserOrderModel(int id, UserOrderModel userOrderModel)
-        {
-            if (id != userOrderModel.Id)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutUserOrderModel(int id, UserOrderModel userOrderModel)
+        //{
+        //    if (id != userOrderModel.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(userOrderModel).State = EntityState.Modified;
+        //    _context.Entry(userOrderModel).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserOrderModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserOrderModelExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         //// POST: api/UserOrderModels
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -391,8 +392,14 @@ namespace SET3_Backend.Controllers
             }
             List<ProductUserOrderIntertable> productUserOrderIntertables = await _context.ProductUserOrderIntertables.Where(x => x.UserOrderId == id).ToListAsync();
             _context.ProductUserOrderIntertables.RemoveRange(productUserOrderIntertables);
-            await _context.SaveChangesAsync();
+            
             _context.UserOrderModels.Remove(userOrderModel);
+
+            TableModel table = await _context.TableModels.FindAsync(userOrderModel.TableId);
+            table.Taken = false;
+
+            _context.TableModels.Update(table);
+
             await _context.SaveChangesAsync();
 
             return NoContent();
