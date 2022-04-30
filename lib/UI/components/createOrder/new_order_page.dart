@@ -161,7 +161,8 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                       productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                                   }
                                   if(items.isNotEmpty) {
-                                    SavedOrderBody body = SavedOrderBody(MyApp.userId, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                    print(MyApp.getCashRegisterId());
+                                    SavedOrderBody body = SavedOrderBody(1, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
                                     APIServices.sendOrder(body, "save").then((value) {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
                                     });
@@ -184,7 +185,8 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                       productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                                   }
                                   if(items.isNotEmpty) {
-                                    SavedOrderBody body = SavedOrderBody(MyApp.userId, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                    print(MyApp.getCashRegisterId());
+                                    SavedOrderBody body = SavedOrderBody(1, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
                                     APIServices.sendOrder(body, "finish").then((value) {
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1)));
                                     });

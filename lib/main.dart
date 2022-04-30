@@ -30,41 +30,45 @@ void main() {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   final database = SQLiteDbProvider.db.database;
-  runApp(MyApp(
-    futureRegister: SQLiteDbProvider.db.getRegister(),
-  ));
+  SQLiteDbProvider.db.getRegister().then((value) {
+    Widget app = MyApp();
+    MyApp.futureRegister = value;
+    runApp(app);
+  });
+
 }
 
 class MyApp extends StatelessWidget {
-  final Future<InstalledRegister> futureRegister;
+  static InstalledRegister futureRegister;
 
-  MyApp({Key key, this.futureRegister}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
     //return "https://set3.azurewebsites.net";
-    return "https://10.2.2.2";
+    return "https://10.0.2.2:7194";
   }
   static getShopId() {
-    return 1;
+    return futureRegister.shopId;
   }
 
   static getCashRegisterId() {
-    return 1;
+    return futureRegister.registerId;
   }
 
   static int userId;
 
   static InstalledRegister register;
 
-  setRegister() {
-    futureRegister.then((value) => {register = value});
-  }
+  // setRegister() {
+  //   futureRegister.then((value) {
+  //   });
+  // }
 
   getHomePage() {
-    setRegister();
-
+    // setRegister();
+    print(futureRegister.registerId);
     //return MyHomePage(2);
-    if (register != null && register.registerId != 0 && register.shopId != 0) {
+    if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
       return MyHomePage(0);
     }
     return LoginScreen();
@@ -110,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-      if (widget.selectedIndex < 3)
+      if (widget.selectedIndex < 2)
         _selectedIndex = widget.selectedIndex;
       else
         _selectedIndex = 1;

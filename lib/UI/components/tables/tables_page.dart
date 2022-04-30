@@ -29,6 +29,7 @@ class _TablePageState extends State<TablePage> {
 
   // This widget is the root of your application.
   _getTables() {
+    print(MyApp.getShopId());
     APIServices.fetchTablesFromShop(MyApp.getShopId()).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
