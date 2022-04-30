@@ -70,7 +70,8 @@ const EditCashRegister = () => {
             shopId: shopId,
             deleted: cashRegister.deleted,
             name: document.getElementById("cashRegisterName").value,
-            description: document.getElementById("cashRegisterDescription").value
+            description: document.getElementById("cashRegisterDescription").value,
+            installed: cashRegister.installed
         };
 
         setUpdatedCashRegister(newCashRegister);

@@ -12,5 +12,7 @@ namespace SET3_Backend.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public bool Installed { get; set; }
+
     }
 }
