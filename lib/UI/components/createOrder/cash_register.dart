@@ -1,6 +1,6 @@
 class CashRegister {
-  int id;
-  String name;
+  final int id;
+  final String name;
   CashRegister(this.id, this.name);
 
   factory CashRegister.fromJson(dynamic json) {

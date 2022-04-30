@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:tasklist/UI/components/createOrder/cash_register.dart';
 import 'package:tasklist/UI/components/createOrder/product.dart';
 import 'package:tasklist/UI/components/createOrder/saved_order_body.dart';
@@ -10,47 +11,33 @@ import 'package:tasklist/UI/components/createOrder/shop.dart';
 import 'package:tasklist/UI/components/orders/userordermodel.dart';
 import 'package:tasklist/main.dart';
 
+import '../../background/background.dart';
 import '../orders/api.services.dart';
 
 
 class NewOrderPage extends StatefulWidget {
+  int tableId;
+
+  NewOrderPage(this.tableId);
+
   @override
-  State<NewOrderPage> createState() => _NewOrderPageState();
+  State<NewOrderPage> createState() => _NewOrderPageState(tableId);
 }
 
 class _NewOrderPageState extends State<NewOrderPage> {
+  int tableId;
+
+  _NewOrderPageState(this.tableId);
+
   final _controllerFirstName = TextEditingController();
 
   List<Product> items = [];
 
-  List<CashRegister> cashRegisters = [];
-
-  List<Shop> shops = [];
-
-  Shop selectedShop;
-
-  CashRegister selectedCashRegister;
-
-  _getShops() {
-    APIServices.fetchStores().then((response) {
+  _getProducts() {
+    APIServices.fetchProducts(MyApp.getShopId()).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
-        shops = list.map((model) => Shop.fromJson(model)).toList();
-        selectedShop = shops[0];
-        APIServices.fetchCashRegistersFromShop(selectedShop.id).then((response) {
-          setState(() {
-            Iterable list = json.decode(response.body);
-            print("Lista kasa:" + list.toString());
-            cashRegisters = list.map((model) => CashRegister.fromJson(model)).toList();
-            selectedCashRegister = cashRegisters[0];
-            APIServices.fetchProducts(selectedShop.id).then((response) {
-              setState(() {
-                Iterable list = json.decode(response.body);
-                items = list.map((model) => Product.fromJson(model)).toList();
-              });
-            });
-          });
-        });
+        items = list.map((model) => Product.fromJson(model)).toList();
       });
     });
   }
@@ -59,7 +46,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
   void initState() {
     super.initState();
 
-    _getShops();
+    _getProducts();
   }
 
   @override
@@ -71,263 +58,223 @@ class _NewOrderPageState extends State<NewOrderPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
-        if (shops.isNotEmpty) {
-          return Column(
-            children: <Widget>[
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(
-                    child: DropdownButtonFormField<Shop>(
-                      decoration: InputDecoration(
-                        // enabledBorder: OutlineInputBorder(
-                        //   borderRadius: BorderRadius.circular(12),
-                        //   borderSide: BorderSide(width: 0, color: Colors.blue),
-                        // ),
-                      ),
-                      value: selectedShop,
-                      items: shops
-                          .map((shop) => DropdownMenuItem<Shop>(
-                        value: shop,
-                        child: Row(
-                          children: [
-                            Icon(Icons.store,color: Colors.black,),
-                            Text(" " + shop.name, style: TextStyle(fontSize: 18)),
-                          ],
-                        ),
-                      ))
-                          .toList(),
-                      onChanged: (shop) => {
-                        APIServices.fetchProducts(shop.id).then((response) {
-                          setState(() {
-                            Iterable list = json.decode(response.body);
-                            items = list.map((model) => Product.fromJson(model)).toList();
-                            APIServices.fetchCashRegistersFromShop(shop.id).then((response) {
-                              setState(() {
-                                print(response.body.toString());
-                                Iterable list = json.decode(response.body);
-                                cashRegisters = list.map((model) => CashRegister.fromJson(model)).toList();
-                                selectedCashRegister = cashRegisters[0];
-                              });
-                            });
-                          });
-                        }),
-                        setState(() => {
-                          selectedShop = shop
-                        }),
-                      },
-
+      appBar: AppBar(
+        backgroundColor: Color(0xfff3c526e),
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 6.0),
+          child: Text('SET3 Cash Counter',
+              style: GoogleFonts.lato(
+                  color: Colors.white,
+                  fontSize: 15,
+                  letterSpacing: 0.3,
+                  fontWeight: FontWeight.normal)),
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          Background(),
+          LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                children: <Widget>[
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("My cart:", style: TextStyle(fontSize: 18, color: Colors.white),),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("My cart:", style: TextStyle(fontSize: 18),),
-                ),
-              ),
-              SizedBox(height: 5),
-              Visibility(
-                visible: items.isNotEmpty,
-                child:
-                Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: ListTile(
-                            title: Text(items[index].Name),
-                            leading: Icon(Icons.shopping_bag_outlined),
-                            subtitle: Text(
-                              items[index].Price.toString() + " BAM" + ' (' + items[index].measuringUnit + ')',
-                              style: const TextStyle(fontSize: 11),
-                            ),
-                            dense: false,
-                            onTap: () {
-                              openProductDialog(items[index]);
-                            },
-                            trailing: buildTrailingWidget(index),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(
-                          height: 1,
-                        );
-                      },
-                      itemCount: items.length),
-                ),
-              ),
-              Visibility(
-                child:
-                Container(
-                  color: Color(0xfff3c526e),
-                  child: Column(
-                    children: [
-
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Total : " + calculateTotal() + " BAM",
-                            style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  SizedBox(height: 5),
+                  Visibility(
+                    visible: items.isNotEmpty,
+                    child:
+                    Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              child: ListTile(
+                                title: Text(items[index].Name),
+                                leading: Icon(Icons.shopping_bag_outlined),
+                                subtitle: Text(
+                                  items[index].Price.toString() + " BAM" + ' (' + items[index].measuringUnit + ')',
+                                  style: const TextStyle(fontSize: 11),
+                                ),
+                                dense: false,
+                                onTap: () {
+                                  openProductDialog(items[index]);
+                                },
+                                trailing: buildTrailingWidget(index),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              height: 1,
+                            );
+                          },
+                          itemCount: items.length),
+                    ),
+                  ),
+                  Visibility(
+                    child:
+                    Container(
+                      color: Color(0xfff3c526e),
+                      child: Column(
                         children: [
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              primary: Colors.white,
-                            ),
-                            onPressed: () {
-                              // const snackBar = SnackBar(
-                              //   content: Text(
-                              //       "Order saved, napraviti return to previous page"),
-                              //   duration: Duration(seconds: 2),
-                              // );
-                              // ScaffoldMessenger.of(context)
-                              //     .showSnackBar(snackBar);
-                              //TODO("treba napraviti za usera, i za cash register, da se salje kako treba")
-                              List<ProductQuantitys> productQuantitys = [];
 
-                              for(Product product in items) {
-                                if(product.chosenQuantity != 0)
-                                  productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
-                              }
-                              if(items.isNotEmpty) {
-                                SavedOrderBody body = SavedOrderBody(MyApp.userId, selectedShop.id, 0, productQuantitys);
-                                APIServices.sendOrder(body, "save").then((value) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                                });
-                              }
-                            },
-                            child: Text(
-                              "Save",
-                              style: const TextStyle(fontSize: 20),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Total : " + calculateTotal() + " BAM",
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.white),
+                              ),
                             ),
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              primary: Colors.white,
-                            ),
-                            onPressed: () {
-                              openCashRegisterChooser();
-                              // const snackBar = SnackBar(
-                              //   content: Text(
-                              //       "Order done, napraviti prikaz fiskalnog racuna"),
-                              //   duration: Duration(seconds: 2),
-                              // );
-                              // ScaffoldMessenger.of(context)
-                              //     .showSnackBar(snackBar);
 
-                            },
-                            child: Text(
-                              "Order",
-                              style: const TextStyle(fontSize: 20),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                ),
+                                onPressed: () {
+                                  List<ProductQuantitys> productQuantitys = [];
+
+                                  for(Product product in items) {
+                                    if(product.chosenQuantity != 0)
+                                      productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+                                  }
+                                  if(items.isNotEmpty) {
+                                    SavedOrderBody body = SavedOrderBody(MyApp.userId, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                    APIServices.sendOrder(body, "save").then((value) {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  "Save",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                ),
+                                onPressed: () {
+                                  List<ProductQuantitys> productQuantitys = [];
+
+                                  for(Product product in items) {
+                                    if(product.chosenQuantity != 0)
+                                      productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+                                  }
+                                  if(items.isNotEmpty) {
+                                    SavedOrderBody body = SavedOrderBody(MyApp.userId, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                    APIServices.sendOrder(body, "finish").then((value) {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1)));
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  "Order",
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
-        } else {
-          return Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-      }),
+                ],
+              );
+          }),
+        ],
+      ),
     );
   }
 
-  Future openCashRegisterChooser() => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Select a cash register"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownButtonFormField<CashRegister>(
-            decoration: InputDecoration(
-              // enabledBorder: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(12),
-              //   borderSide: BorderSide(width: 0, color: Colors.blue),
-              // ),
-            ),
-            value: selectedCashRegister,
-            items: cashRegisters
-                .map((cashRegister) => DropdownMenuItem<CashRegister>(
-              value: cashRegister,
-              child: Row(
-                children: [
-                  Text(cashRegister.name, style: TextStyle(fontSize: 16)),
-                ],
-              ),
-            ))
-                .toList(),
-            onChanged: (cashRegister) => {
-              setState(() => {
-                selectedCashRegister = cashRegister
-              }),
-            },
-
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text("Confirm"),
-                onPressed: () {
-                  //TODO("treba napraviti za usera, i za cash register, da se salje kako treba")
-                  List<ProductQuantitys> productQuantitys = [];
-
-                  for(Product product in items) {
-                    if(product.chosenQuantity != 0)
-                      productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
-                  }
-                  if(items.isNotEmpty) {
-                    SavedOrderBody body = SavedOrderBody(MyApp.userId, selectedShop.id, selectedCashRegister.id, productQuantitys);
-                    APIServices.sendOrder(body, "finish").then((value) => print("gotovo")).then((value) {
-                      Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+  // Future openCashRegisterChooser() => showDialog(
+  //   context: context,
+  //   builder: (context) => AlertDialog(
+  //     title: Text("Select a cash register"),
+  //     content: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         DropdownButtonFormField<CashRegister>(
+  //           decoration: InputDecoration(
+  //             // enabledBorder: OutlineInputBorder(
+  //             //   borderRadius: BorderRadius.circular(12),
+  //             //   borderSide: BorderSide(width: 0, color: Colors.blue),
+  //             // ),
+  //           ),
+  //           value: selectedCashRegister,
+  //           items: cashRegisters
+  //               .map((cashRegister) => DropdownMenuItem<CashRegister>(
+  //             value: cashRegister,
+  //             child: Row(
+  //               children: [
+  //                 Text(cashRegister.name, style: TextStyle(fontSize: 16)),
+  //               ],
+  //             ),
+  //           ))
+  //               .toList(),
+  //           onChanged: (cashRegister) => {
+  //             setState(() => {
+  //               selectedCashRegister = cashRegister
+  //             }),
+  //           },
+  //
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             TextButton(
+  //               child: Text("Cancel"),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //             TextButton(
+  //               child: Text("Confirm"),
+  //               onPressed: () {
+  //                 //TODO("treba napraviti za usera, i za cash register, da se salje kako treba")
+  //                 List<ProductQuantitys> productQuantitys = [];
+  //
+  //                 for(Product product in items) {
+  //                   if(product.chosenQuantity != 0)
+  //                     productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+  //                 }
+  //                 if(items.isNotEmpty) {
+  //                   SavedOrderBody body = SavedOrderBody(MyApp.userId, selectedShop.id, selectedCashRegister.id, productQuantitys);
+  //                   APIServices.sendOrder(body, "finish").then((value) => print("gotovo")).then((value) {
+  //                     Navigator.of(context).pop();
+  //                     Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
+  //                   });
+  //                 }
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // );
 
   Future openProductDialog(Product product) => showDialog(
     context: context,

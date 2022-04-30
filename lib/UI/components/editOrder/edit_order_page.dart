@@ -11,48 +11,41 @@ import 'package:tasklist/UI/components/createOrder/shop.dart';
 import 'package:tasklist/UI/components/orders/userordermodel.dart';
 import 'package:tasklist/main.dart';
 
+import '../../background/background.dart';
 import '../orders/api.services.dart';
 
 
 class EditOrderPage extends StatefulWidget {
-  UserOrderModel userOrderModel;
+  int tableId;
 
-  EditOrderPage(this.userOrderModel);
+  EditOrderPage(this.tableId);
 
   @override
-  State<EditOrderPage> createState() => _EditOrderPageState(userOrderModel);
+  State<EditOrderPage> createState() => _EditOrderPageState(tableId);
 }
 
 class _EditOrderPageState extends State<EditOrderPage> {
+  int tableId;
 
   UserOrderModel userOrderModel;
-  _EditOrderPageState(this.userOrderModel);
+
+  _EditOrderPageState(this.tableId);
 
   final _inputController = TextEditingController();
 
   List<ProductForEdit> items = [];
 
-  List<CashRegister> cashRegisters = [];
-
-  CashRegister selectedCashRegister;
-
-  _getShops() {
-    print("OVDJE SAM");
-    APIServices.fetchProductsFromUserOrder(userOrderModel.id).then((value) {
+  _getProducts() {
+    APIServices.fetchUserOrderFromTable(tableId).then((response) {
       setState(() {
-          APIServices.fetchCashRegistersFromShop(userOrderModel.shopID).then((response) {
-            setState(() {
-              Iterable list = json.decode(response.body);
-              print("Lista kasa:" + list.toString());
-              cashRegisters = list.map((model) => CashRegister.fromJson(model)).toList();
-              selectedCashRegister = cashRegisters[0];
-              APIServices.fetchProductsFromUserOrder(userOrderModel.id).then((response) {
-                setState(() {
-                  Iterable list = json.decode(response.body);
-                  items = list.map((model) => ProductForEdit.fromJson(model)).toList();
-                });
-              });
-            });
+        dynamic object = json.decode(response.body);
+        userOrderModel = UserOrderModel.fromJson(object);
+        APIServices.fetchProductsFromUserOrder(userOrderModel.id).then((response) {
+          setState(() {
+            print(response.body);
+            Iterable list = json.decode(response.body);
+            items = list.map((model) => ProductForEdit.fromJson(model)).toList();
+          });
         });
       });
     });
@@ -82,8 +75,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
   @override
   void initState() {
     super.initState();
-
-    _getShops();
+    _getProducts();
   }
 
   @override
@@ -103,230 +95,209 @@ class _EditOrderPageState extends State<EditOrderPage> {
         ),
         centerTitle: true,
       ),
-      body: LayoutBuilder(builder: (context, constraints) {
-        return Column(
-          children: <Widget>[
-            SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text("My cart:", style: TextStyle(fontSize: 18),),
-              ),
-            ),
-            SizedBox(height: 5),
-            Visibility(
-              visible: items.isNotEmpty,
-              child:
-              Expanded(
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: ListTile(
-                          title: Text(items[index].Name),
-                          leading: Icon(Icons.shopping_bag_outlined),
-                          subtitle: Text(
-                            items[index].Price.toString() + " BAM" + ' (' + items[index].measuringUnit + ')',
-                            style: const TextStyle(fontSize: 11),
-                          ),
-                          dense: false,
-                          onTap: () {
-                            openProductDialog(items[index]);
-                          },
-                          trailing: buildTrailingWidget(index),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 1,
-                      );
-                    },
-                    itemCount: items.length),
-              ),
-            ),
-            Visibility(
-              child:
-              Container(
-                color: Color(0xfff3c526e),
-                child: Column(
-                  children: [
-
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "Total : " + calculateTotal() + " BAM",
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.white),
-                        ),
-                      ),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: Stack(
+        children: [
+          Background(),
+          LayoutBuilder(builder: (context, constraints) {
+            return Column(
+              children: <Widget>[
+                SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("My cart:", style: TextStyle(fontSize: 18, color: Colors.white),),
+                  ),
+                ),
+                SizedBox(height: 5),
+                Visibility(
+                  visible: items.isNotEmpty,
+                  child:
+                  Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(15.0)),
+                            child: ListTile(
+                              title: Text(items[index].Name),
+                              leading: Icon(Icons.shopping_bag_outlined),
+                              subtitle: Text(
+                                items[index].Price.toString() + " BAM" + ' (' + items[index].measuringUnit + ')',
+                                style: const TextStyle(fontSize: 11),
+                              ),
+                              dense: false,
+                              onTap: () {
+                                openProductDialog(items[index]);
+                              },
+                              trailing: buildTrailingWidget(index),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider(
+                            height: 1,
+                          );
+                        },
+                        itemCount: items.length),
+                  ),
+                ),
+                Visibility(
+                  child:
+                  Container(
+                    color: Color(0xfff3c526e),
+                    child: Column(
                       children: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                          ),
-                          onPressed: () {
-                            APIServices.deleteOrder(userOrderModel.id).then((value) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                            });
-                            // const snackBar = SnackBar(
-                            //   content: Text(
-                            //       "Order done, napraviti prikaz fiskalnog racuna"),
-                            //   duration: Duration(seconds: 2),
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
 
-                          },
-                          child: Text(
-                            "Delete",
-                            style: const TextStyle(fontSize: 20),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Total : " + calculateTotal() + " BAM",
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.white),
+                            ),
                           ),
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                          ),
-                          onPressed: () {
-                            // const snackBar = SnackBar(
-                            //   content: Text(
-                            //       "Order saved, napraviti return to previous page"),
-                            //   duration: Duration(seconds: 2),
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
-                            //TODO("treba napraviti za usera, i za cash register, da se salje kako treba")
-                            List<ProductQuantitys> productQuantitys = [];
 
-                            for(ProductForEdit product in items) {
-                              if(product.chosenQuantity != 0)
-                                productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
-                            }
-                            if(items.isNotEmpty) {
-                              SavedOrderBody body = SavedOrderBody(MyApp.userId, userOrderModel.shopID, 0, productQuantitys);
-                              APIServices.sendOrderEdit(body, "save", userOrderModel.id).then((value) {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                              });
-                            }
-                          },
-                          child: Text(
-                            "Save",
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                          ),
-                          onPressed: () {
-                            openCashRegisterChooser();
-                            // const snackBar = SnackBar(
-                            //   content: Text(
-                            //       "Order done, napraviti prikaz fiskalnog racuna"),
-                            //   duration: Duration(seconds: 2),
-                            // );
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(snackBar);
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                primary: Colors.white,
+                              ),
+                              onPressed: () {
+                                List<ProductQuantitys> productQuantitys = [];
 
-                          },
-                          child: Text(
-                            "Order",
-                            style: const TextStyle(fontSize: 20),
-                          ),
+                                for(ProductForEdit product in items) {
+                                  if(product.chosenQuantity != 0)
+                                    productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+                                }
+                                if(items.isNotEmpty) {
+                                  SavedOrderBody body = SavedOrderBody(MyApp.userId, userOrderModel.shopID, MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                  APIServices.sendOrderEdit(body, "save", userOrderModel.id).then((value) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
+                                  });
+                                }
+                              },
+                              child: Text(
+                                "Save",
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                primary: Colors.white,
+                              ),
+                              onPressed: () {
+                                List<ProductQuantitys> productQuantitys = [];
+
+                                for(ProductForEdit product in items) {
+                                  if(product.chosenQuantity != 0)
+                                    productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+                                }
+                                if(items.isNotEmpty) {
+                                  SavedOrderBody body = SavedOrderBody(MyApp.userId, userOrderModel.shopID, MyApp.getCashRegisterId(), tableId, productQuantitys);
+                                  APIServices.sendOrderEdit(body, "finish", userOrderModel.id).then((value) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1)));
+                                  });
+                                }
+
+                              },
+                              child: Text(
+                                "Order",
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ],
-        );
-      }),
+              ],
+            );
+          }),
+        ],
+      ),
     );
   }
 
-  Future openCashRegisterChooser() => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Select a cash register"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownButtonFormField<CashRegister>(
-            decoration: InputDecoration(
-              // enabledBorder: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(12),
-              //   borderSide: BorderSide(width: 0, color: Colors.blue),
-              // ),
-            ),
-            value: selectedCashRegister,
-            items: cashRegisters
-                .map((cashRegister) => DropdownMenuItem<CashRegister>(
-              value: cashRegister,
-              child: Row(
-                children: [
-                  Text(cashRegister.name, style: TextStyle(fontSize: 16)),
-                ],
-              ),
-            ))
-                .toList(),
-            onChanged: (cashRegister) => {
-              setState(() => {
-                selectedCashRegister = cashRegister
-              }),
-            },
-
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text("Confirm"),
-                onPressed: () {
-                  //TODO("treba napraviti za usera, i za cash register, da se salje kako treba")
-                  List<ProductQuantitys> productQuantitys = [];
-
-                  for(ProductForEdit product in items) {
-                    if(product.chosenQuantity != 0)
-                      productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
-                  }
-                  if(items.isNotEmpty) {
-                    SavedOrderBody body = SavedOrderBody(MyApp.userId, userOrderModel.shopID, selectedCashRegister.id, productQuantitys);
-                    APIServices.sendOrderEdit(body, "finish", userOrderModel.id).then((value) {
-                      Navigator.of(context).pop();
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+  // Future openCashRegisterChooser() => showDialog(
+  //   context: context,
+  //   builder: (context) => AlertDialog(
+  //     title: Text("Select a cash register"),
+  //     content: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         DropdownButtonFormField<CashRegister>(
+  //           decoration: InputDecoration(
+  //             // enabledBorder: OutlineInputBorder(
+  //             //   borderRadius: BorderRadius.circular(12),
+  //             //   borderSide: BorderSide(width: 0, color: Colors.blue),
+  //             // ),
+  //           ),
+  //           value: selectedCashRegister,
+  //           items: cashRegisters
+  //               .map((cashRegister) => DropdownMenuItem<CashRegister>(
+  //             value: cashRegister,
+  //             child: Row(
+  //               children: [
+  //                 Text(cashRegister.name, style: TextStyle(fontSize: 16)),
+  //               ],
+  //             ),
+  //           ))
+  //               .toList(),
+  //           onChanged: (cashRegister) => {
+  //             setState(() => {
+  //               selectedCashRegister = cashRegister
+  //             }),
+  //           },
+  //
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.end,
+  //           children: [
+  //             TextButton(
+  //               child: Text("Cancel"),
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //             ),
+  //             TextButton(
+  //               child: Text("Confirm"),
+  //               onPressed: () {
+  //                 List<ProductQuantitys> productQuantitys = [];
+  //
+  //                 for(ProductForEdit product in items) {
+  //                   if(product.chosenQuantity != 0)
+  //                     productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
+  //                 }
+  //                 if(items.isNotEmpty) {
+  //                   SavedOrderBody body = SavedOrderBody(MyApp.userId, userOrderModel.shopID, selectedCashRegister.id, productQuantitys);
+  //                   APIServices.sendOrderEdit(body, "finish", userOrderModel.id).then((value) {
+  //                     Navigator.of(context).pop();
+  //                     Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
+  //                   });
+  //                 }
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  // );
 
   Future openProductDialog(ProductForEdit product) => showDialog(
     context: context,

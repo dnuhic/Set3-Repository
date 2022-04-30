@@ -9,6 +9,7 @@ import 'package:tasklist/reciept_page.dart';
 
 import 'UI/background/background.dart';
 import 'UI/components/createOrder/new_order_page.dart';
+import 'UI/components/tables/tables_page.dart';
 import 'login_page.dart';
 import 'orders_list_page.dart';
 //import 'login_page.dart';
@@ -34,6 +35,13 @@ void main() {
 class MyApp extends StatelessWidget {
   static getBaseUrl() {
     return "https://10.0.2.2:7194";
+  }
+  static getShopId() {
+    return 1;
+  }
+
+  static getCashRegisterId() {
+    return 1;
   }
   static int userId;
   // This widget is the root of your application.
@@ -78,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-        if(widget.selectedIndex < 3) _selectedIndex = widget.selectedIndex;
+        if(widget.selectedIndex < 2) _selectedIndex = widget.selectedIndex;
         else _selectedIndex = 1;
       });
   }
@@ -106,14 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
+          TablePage(),
           OrderPage(),
-          NewOrderPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Tables"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),

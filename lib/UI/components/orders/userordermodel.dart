@@ -19,8 +19,8 @@ class UserOrderModel {
   int get cashRegisterID => CashRegisterId;
 
   factory UserOrderModel.fromJson(dynamic json) {
-    return UserOrderModel(json['id'] as int, json['updatedDate'] as String,
-        json['done'] as bool, json['shopId'] as int, json['userId'] as int, json['cashRegisterId']);
+    return UserOrderModel(json['id'], json['updatedDate'],
+        json['done'], json['shopId'], json['userId'], json['cashRegisterId']);
   }
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();

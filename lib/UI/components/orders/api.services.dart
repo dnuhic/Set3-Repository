@@ -10,7 +10,7 @@ import '../createOrder/saved_order_body.dart';
 class APIServices {
   String baseUrl = "https://10.0.2.2:7206";
 
-  static Future fetchUserOrder(int id) async {
+  static Future fetchDoneUserOrders(int id) async {
     return await http
         .get(Uri.parse(MyApp.getBaseUrl() + '/api/UserOrderModels/myuserorders/' + id.toString()));
   }
@@ -58,6 +58,16 @@ class APIServices {
   static Future fetchProductsFromUserOrder(int id) async {
     return await http
         .get(Uri.parse(MyApp.getBaseUrl() + '/api/userordermodels/savedUserOrderProducts/' + id.toString()));
+  }
+
+  static Future fetchTablesFromShop(int id) async {
+    return await http
+        .get(Uri.parse(MyApp.getBaseUrl() + '/api/tablemodels/tablesWithProductsFromShop/' + id.toString()));
+  }
+
+  static Future fetchUserOrderFromTable(int id) async {
+    return await http
+        .get(Uri.parse(MyApp.getBaseUrl() + '/api/userordermodels/userOrderFromTable/' + id.toString()));
   }
 }
 
