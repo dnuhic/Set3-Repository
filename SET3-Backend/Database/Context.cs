@@ -22,8 +22,8 @@ namespace SET3_Backend.Database
         public virtual DbSet<ProductShopIntertable> ProductShopIntertables { get; set; }
         public virtual DbSet<UserOrderModel> UserOrderModels { get; set; }
         public virtual DbSet<ProductUserOrderIntertable> ProductUserOrderIntertables { get; set; }
-
         public virtual DbSet<MeasuringUnit> MeasuringUnits { get; set; }
+        public virtual DbSet<TableModel> TableModels { get; set; }
 
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
@@ -56,6 +56,10 @@ namespace SET3_Backend.Database
             //View->Sql server object explorer
             //ima baza (localdb)\Set3 StoreDB je ime lokalnaBaza
         }
+
+        //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;'
+        //i u metodi dole isto, nakon toga pratite komentare u metodi ispod
+
 
 
 
