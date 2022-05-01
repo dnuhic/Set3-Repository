@@ -28,8 +28,9 @@ function CashboxPage(props) {
 			credentials: 'same-origin'
 		};
 		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`, requestOptions);
-		ResponseCheckModule.unauthorizedResponseCheck(responseC, navigate)
+		//ResponseCheckModule.unauthorizedResponseCheck(responseC, navigate)
 		const c = await responseC.json();
+		console.log(c);
 
 		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
 		ResponseCheckModule.unauthorizedResponseCheck(responseS, navigate)

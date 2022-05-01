@@ -5,6 +5,7 @@ import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 import { useNavigate } from "react-router-dom"
 import Box from '@mui/material/Box';
 import { Button } from '../../../globalStyles';
+import Select from 'react-select'
 
 
 const AddCategory = () => {
@@ -12,12 +13,21 @@ const AddCategory = () => {
     const navigate = useNavigate()
     const [categories, setCategories] = useState(null)
     const [newCategory, setNewCategory] = useState(null)
+    const [selectedOption, setSelectedOption] = useState(null)
 
-
+    const options = [
+        { value: 0.17, label: '0.17' },
+        { value: 0.05, label: '0.05' },
+        { value: 0.22, label: '0.22' }
+    ]
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
         return b ? b.pop() : "";
+    }
+
+    const handleChange = (selectedOption) => {
+        setSelectedOption(selectedOption);
     }
 
    
@@ -25,10 +35,17 @@ const AddCategory = () => {
     const createCategory = () => {
         console.log("klik zasad")
         if (categories != null) {
-            if (document.getElementById("name").value == "") {
+            if (document.getElementById("name").value === "") {
                 alert("All fields must not be empty!");
                 return;
             }
+
+            /*if (Number(document.getElementById("tax").value) <= 0 || Number(document.getElementById("tax").value) >= 1) {
+                alert("Tax must be number between zero and one!");
+                return;
+            }*/
+
+
                 
 
             for (let i = 0; i < categories.length; i++) {
@@ -41,7 +58,8 @@ const AddCategory = () => {
 
             let category = {
 
-                "Name": document.getElementById("name").value
+                "Name": document.getElementById("name").value,
+                "Tax": selectedOption.value
 
             };
 
@@ -86,6 +104,7 @@ const AddCategory = () => {
                     console.log(data)
                 });
             document.getElementById("name").value = "";
+            
             alert('Action completed!');
             
         }
@@ -117,6 +136,14 @@ const AddCategory = () => {
                                 className="form-control"
                                 placeholder="Category name"
                             />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label" for="tax">Tax</label>
+                            <Select
+                                value={selectedOption}
+                                onChange={handleChange}
+                                options={options} />
+                            {/*{selectedOptions.map(o => <p>{o.value}</p>)}*/}
                         </div>
                     </div>
                     <Button

@@ -30,7 +30,7 @@ function ListItem(props) {
             body: JSON.stringify({"Id": props.store.id}),
             credentials: 'same-origin'
         };
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/deleteShop`, requestOptions);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/deleteShop/${props.store.id}`, requestOptions);
         ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
         const data = await response.json();
         setDeleted(true);

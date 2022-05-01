@@ -150,7 +150,7 @@ namespace SET3_Backend.Controllers
             public int Id { get; set; }
         }
 
-        [HttpPost("deleteShop"), Authorize(Roles = "ShopAdmin,Admin")] //
+        [HttpPost("deleteShop/{id}"), Authorize(Roles = "ShopAdmin,Admin")] //
         public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
         {
 

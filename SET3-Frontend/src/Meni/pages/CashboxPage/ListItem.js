@@ -42,7 +42,7 @@ function ListItem(props) {
                     <LaptopChromebookIcon />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={`${props.cashbox.description}`} />
+            <ListItemText primary={`${props.cashbox.name}`} />
         </MuiListItem>
     )
 }
