@@ -32,7 +32,7 @@ class PdfInvoiceApi {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildSupplierAddress(invoice.supplier),
+              // buildSupplierAddress(invoice.supplier),
               Container(
                 height: 50,
                 width: 50,
@@ -81,14 +81,14 @@ class PdfInvoiceApi {
     );
   }
 
-  static Widget buildSupplierAddress(BillSupplier supplier) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(supplier.email, style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 1 * PdfPageFormat.mm),
-          Text(supplier.firstName + ' ' + supplier.lastName),
-        ],
-      );
+  // static Widget buildSupplierAddress(BillSupplier supplier) => Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(supplier.email, style: TextStyle(fontWeight: FontWeight.bold)),
+  //         SizedBox(height: 1 * PdfPageFormat.mm),
+  //         Text(supplier.firstName + ' ' + supplier.lastName),
+  //       ],
+  //     );
 
   static Widget buildTitle(BillModel invoice) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

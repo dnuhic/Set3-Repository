@@ -12,6 +12,7 @@ import 'package:tasklist/reciept_page.dart';
 import 'Database.dart';
 import 'UI/background/background.dart';
 import 'UI/components/createOrder/new_order_page.dart';
+import 'UI/components/tables/tables_page.dart';
 import 'login_page.dart';
 import 'orders_list_page.dart';
 //import 'login_page.dart';
@@ -29,34 +30,45 @@ void main() {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   final database = SQLiteDbProvider.db.database;
-  runApp(MyApp(
-    futureRegister: SQLiteDbProvider.db.getRegister(),
-  ));
+  SQLiteDbProvider.db.getRegister().then((value) {
+    Widget app = MyApp();
+    MyApp.futureRegister = value;
+    runApp(app);
+  });
+
 }
 
 class MyApp extends StatelessWidget {
-  final Future<InstalledRegister> futureRegister;
+  static InstalledRegister futureRegister;
 
-  MyApp({Key key, this.futureRegister}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
     //return "https://set3.azurewebsites.net";
-    return "https://10.2.2.2";
+    return "https://10.0.2.2:7194";
+  }
+  static getShopId() {
+    return futureRegister.shopId;
+  }
+
+  static getCashRegisterId() {
+    return futureRegister.registerId;
   }
 
   static int userId;
 
   static InstalledRegister register;
 
-  setRegister() {
-    futureRegister.then((value) => {register = value});
-  }
+  // setRegister() {
+  //   futureRegister.then((value) {
+  //   });
+  // }
 
   getHomePage() {
-    setRegister();
-
+    // setRegister();
+    print(futureRegister.registerId);
     //return MyHomePage(2);
-    if (register != null && register.registerId != 0 && register.shopId != 0) {
+    if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
       return MyHomePage(0);
     }
     return LoginScreen();
@@ -102,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-      if (widget.selectedIndex < 3)
+      if (widget.selectedIndex < 2)
         _selectedIndex = widget.selectedIndex;
       else
         _selectedIndex = 1;
@@ -132,22 +144,20 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
+          TablePage(),
           OrderPage(),
-          NewOrderPage(),
-          //RecieptPage()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.add_chart), label: "Add Order"),
-            //BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Rer"),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color(0xfff3c526e),
-          unselectedItemColor: Colors.grey,
-          onTap: onTapped),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Tables"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xfff3c526e),
+        unselectedItemColor: Colors.grey,
+        onTap: onTapped
+      ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

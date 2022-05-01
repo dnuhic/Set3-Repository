@@ -191,6 +191,7 @@ class _LoginFormState extends State<LoginForm> {
                     final register = InstalledRegister(1, registerId, shopId);
                     await SQLiteDbProvider.db.update(register);
 
+                    MyApp.futureRegister = register;
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => MyHomePage(0)),
