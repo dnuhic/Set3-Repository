@@ -69,9 +69,9 @@ namespace SET3_Backend.Controllers
 
             if (!_context.CategoryModels.Any())
             {
-                _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString()));
-                _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString()));
-                _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString()));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Food.ToString(), 0.17));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Hygiene.ToString(), 0.17));
+                _context.CategoryModels.Add(new CategoryModel(CategoryType.Clothes.ToString(), 0.17));
                 
             }
 
