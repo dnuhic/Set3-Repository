@@ -8,6 +8,7 @@ import 'package:tasklist/UI/components/createOrder/shop.dart';
 import 'package:tasklist/UI/components/orders/api.services.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
+import 'package:tasklist/UI/components/orders/userordermodel.dart';
 
 class MockClient extends Mock implements http.Client {}
 
@@ -17,7 +18,7 @@ class MockApiService implements APIServices {
 
   static String url = "https://localhost:7194";
 
-  static Future fetchUserOrder(int id) async {
+  static Future fetchDoneUserOrders(int id) async {
     return await http.get(
         Uri.parse(url + '/api/UserOrderModels/myuserorders/' + id.toString()));
   }
@@ -66,6 +67,16 @@ class MockApiService implements APIServices {
   static Future fetchProductsFromUserOrder(int id) async {
     return await http.get(Uri.parse(
         url + '/api/userordermodels/savedUserOrderProducts/' + id.toString()));
+  }
+
+  static Future fetchTablesFromShop(int id) async {
+    return await http
+        .get(Uri.parse(url + '/api/tablemodels/tablesWithProductsFromShop/' + id.toString()));
+  }
+
+  static Future fetchUserOrderFromTable(int id) async {
+    return await http
+        .get(Uri.parse(url + '/api/userordermodels/userOrderFromTable/' + id.toString()));
   }
 }
 
@@ -129,16 +140,21 @@ void main() {
     expect(jsonDecode(response.body).map((cashRegister) => CashRegister.fromJson(cashRegister).name).toList(), cashRegistersNames);
   });
 
-  test('checks if sendOrder and fetchUserOrder work', () async {
+  test('checks if sendOrder and fetchProductsFromUserOrder and fetchDoneUserOrders work', () async {
     
-    final savedOrder = SavedOrderBody(1, 3, 1, [ProductQuantitys(1, 5)].toList());
+    final savedOrder = SavedOrderBody(1, 3, 1, 1, [ProductQuantitys(1, 5)].toList());
     
     await MockApiService.sendOrder(savedOrder, "finish");
-        
     
+    final response = await MockApiService.fetchDoneUserOrders(1);
+    final responseUserOrderModel = UserOrderModel.fromJson(jsonDecode(response.body)[0]);
+    expect(responseUserOrderModel.userID, savedOrder.userId);
+    expect(responseUserOrderModel.shopID, savedOrder.shopId);
     
-    // final response = await MockApiService.fetchCashRegistersFromShop(1);
-    // expect(jsonDecode(response.body).map((cashRegister) => CashRegister.fromJson(cashRegister).name).toList(), cashRegistersNames);
+    final responseProducts = await MockApiService.fetchProductsFromUserOrder(responseUserOrderModel.Id);
+    final jsonProductOrder = jsonDecode(responseProducts.body)[0];
+    final responseProductsOrderModel = ProductQuantitys(jsonProductOrder["productId"],5);
+    expect(responseProductsOrderModel.productId, 1);
   });
 
 }

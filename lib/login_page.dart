@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tasklist/UI/forms/loginservice.dart';
 
 import 'UI/background/background.dart';
 import 'UI/forms/login_form.dart';
 
 
 class LoginScreen extends StatelessWidget {
-  // This widget is the root of your application.
+  final LoginService loginService;
+
+  LoginScreen({this.loginService});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,7 +19,7 @@ class LoginScreen extends StatelessWidget {
         body: Stack(
           children: [
             Background(),
-            const LoginForm(),
+            LoginForm(loginService: loginService,)
           ],
         ),
       ),

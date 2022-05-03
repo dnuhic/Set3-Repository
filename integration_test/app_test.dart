@@ -21,6 +21,7 @@ import 'package:tasklist/UI/forms/loginservice.dart';
 import 'package:tasklist/login_page.dart';
 import 'package:tasklist/main.dart';
 
+
 class MockLoginService extends Mock implements LoginService{}
 
 Widget createLoginPage(MockLoginService mockLoginService){
@@ -67,52 +68,63 @@ void main() {
     
   }
 
-
-  testWidgets('Checks if there is text', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    arrangeLoginService();
-    await tester.pumpWidget(createLoginPage(mockLoginService));
-    await tester.pump();
-    // Verify that our counter starts at 0.
-    expect(find.text('Login'), findsOneWidget);
-    expect(find.byKey(Key("drop-down-shop")), findsOneWidget);
-    expect(find.byKey(Key("drop-down-cashregister")), findsOneWidget);
-
-    
-    // Tap the '+' icon and trigger a frame.
-    // await tester.tap(find.byIcon(Icons.add));
-    // await tester.pump();
-
-    // // Verify that our counter has incremented.
-    // expect(find.text('0'), findsNothing);
-    // expect(find.text('1'), findsOneWidget);
-  });
-
   testWidgets('Checks if there is content in shops', (WidgetTester tester) async {
     
     arrangeLoginService();
     await tester.pumpWidget(createLoginPage(mockLoginService));
     await tester.pump();
+    
+    await tester.tap(find.byKey(Key("drop-down-shop")));
+    await tester.pumpAndSettle();
 
-    expect(find.text(' Prvi shop'), findsOneWidget);
-    expect(find.text(' Drugi shop'), findsOneWidget);
-    expect(find.text(' Treci shop'), findsOneWidget);
-    expect(find.text(' Cetvrti shop'), findsNothing);
+    expect(find.text(' Prvi shop').last, findsOneWidget);
+    expect(find.text(' Drugi shop').last, findsOneWidget);
+    expect(find.text(' Treci shop').last, findsOneWidget);
 
+    await tester.tap(find.text(' Drugi shop').last);
+    await tester.pumpAndSettle();
+  
   });
 
-
-  testWidgets('Checks if there is content in cashregister with first as default ', (WidgetTester tester) async {
+  testWidgets('Checks if there is content in cashregister and if it changes after click', (WidgetTester tester) async {
     
     arrangeLoginService();
     await tester.pumpWidget(createLoginPage(mockLoginService));
     await tester.pump();
+    
+    await tester.tap(find.byKey(Key("drop-down-cashregister")));
+    await tester.pumpAndSettle();
 
-    expect(find.text(' Prva kasa'), findsOneWidget);
+    expect(find.text(' Prva kasa').last, findsOneWidget);
     expect(find.text(' Druga kasa'), findsNothing);
+    expect(find.text(' Treca kasa'), findsNothing);
+
+    await tester.tap(find.text(' Prva kasa').last);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(Key("drop-down-shop")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(' Drugi shop').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text(' Prva kasa'), findsNothing);
+    expect(find.text(' Druga kasa'), findsOneWidget);
     expect(find.text(' Treca kasa'), findsNothing);
   
   });
 
-  
+  testWidgets('Checks if login leads to orders', (WidgetTester tester) async {
+    
+    arrangeLoginService();
+    await tester.pumpWidget(createLoginPage(mockLoginService));
+    await tester.pump();
+    
+    await tester.tap(find.byKey(Key('login-btn')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsNothing);
+    expect(find.byType(MyHomePage), findsOneWidget);
+    
+  });
+
 }

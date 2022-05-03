@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
+import 'package:tasklist/UI/forms/loginservice.dart';
 import 'package:tasklist/edit_order_page.dart';
 import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
     if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
       return MyHomePage(0);
     }
-    return LoginScreen();
+    return LoginScreen(loginService: LoginService(),);
   }
 
   // This widget is the root of your application.
