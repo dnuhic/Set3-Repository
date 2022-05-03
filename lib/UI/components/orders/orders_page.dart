@@ -25,7 +25,7 @@ class _OrderPageState extends State<OrderPage> {
 
   // This widget is the root of your application.
   _getOrders() {
-    APIServices.fetchUserOrder(MyApp.userId).then((response) {
+    APIServices.fetchDoneUserOrders(MyApp.getCashRegisterId()).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         orders = list.map((model) => UserOrderModel.fromJson(model)).toList();
@@ -47,58 +47,59 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(builder: (context, constraints) {
-          return Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5, top: 10, right: 10, left: 10),
-                  child: Text("My orders:", style: TextStyle(fontSize: 20)),
-                ),
-              ),
-              // const Card(
-              //   color: Colors.white70,
-              //   child: Padding(
-              //     padding: EdgeInsets.all(16.0),
-              //     child: Text("My orders", style: TextStyle(fontSize: 17)),
-              //   ),
-              // ),
-              Expanded(
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: ListTile(
-                          title: Text("Order ID: #" + orders[index].Id.toString()),
-                          leading: Icon(Icons.shopping_cart),
-                          subtitle: Text(DateTime.parse(orders[index].UpdatedDate).day.toString()
-                              + "/" + DateTime.parse(orders[index].UpdatedDate).month.toString() + "/"
-                              + DateTime.parse(orders[index].UpdatedDate).year.toString() + " "
-                              + DateTime.parse(orders[index].UpdatedDate).hour.toString() + ":"
-                              + DateTime.parse(orders[index].UpdatedDate).minute.toString()),
-                          dense: true,
-                          //show if order is done
-                          trailing:
-                          orderDone(orders[index]),
-                          onTap: () {
-                            if(orders[index].done == false)
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrderPage(orders[index])));
-                          },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 1,
-                      );
-                    },
-                    itemCount: orders.length),
-              ),
-            ],
-          );
-      }),
+      body: Stack(
+        children: [
+          Background(),
+          LayoutBuilder(builder: (context, constraints) {
+              return Column(
+                children: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 5, top: 10, right: 10, left: 10),
+                      child: Text("Order History:", style: TextStyle(fontSize: 18, color: Colors.white)),
+                    ),
+                  ),
+                  // const Card(
+                  //   color: Colors.white70,
+                  //   child: Padding(
+                  //     padding: EdgeInsets.all(16.0),
+                  //     child: Text("My orders", style: TextStyle(fontSize: 17)),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(15.0)),
+                            child: ListTile(
+                              title: Text("Order ID: #" + orders[index].Id.toString(), style: TextStyle(fontSize: 14)),
+                              leading: Icon(Icons.shopping_cart),
+                              subtitle: Text(DateTime.parse(orders[index].UpdatedDate).day.toString()
+                                  + "/" + DateTime.parse(orders[index].UpdatedDate).month.toString() + "/"
+                                  + DateTime.parse(orders[index].UpdatedDate).year.toString() + " "
+                                  + DateTime.parse(orders[index].UpdatedDate).hour.toString() + ":"
+                                  + DateTime.parse(orders[index].UpdatedDate).minute.toString()),
+                              dense: true,
+                              //show if order is done
+                              trailing: orderDone(orders[index]),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider(
+                            height: 1,
+                          );
+                        },
+                        itemCount: orders.length),
+                  ),
+                ],
+              );
+          }),
+        ],
+      ),
     );
   }
 
@@ -117,11 +118,11 @@ class _OrderPageState extends State<OrderPage> {
                 PdfApi.openFile(pdfFile);
               },
               icon: Icon(Icons.receipt_long_outlined)),
-          Icon(
-            Icons.download_done,
-            color: Colors.green,
-            size: 30.0,
-          ),
+          // Icon(
+          //   Icons.download_done,
+          //   color: Colors.green,
+          //   size: 30.0,
+          // ),
         ]),
       );
     } else {

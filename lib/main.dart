@@ -2,18 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
 import 'package:tasklist/edit_order_page.dart';
 import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
 
+import 'Database.dart';
 import 'UI/background/background.dart';
 import 'UI/components/createOrder/new_order_page.dart';
+import 'UI/components/tables/tables_page.dart';
 import 'login_page.dart';
 import 'orders_list_page.dart';
 //import 'login_page.dart';
-
-
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -26,16 +28,52 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = SQLiteDbProvider.db.database;
+  SQLiteDbProvider.db.getRegister().then((value) {
+    Widget app = MyApp();
+    MyApp.futureRegister = value;
+    runApp(app);
+  });
+
 }
 
-
-
 class MyApp extends StatelessWidget {
+  static InstalledRegister futureRegister;
+
+  MyApp({Key key}) : super(key: key);
+
   static getBaseUrl() {
+    //return "https://set3.azurewebsites.net";
     return "https://10.0.2.2:7194";
   }
+  static getShopId() {
+    return futureRegister.shopId;
+  }
+
+  static getCashRegisterId() {
+    return futureRegister.registerId;
+  }
+
   static int userId;
+
+  static InstalledRegister register;
+
+  // setRegister() {
+  //   futureRegister.then((value) {
+  //   });
+  // }
+
+  getHomePage() {
+    // setRegister();
+    print(futureRegister.registerId);
+    //return MyHomePage(2);
+    if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
+      return MyHomePage(0);
+    }
+    return LoginScreen();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -46,7 +84,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginScreen(),
+      home: getHomePage(),
     );
   }
 }
@@ -60,27 +98,27 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-
-
 class _MyHomePageState extends State<MyHomePage> {
-    int _selectedIndex = 0;
-    PageController pageController = PageController();
-    void onTapped(int index){
-      setState(() {
-        _selectedIndex = index;
-      });
-      pageController.jumpToPage(index);
-    }
+  int _selectedIndex = 0;
+  PageController pageController = PageController();
+  void onTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    pageController.jumpToPage(index);
+  }
 
-    @override
-    void initState() {
+  @override
+  void initState() {
     // TODO: implement initState
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
     setState(() {
-        if(widget.selectedIndex < 3) _selectedIndex = widget.selectedIndex;
-        else _selectedIndex = 1;
-      });
+      if (widget.selectedIndex < 2)
+        _selectedIndex = widget.selectedIndex;
+      else
+        _selectedIndex = 1;
+    });
   }
 
   @override
@@ -106,14 +144,14 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
+          TablePage(),
           OrderPage(),
-          NewOrderPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Tables"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
-          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: "Add Order"),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),
