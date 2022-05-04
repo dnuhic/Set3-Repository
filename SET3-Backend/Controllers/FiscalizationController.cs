@@ -10,6 +10,8 @@ using SET3_Backend.Models;
 using FiskalizacijaService;
 using Cis;
 using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
+
 
 namespace SET3_Backend.Controllers
 {
@@ -26,44 +28,79 @@ namespace SET3_Backend.Controllers
 		}
 
 		[HttpGet]
-		public async Task<BillModel> ExecuteFiscalization(FiscalBillModel fiscalModel)
+		public async Task<BillModel> ExecuteFiscalization(BillModel billModel)
 		{
+
+			FiscalBillModel fiscalModel = new FiscalBillModel(
+				new Zaglavlje(billModel.BillInfo.Number, DateTime.Now),
+				new Racun(
+					"12345678910",
+					true,
+					DateTime.Now,
+					OznakaSlijednostiType.N.ToString(),
+					new BrRac(
+						"1",
+						"1",
+						"1"
+					),
+					new List<Porez>(),
+					billModel.BillItems.Select(el => el.Quantity * el.UnitPrice).Sum(),
+					NacinPlacanjaType.G.ToString(),
+					"12345678910",
+					"225883"
+				),
+				"jib ovdje ide"
+			);
 			// Kreiranje računa za za fiskalizaciju
 			var invoice = new RacunType()
 			{
 				BrRac = new BrojRacunaType()
 				{
-					BrOznRac = fiscalModel.BrOznRac,
-					OznPosPr = fiscalModel.OznPosPr,
-					OznNapUr = fiscalModel.OznNapUr
+					BrOznRac = fiscalModel.Racun.brojRacuna.BrOznRac,
+					OznPosPr = fiscalModel.Racun.brojRacuna.OznPosPr,
+					OznNapUr = fiscalModel.Racun.brojRacuna.OznNapUr
 				},
 				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
-				IznosUkupno = fiscalModel.IznosUkupno.ToString("N2"),
+				IznosUkupno = fiscalModel.Racun.IznosUkupno.ToString("N2", CultureInfo.InvariantCulture),
 				NacinPlac = NacinPlacanjaType.G,
 				NakDost = false,
-				Oib = fiscalModel.Oib,
-				OibOper = fiscalModel.OibOper,
+				Oib = fiscalModel.Racun.OIB,
+				OibOper = fiscalModel.Racun.OibOper,
 				OznSlijed = OznakaSlijednostiType.N,
-				Pdv = new[]
+				Pdv = fiscalModel.Racun.pDV.Select(porez => new PorezType
 				{
-					new PorezType
-					{
-						Stopa = fiscalModel.Stopa.ToString("N2"),
-						Osnovica = fiscalModel.Osnovica.ToString("N2"),
-						Iznos = fiscalModel.Iznos.ToString("N2")
-					}
-				},
+					Stopa = porez.Stopa.ToString("N2", CultureInfo.InvariantCulture),
+					Osnovica = porez.Osnovica.ToString("N2", CultureInfo.InvariantCulture),
+					Iznos = porez.Iznos.ToString("N2", CultureInfo.InvariantCulture)
+				}).ToArray(),
 				USustPdv = true
 			};
 
-			X509Certificate2 certificate = new X509Certificate2();
+			Byte[] cerFileRead = await File.ReadAllBytesAsync(@"..\\Connected Services\\FiskalizacijaService\\cis\\demo2020_sub_ca.cer");
+
+			X509Certificate2 certificate = new X509Certificate2(cerFileRead);
 
 			// Generiraj ZKI, potpiši, pošalji račun i provjeri potpis CIS odgovora
 			RacunOdgovor response = await Fiscalization.SendInvoiceAsync(invoice, certificate);
 
-			
-			
-			return null; 
+			//u bazu
+			await _context.FiscalBillModels.AddAsync(fiscalModel);
+
+			//return onaj objekat
+			/*
+			return new BillModel(
+				new BillInfo(
+						"",
+						DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
+						"",
+						"",
+						""
+					),
+					null,
+					new BillSupplier("", "", "")
+			);
+			*/
+			return billModel;
 		}
 
 

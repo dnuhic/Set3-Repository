@@ -15,7 +15,6 @@ using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using FiskalizacijaService;
 
 namespace Cis
 {
