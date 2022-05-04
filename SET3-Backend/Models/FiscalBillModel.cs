@@ -7,16 +7,13 @@ namespace SET3_Backend.Models
         {
             [Key]
             public String IdZag { get; set; }   
-
             public String IdPoruke { get; set; }
             public DateTime DatumVrijeme { get; set; }
-        public Zaglavlje()
-        {
-
-        }
+        public Zaglavlje(){}
         public Zaglavlje (String idporuke, DateTime datumivrijemeslanja)
             {
                 IdPoruke = idporuke;
+
                 DatumVrijeme = datumivrijemeslanja;
             }
         }
@@ -27,13 +24,13 @@ namespace SET3_Backend.Models
             public String BrOznRac { get; set; }
             public String OznPosPr { get; set; }
             public String OznNapUr { get; set; }
-            public BrRac() { 
-        
-            }
+            public BrRac() {}
             public BrRac (String broznrac, String oznpospr, String oznnapur)
             {
-                BrOznRac = broznrac;   
+                BrOznRac = broznrac;
+            
                 OznPosPr = oznpospr;
+
                 OznNapUr = oznnapur;
             }
         }
@@ -44,14 +41,13 @@ namespace SET3_Backend.Models
             public double Stopa { get; set; }
             public double Osnovica { get; set; }
             public double Iznos { get; set; }
-            public Porez()
-            {
-
-            }
+            public Porez(){}
             public Porez (double poreznastopa, double osnovica, double iznosporeza)
             {
                 Stopa = poreznastopa;
+
                 Osnovica = osnovica;
+
                 Iznos = iznosporeza;
             }
         }
@@ -69,21 +65,27 @@ namespace SET3_Backend.Models
             public String NacinPlac { get; set; }
             public String OibOper { get; set; }
             public String ZastKod { get; set; }
-            public Racun ()
-            {
-
-            }
+            public Racun (){}
             public Racun (String oib, Boolean usustavupdv, DateTime datumivrijemeizdavanja, String oznakaslijednosti, BrRac brojracuna, List<Porez> pdv, double iznosukupno, String nacinplacanja, String oiboper, String zastkod)
             {
                 OIB = oib;
+
                 USustPdv = usustavupdv;
+
                 DatVrijeme = datumivrijemeizdavanja;
+
                 OznSlijed = oznakaslijednosti;
+
                 brojRacuna = brojracuna;
+
                 pDV = pdv;
+
                 IznosUkupno = iznosukupno;
+
                 NacinPlac = nacinplacanja;
+
                 OibOper = oiboper; 
+
                 ZastKod = zastkod;
             }
         }
@@ -94,14 +96,13 @@ namespace SET3_Backend.Models
                 public Zaglavlje Zaglavlje { get; set; }
                 public Racun Racun { get; set; }
                 public String JIR { get; set; }
-                public FiscalBillModel()
-                {
-
-                }
+                public FiscalBillModel(){}
                 public FiscalBillModel (Zaglavlje zaglavlje, Racun racun, String jir)
                 {
                     Zaglavlje = zaglavlje;
+
                     Racun = racun;  
+
                     this.JIR = jir;
                 }
          }
