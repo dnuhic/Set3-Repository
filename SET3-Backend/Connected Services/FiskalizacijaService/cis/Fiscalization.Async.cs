@@ -28,7 +28,7 @@ namespace Cis
 			if (request == null) throw new ArgumentNullException("request");
 			if (request.Racun == null) throw new ArgumentNullException("request.Racun");
 
-			return SignAndSendRequestAsync<RacunZahtjev, RacunOdgovor>(request, x => x.RacuniAsync, certificate, setupService);
+			return SignAndSendRequestAsync<racuniRequest, racuniResponse>(request, x => x.RacuniAsync, certificate, setupService);
 		}
 
 		/// <summary>
@@ -62,9 +62,8 @@ namespace Cis
 			Action<FiskalizacijaService> setupService = null)
 		{
 			if (request == null) throw new ArgumentNullException("request");
-			if (request.Racun == null) throw new ArgumentNullException("request.Racun");
 
-			return SignAndSendRequestAsync<ProvjeraZahtjev, ProvjeraOdgovor>(request, x => x.ProvjeraAsync, certificate, setupService);
+			return SignAndSendRequestAsync<provjeraRequest, provjeraResponse>(request, x => x.ProvjeraAsync, certificate, setupService);
 		}
 
 		/// <summary>
