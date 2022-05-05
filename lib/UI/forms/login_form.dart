@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:requests/requests.dart';
+import 'package:tasklist/UI/components/orders/api.services.dart';
 import 'package:tasklist/main.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -14,7 +15,8 @@ import 'shop.dart';
 
 class LoginForm extends StatefulWidget {
   final LoginService loginService;
-  const LoginForm({Key key, this.loginService}) : super(key: key);
+  final APIServices apiServices;
+  const LoginForm({Key key, this.loginService, this.apiServices}) : super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -198,7 +200,7 @@ class _LoginFormState extends State<LoginForm> {
                     MyApp.futureRegister = register;
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyHomePage(0)),
+                      MaterialPageRoute(builder: (context) => MyHomePage(0, apiServices: widget.apiServices, registerId: registerId, shopId: shopId,)),
                     );
 
                     /*final email = _email.text;

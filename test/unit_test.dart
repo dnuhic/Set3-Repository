@@ -18,21 +18,21 @@ class MockApiService implements APIServices {
 
   static String url = "https://localhost:7194";
 
-  static Future fetchDoneUserOrders(int id) async {
+  Future fetchDoneUserOrders(int id) async {
     return await http.get(
         Uri.parse(url + '/api/UserOrderModels/myuserorders/' + id.toString()));
   }
 
-  static Future fetchStores() async {
+  Future fetchStores() async {
     return await http.get(Uri.parse(url + '/shopmodels/notDeletedShops'));
   }
 
-  static Future fetchProducts(int id) async {
+  Future fetchProducts(int id) async {
     return await http.get(Uri.parse(
         url + '/api/userordermodels/productsFromShop/' + id.toString()));
   }
 
-  static Future sendOrder(SavedOrderBody body, String action) async {
+  Future sendOrder(SavedOrderBody body, String action) async {
     return await http.post(Uri.parse(url + '/api/userordermodels/' + action),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -40,7 +40,7 @@ class MockApiService implements APIServices {
         body: jsonEncode(body));
   }
 
-  static Future sendOrderEdit(
+  Future sendOrderEdit(
       SavedOrderBody body, String action, int userOrderId) async {
     return await http.put(
         Uri.parse(url +
@@ -54,39 +54,44 @@ class MockApiService implements APIServices {
         body: jsonEncode(body));
   }
 
-  static Future deleteOrder(int id) async {
+  Future deleteOrder(int id) async {
     return await http
         .delete(Uri.parse(url + '/api/userordermodels/' + id.toString()));
   }
 
-  static Future fetchCashRegistersFromShop(int id) async {
+  Future fetchCashRegistersFromShop(int id) async {
     return await http.get(Uri.parse(
         url + '/api/cashregistermodels/cashregisterfromshop/' + id.toString()));
   }
 
-  static Future fetchProductsFromUserOrder(int id) async {
+  Future fetchProductsFromUserOrder(int id) async {
     return await http.get(Uri.parse(
         url + '/api/userordermodels/savedUserOrderProducts/' + id.toString()));
   }
 
-  static Future fetchTablesFromShop(int id) async {
+  Future fetchTablesFromShop(int id) async {
     return await http
         .get(Uri.parse(url + '/api/tablemodels/tablesWithProductsFromShop/' + id.toString()));
   }
 
-  static Future fetchUserOrderFromTable(int id) async {
+  Future fetchUserOrderFromTable(int id) async {
     return await http
         .get(Uri.parse(url + '/api/userordermodels/userOrderFromTable/' + id.toString()));
   }
 }
 
 void main() {
+  MockApiService mockApiService;
+
+  setUp((){
+    mockApiService = MockApiService();
+  });
   test('checks if fetchstore returns instance of Shop', () async {
     //final client = MockClient();
     // when(client.get(Uri.parse('https://localhost:7194' + '/shopmodels/notDeletedShops')))
     //       .thenAnswer((_) async =>
     //           http.Response('{"id":1,"name":"Prvi shop","adress":"Sajevo","stockId":1,"deleted":false}', 200));
-    final response = await MockApiService.fetchStores();
+    final response = await mockApiService.fetchStores();
     print(response.body);
     expect(Shop.fromJson(jsonDecode(response.body)[0]), isA<Shop>());
   });
@@ -102,7 +107,7 @@ void main() {
     final shops = [Shop.fromJson(jsonDecode(firstExpectedShop)), Shop.fromJson(jsonDecode(secondExpectedShop))].toList();
     final shopsNames = shops.map((shop) => shop.name);
     
-    final response = await MockApiService.fetchStores();
+    final response = await mockApiService.fetchStores();
     expect(jsonDecode(response.body).map((shop) => Shop.fromJson(shop).name).toList(), shopsNames);
   });
 
@@ -113,7 +118,7 @@ void main() {
     final products = [Product.fromJson(jsonDecode(firstExpectedProduct))].toList();
     final productsNames = products.map((product) => product.Name);
     
-    final response = await MockApiService.fetchProducts(1);
+    final response = await mockApiService.fetchProducts(1);
     expect(jsonDecode(response.body).map((product) => Product.fromJson(product).Name).toList(), productsNames);
   });
 
@@ -124,7 +129,7 @@ void main() {
     final products = [Product.fromJson(jsonDecode(firstExpectedProduct))].toList();
     final productsNames = products.map((product) => product.Name);
     
-    final response = await MockApiService.fetchProducts(1);
+    final response = await mockApiService.fetchProducts(1);
     expect(jsonDecode(response.body).map((product) => Product.fromJson(product).Name).toList(), productsNames);
   });
 
@@ -136,7 +141,7 @@ void main() {
     final cashRegisters = [CashRegister.fromJson(jsonDecode(firstExpectedCashRegister)), CashRegister.fromJson(jsonDecode(secondExpectedCashRegister))].toList();
     final cashRegistersNames = cashRegisters.map((cashRegister) => cashRegister.name).toList();
     
-    final response = await MockApiService.fetchCashRegistersFromShop(1);
+    final response = await mockApiService.fetchCashRegistersFromShop(1);
     expect(jsonDecode(response.body).map((cashRegister) => CashRegister.fromJson(cashRegister).name).toList(), cashRegistersNames);
   });
 
@@ -144,14 +149,14 @@ void main() {
     
     final savedOrder = SavedOrderBody(1, 3, 1, 1, [ProductQuantitys(1, 5)].toList());
     
-    await MockApiService.sendOrder(savedOrder, "finish");
+    await mockApiService.sendOrder(savedOrder, "finish");
     
-    final response = await MockApiService.fetchDoneUserOrders(1);
+    final response = await mockApiService.fetchDoneUserOrders(1);
     final responseUserOrderModel = UserOrderModel.fromJson(jsonDecode(response.body)[0]);
     expect(responseUserOrderModel.userID, savedOrder.userId);
     expect(responseUserOrderModel.shopID, savedOrder.shopId);
     
-    final responseProducts = await MockApiService.fetchProductsFromUserOrder(responseUserOrderModel.Id);
+    final responseProducts = await mockApiService.fetchProductsFromUserOrder(responseUserOrderModel.Id);
     final jsonProductOrder = jsonDecode(responseProducts.body)[0];
     final responseProductsOrderModel = ProductQuantitys(jsonProductOrder["productId"],5);
     expect(responseProductsOrderModel.productId, 1);

@@ -17,8 +17,10 @@ import '../orders/api.services.dart';
 
 class EditOrderPage extends StatefulWidget {
   int tableId;
-
-  EditOrderPage(this.tableId);
+  APIServices apiServices;
+  int registerId;
+  int shopId;
+  EditOrderPage(this.tableId, {this.apiServices, this.registerId, this.shopId});
 
   @override
   State<EditOrderPage> createState() => _EditOrderPageState(tableId);
@@ -36,11 +38,11 @@ class _EditOrderPageState extends State<EditOrderPage> {
   List<ProductForEdit> items = [];
 
   _getProducts() {
-    APIServices.fetchUserOrderFromTable(tableId).then((response) {
+    widget.apiServices.fetchUserOrderFromTable(tableId).then((response) {
       setState(() {
         dynamic object = json.decode(response.body);
         userOrderModel = UserOrderModel.fromJson(object);
-        APIServices.fetchProductsFromUserOrder(userOrderModel.id).then((response) {
+        widget.apiServices.fetchProductsFromUserOrder(userOrderModel.id).then((response) {
           setState(() {
             print(response.body);
             Iterable list = json.decode(response.body);
@@ -185,9 +187,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                 }
                                 if(items.isNotEmpty) {
 
-                                  SavedOrderBody body = SavedOrderBody(1, userOrderModel.shopID, MyApp.getCashRegisterId(), tableId, productQuantitys);
-                                  APIServices.sendOrderEdit(body, "save", userOrderModel.id).then((value) {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
+                                  SavedOrderBody body = SavedOrderBody(1, userOrderModel.shopID, widget.registerId, tableId, productQuantitys);
+                                  widget.apiServices.sendOrderEdit(body, "save", userOrderModel.id).then((value) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                   });
                                 }
                               },
@@ -208,9 +210,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
                                     productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                                 }
                                 if(items.isNotEmpty) {
-                                  SavedOrderBody body = SavedOrderBody(1, userOrderModel.shopID, MyApp.getCashRegisterId(), tableId, productQuantitys);
-                                  APIServices.sendOrderEdit(body, "finish", userOrderModel.id).then((value) {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1)));
+                                  SavedOrderBody body = SavedOrderBody(1, userOrderModel.shopID, widget.registerId, tableId, productQuantitys);
+                                  widget.apiServices.sendOrderEdit(body, "finish", userOrderModel.id).then((value) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                   });
                                 }
 
