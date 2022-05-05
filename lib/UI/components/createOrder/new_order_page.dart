@@ -17,8 +17,10 @@ import '../orders/api.services.dart';
 
 class NewOrderPage extends StatefulWidget {
   int tableId;
-
-  NewOrderPage(this.tableId);
+  APIServices apiServices;
+  int registerId;
+  int shopId;
+  NewOrderPage(this.tableId, {this.apiServices, this.registerId, this.shopId});
 
   @override
   State<NewOrderPage> createState() => _NewOrderPageState(tableId);
@@ -34,7 +36,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
   List<Product> items = [];
 
   _getProducts() {
-    APIServices.fetchProducts(MyApp.getShopId()).then((response) {
+    widget.apiServices.fetchProducts(widget.shopId).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         items = list.map((model) => Product.fromJson(model)).toList();
@@ -153,7 +155,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                 style: TextButton.styleFrom(
                                   primary: Colors.white,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   List<ProductQuantitys> productQuantitys = [];
 
                                   for(Product product in items) {
@@ -161,11 +163,10 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                       productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                                   }
                                   if(items.isNotEmpty) {
-                                    print(MyApp.getCashRegisterId());
-                                    SavedOrderBody body = SavedOrderBody(1, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
-                                    APIServices.sendOrder(body, "save").then((value) {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0)));
-                                    });
+                                    print(widget.registerId);
+                                    SavedOrderBody body = SavedOrderBody(1, widget.shopId, widget.registerId, tableId, productQuantitys);
+                                    await widget.apiServices.sendOrder(body, "save");
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(0, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                   }
                                 },
                                 child: Text(
@@ -177,7 +178,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                 style: TextButton.styleFrom(
                                   primary: Colors.white,
                                 ),
-                                onPressed: () {
+                                onPressed: () async{
                                   List<ProductQuantitys> productQuantitys = [];
 
                                   for(Product product in items) {
@@ -185,11 +186,11 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                       productQuantitys.add(ProductQuantitys(product.productId, product.chosenQuantity));
                                   }
                                   if(items.isNotEmpty) {
-                                    print(MyApp.getCashRegisterId());
-                                    SavedOrderBody body = SavedOrderBody(1, MyApp.getShopId(), MyApp.getCashRegisterId(), tableId, productQuantitys);
-                                    APIServices.sendOrder(body, "finish").then((value) {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1)));
-                                    });
+                                    print(widget.registerId);
+                                    SavedOrderBody body = SavedOrderBody(1, widget.shopId, widget.registerId, tableId, productQuantitys);
+                                    await widget.apiServices.sendOrder(body, "finish");
+                                    
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                   }
                                 },
                                 child: Text(
@@ -354,6 +355,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
     return FittedBox(
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         IconButton(
+          key: Key(items[index].Name + '-remove-circle'),
             onPressed: () {
               setState(() {
                 if (items[index].chosenQuantity != 0)
@@ -366,6 +368,7 @@ class _NewOrderPageState extends State<NewOrderPage> {
             alignment: Alignment.center,
             child: Text(items[index].chosenQuantity.toString())),
         IconButton(
+          key: Key(items[index].Name + '-add-circle'),
             onPressed: () {
               setState(() {
                 if (items[index].chosenQuantity <
@@ -374,7 +377,9 @@ class _NewOrderPageState extends State<NewOrderPage> {
               });
             },
             icon: Icon(Icons.add_circle)),
-        IconButton(onPressed: () {
+        IconButton(
+          key: Key(items[index].Name + '-create-outlined'),
+          onPressed: () {
           _controllerFirstName.text = items[index].chosenQuantity.toString();
           openCustomQuantityInput(items[index]);
 

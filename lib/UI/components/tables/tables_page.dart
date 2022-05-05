@@ -20,6 +20,10 @@ import '../receipt/model/invoice.dart';
 
 
 class TablePage extends StatefulWidget {
+  APIServices apiServices;
+  int registerId;
+  int shopId;
+  TablePage({this.apiServices, this.registerId, this.shopId});
   @override
   State<TablePage> createState() => _TablePageState();
 }
@@ -29,8 +33,8 @@ class _TablePageState extends State<TablePage> {
 
   // This widget is the root of your application.
   _getTables() {
-    print(MyApp.getShopId());
-    APIServices.fetchTablesFromShop(MyApp.getShopId()).then((response) {
+    print(widget.shopId);
+    widget.apiServices.fetchTablesFromShop(widget.shopId).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         tables = list.map((model) => TableModel.fromJson(model)).toList();
@@ -82,9 +86,9 @@ class _TablePageState extends State<TablePage> {
                               trailing: displayTotal(tables[index]),
                               onTap: () {
                                 if(tables[index].taken) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrderPage(tables[index].id)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrderPage(tables[index].id, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                 } else {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewOrderPage(tables[index].id)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewOrderPage(tables[index].id, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                 }
                               },
                               // subtitle: displayOccupied(tables[index])
