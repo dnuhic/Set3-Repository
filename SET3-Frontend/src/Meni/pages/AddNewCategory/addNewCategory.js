@@ -16,9 +16,9 @@ const AddCategory = () => {
     const [selectedOption, setSelectedOption] = useState(null)
 
     const options = [
-        { value: 0.17, label: '0.17' },
-        { value: 0.05, label: '0.05' },
-        { value: 0.22, label: '0.22' }
+        { value: 0.17, label: '17%' },
+        { value: 0.05, label: '5%' },
+        { value: 0.22, label: '22%' }
     ]
 
     function getCookie(key) {
