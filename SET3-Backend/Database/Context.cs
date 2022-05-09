@@ -25,8 +25,9 @@ namespace SET3_Backend.Database
         public virtual DbSet<MeasuringUnit> MeasuringUnits { get; set; }
         public virtual DbSet<TableModel> TableModels { get; set; }
 
-        public Context([NotNull] DbContextOptions<Context> options) : base(options) {
-            var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
+        public Context([NotNull] DbContextOptions<Context> options) : base(options)
+        {
+            var conn = (Microsoft.Data.Sqlite.SqliteConnection)Database.GetDbConnection();
         }
 
         //Ukoliko zelite da se spojite na lokalnu bazu u DependencyInjection.cs morate promijeniti dbConnString u 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;'
@@ -36,16 +37,16 @@ namespace SET3_Backend.Database
             //Ovaj dio koda kreira lokalnu bazu
 
 
-
-
-
-
+            string directoryPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/Set3-Database";
+            //DirectoryInfo di = Directory.CreateDirectory(directoryPath);
 
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;";
-            optionsBuilder.UseSqlServer(dbConnString);
+            //var dbConnString = @"Data Source=(localdb)\Local;Initial Catalog=LocalDatabase;";
+            //optionsBuilder.UseSqlServer(dbConnString);
+
+            optionsBuilder.UseSqlite(@"Data Source=" + directoryPath + "/database.db");
 
             // za globalnu konekciju
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";

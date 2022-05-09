@@ -12,11 +12,14 @@ namespace SET3_Backend
         {
             services.AddDbContext<Context>(options =>
             {
+                string directoryPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/Set3-Database";
+                //DirectoryInfo di = Directory.CreateDirectory(directoryPath);
                 //Treba dodati connection string na bazu umjesto 'dbConnString'
                 //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-                var dbConnString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;";
-                options.UseSqlServer(dbConnString,
-                    dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
+                options.UseSqlite(@"Data Source=" + directoryPath + "/database.db");
+                //var dbConnString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;";
+                //options.UseSqlServer(dbConnString,
+                //    dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",

@@ -10,6 +10,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "SET3-Frontend", "SET3-Front
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SET3-Backend", "SET3-Backend\SET3-Backend.csproj", "{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseScript", "DatabaseScript\DatabaseScript.csproj", "{8F00ADBE-5CCA-4728-8D8C-D373AA19C77C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E830923-1FEB-4942-BBAB-D862BBAB2A3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F00ADBE-5CCA-4728-8D8C-D373AA19C77C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F00ADBE-5CCA-4728-8D8C-D373AA19C77C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F00ADBE-5CCA-4728-8D8C-D373AA19C77C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F00ADBE-5CCA-4728-8D8C-D373AA19C77C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
