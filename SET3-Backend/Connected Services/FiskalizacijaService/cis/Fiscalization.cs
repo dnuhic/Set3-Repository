@@ -1,3 +1,5 @@
+/*
+
 using FiskalizacijaService;
 using System;
 using System.IO;
@@ -580,3 +582,4 @@ namespace Cis
 
 	#endregion
 }
+*/
