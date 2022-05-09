@@ -20,7 +20,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 //Load dependency injection
 builder.Services.AddBackendServices(builder.Configuration);

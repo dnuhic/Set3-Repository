@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 using FiskalizacijaService;
-using Cis;
 using System.Security.Cryptography.X509Certificates;
 using System.Globalization;
-
+using Newtonsoft.Json;
+using System.Text;
 
 namespace SET3_Backend.Controllers
 {
@@ -20,6 +20,13 @@ namespace SET3_Backend.Controllers
 	[ApiController]
 	public class FiscalizationController
 	{
+
+
+		public const string DATE_FORMAT_SHORT = "dd.MM.yyyy";
+		public const string DATE_FORMAT_LONG = "dd.MM.yyyyTHH:mm:ss";
+
+		public const string SERVICE_URL_PRODUCTION = "https://cis.porezna-uprava.hr:8449/FiskalizacijaService";
+		public const string SERVICE_URL_DEMO = "https://cistest.apis-it.hr:8449/FiskalizacijaServiceTest";
 		private readonly Context _context;
 		public FiscalizationController(Context context)
 		{
@@ -58,6 +65,10 @@ namespace SET3_Backend.Controllers
 				),
 				"jib ovdje ide"
 			);
+			var zaglavlje = new ZaglavljeType()
+			{
+
+			};
 			// Kreiranje računa za za fiskalizaciju
 			var invoice = new RacunType()
 			{
@@ -70,7 +81,7 @@ namespace SET3_Backend.Controllers
 					OznNapUr = fiscalModel.Racun.brojRacuna.OznNapUr
 				},
 
-				DatVrijeme = DateTime.Now.ToString(Fiscalization.DATE_FORMAT_LONG),
+				DatVrijeme = DateTime.Now.ToString(DATE_FORMAT_LONG),
 
 				IznosUkupno = fiscalModel.Racun.IznosUkupno.ToString("N2", CultureInfo.InvariantCulture),
 
@@ -95,12 +106,34 @@ namespace SET3_Backend.Controllers
 
 				USustPdv = true
 			};
-			Byte[] cerFileRead = await File.ReadAllBytesAsync(@"..\\Connected Services\\FiskalizacijaService\\cis\\demo2020_sub_ca.cer");
+			/*
+			var sign = new SignatureType()
+			{
 
-			X509Certificate2 certificate = new X509Certificate2(cerFileRead);
+			};
+			var req = new RacunZahtjev()
+			{
+				Zaglavlje = zaglavlje,
+				Racun = invoice,
+				Signature = sign
+			};
+
+			FiskalizacijaPortTypeClient client = new FiskalizacijaPortTypeClient();
+			var result = await client.racuniAsync(new racuniRequest(req));
+			//Byte[] cerFileRead = await File.ReadAllBytesAsync(@"..\\Connected Services\\FiskalizacijaService\\cis\\demo2020_sub_ca.cer");
+
+			//X509Certificate2 certificate = new X509Certificate2(cerFileRead);
 
 			// Generiraj ZKI, potpiši, pošalji račun i provjeri potpis CIS odgovora
-			RacunOdgovor response = await Fiscalization.SendInvoiceAsync(invoice, certificate);
+			//<RacunOdgovor response = await Fiscalization.SendInvoiceAsync(invoice, certificate);
+			*/
+
+			using var httpClient = new HttpClient();
+			StringContent content = new StringContent(JsonConvert.SerializeObject(invoice), Encoding.UTF8, "application/json");
+			using var response = await httpClient.PostAsync("https://localhost:3030/api/Reservation", content);
+			string jir = await response.Content.ReadAsStringAsync();
+
+			fiscalModel.JIR = jir;
 			//u bazu
 			await _context.FiscalBillModels.AddAsync(fiscalModel);
 
