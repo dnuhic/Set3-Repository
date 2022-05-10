@@ -130,7 +130,16 @@ namespace SET3_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<TFAModel>> Login(UserDto userDto)
         {
-
+            List<UserModel> lista = await _context.UserModels.ToListAsync();
+            if (lista.Count == 0)
+            {
+                SecurityQuestionModel question = await _context.SecurityQuestionModels.FirstOrDefaultAsync();
+                var sha1 = SHA256.Create();
+                var passwordHash1 = Encoding.ASCII.GetString(sha1.ComputeHash(Encoding.ASCII.GetBytes("password")));
+                lista.Add(new UserModel("admin@gmail.com", "Admin", "Admin", passwordHash1, question!.Id, "Odgovor", false, RoleType.Admin.ToString(), ""));
+                _context.UserModels.AddRange(lista);
+                await _context.SaveChangesAsync();
+            }
             Console.WriteLine("inside post");
             if (userDto == null) new TFAModel("ERROR");
             UserModel user = await _context.UserModels.Where(u => u.Email.Equals(userDto.Email)).FirstOrDefaultAsync();
