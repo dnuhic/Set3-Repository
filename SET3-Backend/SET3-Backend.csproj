@@ -41,4 +41,10 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.8.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Tring.Fiscal.Driver">
+      <HintPath>..\..\..\..\..\Desktop\23-Tring.Fiscal.Serve-official\v3.4.518_69575ae\Tring.Fiscal.Driver.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
