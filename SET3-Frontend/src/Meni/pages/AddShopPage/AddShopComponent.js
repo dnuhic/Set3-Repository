@@ -16,6 +16,9 @@ const AddShopComponent = () => {
     const [defaultStock, setDefaultStock] = useState(null);
 
     const [selectedStock, setSelectedStock] = useState(null);
+    const receiptTypes = ['Bosanski', 'Hrvatski'];
+    const [defaultReceipt, setDefaultReceipt] = useState(null);
+    const [selectedReceipt, setSelectedReceipt] = useState(null);
 
     function getCookie(key) {
         var b = document.cookie.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
@@ -39,6 +42,11 @@ const AddShopComponent = () => {
             if (selectedStock !== null) {
                 body.stockId = parseInt(selectedStock)
             }
+            if (selectedReceipt !== null) {
+                body.receiptType = selectedReceipt
+            } else {
+                body.receiptType = defaultReceipt
+            }
             console.log("Tijelo je: ", body);
             const requestOptions = {
                 method: 'POST',
@@ -58,6 +66,9 @@ const AddShopComponent = () => {
                     alert("Shop was succesfully added!");
                     setName("");
                     setAddress("");
+                    if(selectedReceipt !== null)
+                        setDefaultReceipt(selectedReceipt)
+                    setSelectedReceipt(null);
                     console.log("Success!");
                 })
                 .catch(err => {
@@ -82,6 +93,7 @@ const AddShopComponent = () => {
                 setShopStocks(data);
                 setDefaultStock(data[0]);
                 setSelectedStock(data[0].id);
+                setDefaultReceipt('Bosanski');
             });
     }
 
@@ -105,6 +117,12 @@ const AddShopComponent = () => {
         console.log('ID:')
         console.log(e.target.value)
         
+    }
+
+    const handleReceiptChange = (e) => {
+
+        setSelectedReceipt(e.target.value);
+
     }
 
     return (
@@ -159,7 +177,25 @@ const AddShopComponent = () => {
                             }
                         </select>
                     </div>
-                }
+                    }
+
+                    {receiptTypes === null || receiptTypes.length === 0  ?
+                        <h6 style={{ marginTop: "10px", marginBottom: "20px" }}>There is no receipt types available!</h6>
+                        :
+                        <div>Choose the type of receipt you want to generate
+                        <div className="dropdown" style={{ marginTop: "10px", marginBottom: "20px" }}>
+                            <select className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                onChange={(e) => handleReceiptChange(e)}>
+                                {
+                                    receiptTypes.map(receipt => {
+                                        return <option className="dropdown-item" href="#" value={receipt} data-id={receipt}>{receipt}</option>;
+                                    })
+                                }
+                            </select>
+                            </div>
+                        </div>
+                    }
+
 
                 <button
                     type="button"
