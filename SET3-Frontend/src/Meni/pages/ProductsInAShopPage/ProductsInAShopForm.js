@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 function ProductsInAShopForm() {
 	const navigate = useNavigate();
 	const [allProducts, setAllProducts] = useState(null);
+	const [shop, setShop] = useState(null);
 	const { id } = useParams();
 
 	function getCookie(key) {
@@ -29,6 +30,9 @@ function ProductsInAShopForm() {
 		const responseProduct = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/ProductModels`, requestOptions);
 		ResponseCheckModule.unauthorizedResponseCheck(response, navigate)
 		const dataProduct = await responseProduct.json();
+
+		const responseShop = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
+		const dataShop = await responseShop.json();
 	
 		var inShop = [];
 
@@ -46,6 +50,10 @@ function ProductsInAShopForm() {
         }
 
 		setAllProducts(inShop);
+		
+		setShop(dataShop)
+		console.log('Prodavnica')
+		console.log(shop)
 	}
 
 	useEffect(getData, []);
@@ -75,7 +83,7 @@ function ProductsInAShopForm() {
 
 				{allProducts &&
 					<>
-					<h1 className="text-left pl-m m-0" style={{ fontSize: 40 }}> Products in this shop </h1>
+						{shop && <h1 className="text-left pl-m m-0" style={{ fontSize: 40 }}> Products in this shop {shop.name}</h1>}
 					<List products={allProducts} />
 					</>}
 				{!allProducts && <h1>Loading...</h1>}

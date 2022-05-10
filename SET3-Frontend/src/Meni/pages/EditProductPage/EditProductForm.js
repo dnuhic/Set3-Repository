@@ -41,11 +41,12 @@ function EditProductForm() {
             StockId: noviId,
             Name: document.getElementById("name").value,
             CategoryName: category,
-            Price: product.price,
             Deleted: product.deleted,
+            Quantity: product.quantity,
             Barcode: product.barcode,
             BarcodeText: product.barcodeText,
-            Quantity: product.quantity
+            Price: product.price,
+            MeasuringUnit: product.measuringUnit
         };
 
         console.log("NEW PRODUCT: ");
