@@ -53,7 +53,11 @@ namespace SET3_Backend.Controllers
 						"1"
 					),
 
-					new List<Porez>(),
+					billModel.BillItems.Select(el =>
+					{
+						var osnovica = ((1 - el.Vat) * el.UnitPrice * el.Quantity);
+						return new Porez(el.Vat, osnovica, el.Vat + osnovica);
+					}).ToList(),
 
 					billModel.BillItems.Select(el => el.Quantity * el.UnitPrice).Sum(),
 
