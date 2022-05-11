@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
@@ -114,16 +116,15 @@ class _OrderPageState extends State<OrderPage> {
                 final data = await fetchData(order);
                 
                 print(data.toString());
-                final pdfFile = await PdfInvoiceApi.generate(data[0],data[1]);
+                var jir = generateRandomString();
+                if(await hrvFiskalizacija(order.shopID)){
+                  jir = generateRandomNumber();
+                }
+                final pdfFile = await PdfInvoiceApi.generate(data,jir);
 
                 PdfApi.openFile(pdfFile);
               },
               icon: Icon(Icons.receipt_long_outlined)),
-          // Icon(
-          //   Icons.download_done,
-          //   color: Colors.green,
-          //   size: 30.0,
-          // ),
         ]),
       );
     } else {
@@ -156,11 +157,19 @@ class _OrderPageState extends State<OrderPage> {
       }),
     );
 
-    final jir = await fetchJir(response.body);
-    var returnList = List.empty();
-    returnList.add(BillModel.fromJson(jsonDecode(response.body)));
-    returnList.add(jir);
-    return returnList;
+    return BillModel.fromJson(jsonDecode(response.body));
+  }
+
+  static Future hrvFiskalizacija(int shopId) async {
+    final response = await http.get(
+      Uri.parse(
+          MyApp.getBaseUrl() + '/api/HratskaFiskalizacija/'+shopId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    return response.body;
   }
 
   static Future fetchJir(dynamic bill) async {
@@ -177,6 +186,25 @@ class _OrderPageState extends State<OrderPage> {
     );
 
     return response.body;
+  }
+
+  String generateRandomString() {
+    var r = Random();
+    const _chars = '0123456789abcdef';
+    var jir = List.generate(32, (index) => _chars[r.nextInt(_chars.length)]).join();
+    var i = 0; 
+    final dashes = {2, 3, 4, 5}; 
+
+    final finaljir = jir.splitMapJoin(RegExp('....'), onNonMatch: (s) => dashes.contains(i++)? '-' : '');
+
+    return finaljir;
+  }
+
+  String generateRandomNumber() {
+    var r = Random();
+    const _chars = '0123456789';
+    var jir = List.generate(6, (index) => _chars[r.nextInt(_chars.length)]).join();
+    return jir;
   }
 
   Future receiptDialog(int orderId) => showDialog(
