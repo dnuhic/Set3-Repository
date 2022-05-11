@@ -134,7 +134,7 @@ namespace SET3_Backend.Controllers
 
 			using var httpClient = new HttpClient();
 			StringContent content = new StringContent(JsonConvert.SerializeObject(invoice), Encoding.UTF8, "application/json");
-			using var response = await httpClient.PostAsync("https://localhost:3030/api/Reservation", content);
+			using var response = await httpClient.PostAsync("https://set3-fiskalizacija.azurewebsites.net/api/Reservation", content);
 			string jir = await response.Content.ReadAsStringAsync();
 
 			fiscalModel.JIR = jir;
