@@ -33,8 +33,8 @@ namespace SET3_Backend.Controllers
 			_context = context;
 		}
 
-		[HttpGet]
-		public async Task<BillModel> ExecuteFiscalization(BillModel billModel)
+		[HttpPost]
+		public async Task<string> ExecuteFiscalization(BillModel billModel)
 		{
 			FiscalBillModel fiscalModel = new FiscalBillModel(
 				new Zaglavlje(billModel.BillInfo.Number, DateTime.Now),
@@ -154,8 +154,6 @@ namespace SET3_Backend.Controllers
 					new BillSupplier("", "", "")
 			);
 			*/
-
-			billModel
 
 			return jir;
 		}
