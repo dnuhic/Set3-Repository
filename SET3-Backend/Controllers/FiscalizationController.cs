@@ -155,7 +155,9 @@ namespace SET3_Backend.Controllers
 			);
 			*/
 
-			return billModel;
+			billModel
+
+			return jir;
 		}
 
 	}
