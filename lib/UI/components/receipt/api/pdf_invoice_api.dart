@@ -7,7 +7,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 
 class PdfInvoiceApi {
-  static Future<File> generate(BillModel invoice) async {
+  static Future<File> generate(BillModel invoice, String jir) async {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
@@ -19,7 +19,7 @@ class PdfInvoiceApi {
         Divider(),
         buildTotal(invoice),
       ],
-      footer: (context) => buildFooter(invoice),
+      footer: (context) => buildFooter(invoice, jir),
     ));
 
     return PdfApi.saveDocument(name: 'Bill.pdf', pdf: pdf);
@@ -184,10 +184,12 @@ class PdfInvoiceApi {
     );
   }
 
-  static Widget buildFooter(BillModel invoice) => Column(
+  static Widget buildFooter(BillModel invoice, String jir) => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Divider(),
+          SizedBox(height: 2 * PdfPageFormat.mm),
+          buildSimpleText(title: 'JIR ', value: jir),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(title: 'Store', value: invoice.info.storeName),
           SizedBox(height: 1 * PdfPageFormat.mm),

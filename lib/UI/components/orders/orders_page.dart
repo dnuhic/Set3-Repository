@@ -112,8 +112,9 @@ class _OrderPageState extends State<OrderPage> {
               onPressed: () async {
                 print("TU sam");
                 final data = await fetchData(order);
+                
                 print(data.toString());
-                final pdfFile = await PdfInvoiceApi.generate(data);
+                final pdfFile = await PdfInvoiceApi.generate(data[0],data[1]);
 
                 PdfApi.openFile(pdfFile);
               },
@@ -155,9 +156,27 @@ class _OrderPageState extends State<OrderPage> {
       }),
     );
 
-    response.body;
+    final jir = await fetchJir(response.body);
+    var returnList = List.empty();
+    returnList.add(BillModel.fromJson(jsonDecode(response.body)));
+    returnList.add(jir);
+    return returnList;
+  }
 
-    return BillModel.fromJson(jsonDecode(response.body));
+  static Future fetchJir(dynamic bill) async {
+
+    //final uri = Uri.parse('https://192.168.1.2:7194/api/ProductUserOrderIntertables/bill', queryParameters)
+
+    final response = await http.post(
+      Uri.parse(
+          MyApp.getBaseUrl() + '/api/ExecuteFiscalization'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(bill),
+    );
+
+    return response.body;
   }
 
   Future receiptDialog(int orderId) => showDialog(
