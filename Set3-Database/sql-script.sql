@@ -176,4 +176,6 @@ INSERT INTO "SecurityQuestionModels" VALUES (1, "What is your favourite animal?"
 
 INSERT INTO "SecurityQuestionModels" VALUES (2, "What is your favourite color?");
 
+INSERT INTO "StockModels" VALUES (1, "Warehouse");
+
 COMMIT;
