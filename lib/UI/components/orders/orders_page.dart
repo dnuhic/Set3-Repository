@@ -163,7 +163,7 @@ class _OrderPageState extends State<OrderPage> {
   static Future hrvFiskalizacija(int shopId) async {
     final response = await http.get(
       Uri.parse(
-          MyApp.getBaseUrl() + '/api/HratskaFiskalizacija/'+shopId),
+          MyApp.getBaseUrl() + '/HratskaFiskalizacija/'+shopId),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
