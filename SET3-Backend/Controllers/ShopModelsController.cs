@@ -68,6 +68,19 @@ namespace SET3_Backend.Controllers
             return BadRequest("Bad token");
         }
 
+        [HttpGet("{id}")]
+        public async Task<bool> HratskaFiskalizacija(int id)
+        {
+                var shopModel = await _context.ShopModels.FindAsync(id);
+
+                if (shopModel == null)
+                {
+                    return false;
+                }
+
+                return shopModel.ReceiptType.Equals("Hrvatski");
+        }
+
         // PUT: ShopModels/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}"), Authorize(Roles = "ShopAdmin,Admin")]
