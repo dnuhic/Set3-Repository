@@ -44,8 +44,8 @@ class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
-    //return "https://set3.azurewebsites.net";
-    return "https://10.0.2.2:7194";
+    return "https://set3-back.azurewebsites.net";
+    // return "https://10.0.2.2:7194";
   }
   static getShopId() {
     return futureRegister.shopId;
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Tables"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Units"),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
         ],
         currentIndex: _selectedIndex,
