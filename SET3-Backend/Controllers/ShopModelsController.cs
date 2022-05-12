@@ -68,7 +68,7 @@ namespace SET3_Backend.Controllers
             return BadRequest("Bad token");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("hrvatskaFiskalizacija/{id}")]
         public async Task<bool> HratskaFiskalizacija(int id)
         {
                 var shopModel = await _context.ShopModels.FindAsync(id);
