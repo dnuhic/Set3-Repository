@@ -452,3 +452,10 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+/.dart_tool
+/android
+/build
+/ios
+/.packages
+/.flutter-plugins-dependencies
+/.flutter-plugins
