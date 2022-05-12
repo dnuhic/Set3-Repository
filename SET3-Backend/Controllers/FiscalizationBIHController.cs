@@ -27,7 +27,9 @@ namespace SET3_Backend.Controllers
 			_context = context;
 		}
 
-		private void MakeFiscalBillXML(BillModel racun)
+		private async 
+		Task
+		MakeFiscalBillXML(BillModel racun)
 		{
 			FileSystemWatcher watcher = new FileSystemWatcher();
 			watcher.Path = "C:\\Tring\\Xml\\odgovori\\";
@@ -74,11 +76,7 @@ namespace SET3_Backend.Controllers
 
 				XmlElement Sifra = doc.CreateElement(string.Empty, "Sifra", string.Empty);
 				var random = new System.Random();
-				int num = 0;
-				do
-				{
-					num = random.Next(1, racun.BillItems.Count());
-				} while (artiklId.Contains(num));
+				int num = 123;
 				artiklId.Add(num);
 				Sifra.InnerText = $"0-{num.ToString()}";
 				artikal.AppendChild(Sifra);
@@ -147,17 +145,20 @@ namespace SET3_Backend.Controllers
 			BrojRacuna.InnerText = racun.BillInfo.Number.ToString();
 			NoviObjekat.AppendChild(BrojRacuna);
 			doc.Save("C:\\Tring\\Xml\\sfr.xml");
+			doc.Save("C:\\Tring2\\Xml\\sfr.xml");
 		}
 
 		[HttpPost]
-		public BillModel CreateFiscalBill(BillModel racun)
+		public async Task<string> CreateFiscalBillAsync(BillModel racun)
 		{
-			MakeFiscalBillXML(racun);
+			Console.WriteLine("ulazak u createfiscalbill");
+			await MakeFiscalBillXML(racun);
+			Thread.Sleep(10000);
 			XmlDocument doc = new XmlDocument();
-			doc.LoadXml("C:\\Tring\\Xml\\odgovori\\sfr.xml");
+			doc.Load("C:\\Tring\\Xml\\odgovori\\sfr.xml");
 			var odgovori = doc.GetElementsByTagName("Odgovor");
-			var brojFiskalnogRacuna = odgovori.Item(1).ChildNodes.Item(1).InnerText;
-			return racun;
+			var brojFiskalnogRacuna = odgovori.Item(0).ChildNodes.Item(1).InnerText;
+			return brojFiskalnogRacuna;
 		}
 
 	}
