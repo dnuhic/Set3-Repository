@@ -335,6 +335,20 @@ namespace SET3_Backend.Controllers
         [HttpPut("finish/{id}")]
         public async Task<IActionResult> EditUserOrderModelFinish(int id, [FromBody] UserOrderDto userOrderDto)
         {
+
+            foreach(var product in userOrderDto.ProductQuantitys) {
+                ExportShopModel exportShop = new ExportShopModel(userOrderDto.ShopId, product.ProductId, product.Quantity, DateTime.Now, ExportStatus.EXPORT.ToString(), userOrderDto.CashRegisterId, userOrderDto.TableId);
+                _context.ExportShopModels.Add(exportShop);
+
+                var productInShop = await _context.ProductShopIntertables.Where(x => x.ShopId == userOrderDto.ShopId && x.ProductId == product.ProductId).FirstAsync();
+                productInShop.Quantity = productInShop.Quantity + product.Quantity;
+
+                if(productInShop.Quantity < 0)
+                {
+                    productInShop.Quantity = 0;
+                }
+            }
+            await _context.SaveChangesAsync();
             return PutUserOrder(id, userOrderDto, true).Result;
         }
 

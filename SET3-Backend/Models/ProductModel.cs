@@ -20,8 +20,18 @@ namespace SET3_Backend.Models
         
         public string MeasuringUnit { get; set; }
 
-
-
+        public ProductModel(int stockId, string name, string categoryName, bool deleted, double quantity, string barcode, string barcodeText, float price, string measuringUnit)
+        {
+            StockId = stockId;
+            Name = name;
+            CategoryName = categoryName;
+            Deleted = deleted;
+            Quantity = quantity;
+            Barcode = barcode;
+            BarcodeText = barcodeText;
+            Price = price;
+            MeasuringUnit = measuringUnit;
+        }
     }
 
 

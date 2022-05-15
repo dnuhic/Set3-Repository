@@ -29,6 +29,51 @@ namespace SET3_Backend.Controllers
             _configuration = configuration;
         }
 
+        // GET: api/OrderModels/shoptopdf
+        [HttpGet("shoptopdf")]
+        public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetExportShopToPdf()
+        {
+            List<ExportShopToPdfModel> result = new List<ExportShopToPdfModel>();
+            var export = await _context.ExportShopModels.ToListAsync();
+
+            foreach (var item in export)
+            {
+                ExportShopToPdfModel model = new ExportShopToPdfModel();
+
+                model.Quantity = item.Quantity;
+                model.Status = item.Status;
+                model.DateTime = item.DateTime;
+
+                ShopModel shopModel = await _context.ShopModels.FindAsync(item.ShopId);
+                model.ShopId = item.ShopId;
+                model.Shop = shopModel;
+
+                ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
+                model.ProductId = item.ProductId;
+                model.Product = productModel;
+
+
+                if (item.CashRegisterId != -1)
+                {
+                    var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
+                    model.CashRegisterId = item.CashRegisterId;
+                    model.Register = cashRegister;
+                }
+
+                if (item.TableId != -1)
+                {
+                    var tableModel = await _context.TableModels.FindAsync(item.TableId);
+                    model.TableId = item.TableId;
+                    model.Table = tableModel;
+                }
+
+                result.Add(model);
+            }
+
+            return result;
+        }
+
+
         // GET: api/OrderModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrderModels()
@@ -234,7 +279,10 @@ namespace SET3_Backend.Controllers
 
                     _context.OrderModels.Add(newOrder);
                     orderModels.Add(newOrder);
-               
+
+                    ExportShopModel export = new ExportShopModel(shopId, product.Id, quantities[i], DateTime.Now, ExportStatus.INPORT.ToString(), -1, -1);
+                    _context.ExportShopModels.Add(export);
+
                 }
                 await _context.SaveChangesAsync();
                 return orderModels;

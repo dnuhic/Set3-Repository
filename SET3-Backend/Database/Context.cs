@@ -25,6 +25,7 @@ namespace SET3_Backend.Database
         public virtual DbSet<MeasuringUnit> MeasuringUnits { get; set; }
         public virtual DbSet<TableModel> TableModels { get; set; }
         public virtual DbSet<FiscalBillModel> FiscalBillModels { get; set; }
+        public virtual DbSet<ExportShopModel> ExportShopModels { get; set; }
         public Context([NotNull] DbContextOptions<Context> options) : base(options) {
             var conn = (Microsoft.Data.SqlClient.SqlConnection)Database.GetDbConnection();
         }
