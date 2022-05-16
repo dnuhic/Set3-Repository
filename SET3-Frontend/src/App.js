@@ -35,6 +35,7 @@ import Orders from './Meni/pages/OrderPage/Orders';
 import AddCategory from './Meni/pages/AddNewCategory/addNewCategory';
 import PdfReportFilters from './Meni/pages/PDFexport/PdfReportFilters'
 import ExcelExportPage from './Meni/pages/ExcelPage/ExcelExport'
+import ExcelImportPage from './Meni/pages/ExcelPage/ExcelImport'
 
 function App() {
     return (
@@ -196,6 +197,11 @@ function App() {
             <Routes>
 
                 <Route path="/excelExport" element={<ExcelExportPage/>} />
+
+            </Routes>
+            <Routes>
+
+                <Route path="/excelImport" element={<ExcelImportPage />} />
 
             </Routes>
             

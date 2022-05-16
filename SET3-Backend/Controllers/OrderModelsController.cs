@@ -30,12 +30,12 @@ namespace SET3_Backend.Controllers
         }
 
         // GET: api/OrderModels/shoptopdf
-        [HttpGet("shoptopdf")]
+        [HttpGet("shoptopdfExport")]
         public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetExportShopToPdf()
         {
             List<ExportShopToPdfModel> result = new List<ExportShopToPdfModel>();
             var export = await _context.ExportShopModels.ToListAsync();
-
+            export = export.FindAll(x => x.Status == "EXPORT");
             foreach (var item in export)
             {
                 ExportShopToPdfModel model = new ExportShopToPdfModel();
@@ -55,6 +55,52 @@ namespace SET3_Backend.Controllers
                 model.ProductPrice = productModel.Price;
                 model.ProductCategory = productModel.CategoryName;
              
+
+
+                if (item.CashRegisterId != -1)
+                {
+                    var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
+                    model.CashRegisterId = item.CashRegisterId;
+                    model.CashRegisterName = cashRegister.Name;
+                }
+
+                if (item.TableId != -1)
+                {
+                    var tableModel = await _context.TableModels.FindAsync(item.TableId);
+                    model.TableId = item.TableId;
+                    model.TableName = tableModel.Name;
+                }
+
+                result.Add(model);
+            }
+
+            return result;
+        }
+        [HttpGet("shoptopdfImport")]
+        public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetImportShopToPdf()
+        {
+            List<ExportShopToPdfModel> result = new List<ExportShopToPdfModel>();
+            var export = await _context.ExportShopModels.ToListAsync();
+            export = export.FindAll(x => x.Status == "INPORT");
+            foreach (var item in export)
+            {
+                ExportShopToPdfModel model = new ExportShopToPdfModel();
+
+                model.Quantity = item.Quantity;
+                model.Status = item.Status;
+                model.DateTime = item.DateTime;
+
+                ShopModel shopModel = await _context.ShopModels.FindAsync(item.ShopId);
+                model.ShopId = item.ShopId;
+                model.ShopName = shopModel.Name;
+                model.ShopAdress = shopModel.Adress;
+
+                ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
+                model.ProductId = item.ProductId;
+                model.ProductName = productModel.Name;
+                model.ProductPrice = productModel.Price;
+                model.ProductCategory = productModel.CategoryName;
+
 
 
                 if (item.CashRegisterId != -1)

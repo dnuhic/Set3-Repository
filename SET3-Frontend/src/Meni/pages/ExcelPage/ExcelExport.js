@@ -28,7 +28,7 @@ export default function ExcelExportPage() {
             credentials: 'same-origin'
         };*/
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/shoptopdf`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/shoptopdfExport`);
         const dataResponse = await response.json()
         setData(dataResponse)
         console.log(dataResponse);
