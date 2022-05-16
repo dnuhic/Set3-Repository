@@ -27,15 +27,15 @@ namespace SET3_Backend.Models
 
         public int TableId { get; set; }
 
-        public ExportShopModel(int shopId, int productId, double quantity, DateTime dateTime, string status, int register, int table)
+        public ExportShopModel(int shopId, int productId, double quantity, DateTime dateTime, string status, int cashRegisterId, int tableId)
         {
             ShopId = shopId;
             ProductId = productId;
             Quantity = quantity;
             DateTime = dateTime;
             Status = status;
-            CashRegisterId = register;
-            TableId = table;
+            CashRegisterId = cashRegisterId;
+            TableId = tableId;
         }
     }
 
@@ -43,11 +43,14 @@ namespace SET3_Backend.Models
     {
         public int ShopId { get; set; }
 
-        public ShopModel Shop { get; set; }
+        public string ShopName { get; set; }
+        public  string ShopAdress { get; set; }
 
         public int ProductId { get; set; }
 
-        public ProductModel Product { get; set; }
+        public string ProductName { get; set; }
+        public string ProductCategory { get; set; }
+        public float ProductPrice { get; set; }
 
         public double Quantity { get; set; }
 
@@ -56,11 +59,11 @@ namespace SET3_Backend.Models
         public string Status { get; set; }
 
         public int? CashRegisterId { get; set; }
+        public string? CashRegisterName { get; set; }
 
-        public CashRegisterModel? Register { get; set; }
 
         public int? TableId { get; set; }
 
-        public TableModel? Table { get; set; }
+        public string? TableName { get; set; }
     }
 }

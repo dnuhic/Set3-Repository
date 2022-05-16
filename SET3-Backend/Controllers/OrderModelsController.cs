@@ -46,25 +46,29 @@ namespace SET3_Backend.Controllers
 
                 ShopModel shopModel = await _context.ShopModels.FindAsync(item.ShopId);
                 model.ShopId = item.ShopId;
-                model.Shop = shopModel;
+                model.ShopName = shopModel.Name;
+                model.ShopAdress = shopModel.Adress;
 
                 ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
                 model.ProductId = item.ProductId;
-                model.Product = productModel;
+                model.ProductName = productModel.Name;
+                model.ProductPrice = productModel.Price;
+                model.ProductCategory = productModel.CategoryName;
+             
 
 
                 if (item.CashRegisterId != -1)
                 {
                     var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
                     model.CashRegisterId = item.CashRegisterId;
-                    model.Register = cashRegister;
+                    model.CashRegisterName = cashRegister.Name;
                 }
 
                 if (item.TableId != -1)
                 {
                     var tableModel = await _context.TableModels.FindAsync(item.TableId);
                     model.TableId = item.TableId;
-                    model.Table = tableModel;
+                    model.TableName = tableModel.Name;
                 }
 
                 result.Add(model);
