@@ -70,7 +70,9 @@ export default function ExcelExportPage() {
             <GridColumn field="productCategory" title="Product Category" />
             <GridColumn field="productPrice" title="Product Price" />
             <GridColumn field="quantity" title="Quantity" width="50px" />
-            <GridColumn field="dateTime" title="Date" width="350px" />
+                    <GridColumn field="dateTime" title="Date" width="350px" />
+                    <GridColumn field="cashRegisterName" title="Register name" width="350px" />
+                    <GridColumn field="TableName" title="Table name" width="350px" />
                 </Grid>
                 </div>
         </Box>
