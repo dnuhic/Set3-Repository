@@ -62,7 +62,7 @@ class _TablePageState extends State<TablePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
-                  child: Text("Tables:", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  child: Text("Units:", style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -80,7 +80,7 @@ class _TablePageState extends State<TablePage> {
                                 decoration: new BoxDecoration(
                                     border: new Border(
                                         right: new BorderSide(width: 1.0, color: Colors.grey))),
-                                child: Icon(Icons.table_bar),
+                                child: Icon(Icons.storage),
                               ),
                               title: Text(tables[index].name),
                               trailing: displayTotal(tables[index]),

@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
-    //return "https://set3.azurewebsites.net";
-    return "https://10.0.2.2:7194";
+    return "https://set3-back.azurewebsites.net";
+    // return "https://10.0.2.2:7194";
   }
   
 
@@ -150,8 +150,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('tables')), label: "Tables",),
-          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('orders')), label: "Orders",),
+
+          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('tables')), label: "Units"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('orders')), label: "Orders"),
+
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),
