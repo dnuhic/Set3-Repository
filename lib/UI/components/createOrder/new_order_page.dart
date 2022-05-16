@@ -188,9 +188,11 @@ class _NewOrderPageState extends State<NewOrderPage> {
                                   if(items.isNotEmpty) {
                                     print(widget.registerId);
                                     SavedOrderBody body = SavedOrderBody(1, widget.shopId, widget.registerId, tableId, productQuantitys);
+                                    
                                     await widget.apiServices.sendOrder(body, "finish");
                                     
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
+
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(1, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
                                   }
                                 },
                                 child: Text(

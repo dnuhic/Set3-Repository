@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:format/format.dart';
 import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
 
 import 'dart:convert';
@@ -10,11 +12,13 @@ import 'package:tasklist/UI/components/orders/api.services.dart';
 import 'package:http/http.dart' as http;
 import 'package:tasklist/UI/components/orders/userordermodel.dart';
 import 'package:tasklist/main.dart';
+import 'package:xml/xml.dart';
 
 import '../../background/background.dart';
 import '../receipt/api/pdf_api.dart';
 import '../receipt/api/pdf_invoice_api.dart';
 import '../receipt/model/invoice.dart';
+import 'dart:developer' as developer;
 
 
 class OrderPage extends StatefulWidget {
@@ -117,13 +121,29 @@ class _OrderPageState extends State<OrderPage> {
           IconButton(
               onPressed: () async {
                 print("TU sam");
-                final data = await fetchData(order);
+                final data = await widget.apiServices.fetchData(order);
                 
                 print(data.toString());
                 var jir = generateRandomString();
-                if(await hrvFiskalizacija(order.shopID)){
+                if(await hrvFiskalizacija(order.shopID) != null){
                   jir = generateRandomNumber();
                 }
+
+                
+                await widget.apiServices.fetchData(order);
+                final builder = XmlBuilder();
+                createXMLDocument(builder, data);
+                //developer.log(builder.buildDocument().toString());
+                final xmlSfrResponse = await widget.apiServices.sendFiscalizationXML(builder.buildDocument());
+                
+
+                final xmlSFR = XmlDocument.parse(xmlSfrResponse.body.toString());
+
+                developer.log(xmlSFR.toString());
+                jir = xmlSFR.getElement("KasaOdgovor").getElement("Odgovori").getElement("Odgovor").getElement("Vrijednost").text;
+
+                developer.log(jir.toString());
+
                 final pdfFile = await PdfInvoiceApi.generate(data,jir);
 
                 PdfApi.openFile(pdfFile);
@@ -167,7 +187,7 @@ class _OrderPageState extends State<OrderPage> {
   static Future hrvFiskalizacija(int shopId) async {
     final response = await http.get(
       Uri.parse(
-          MyApp.getBaseUrl() + '/HratskaFiskalizacija/'+shopId),
+          MyApp.getBaseUrl() + '/HratskaFiskalizacija/'+shopId.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -209,6 +229,46 @@ class _OrderPageState extends State<OrderPage> {
     const _chars = '0123456789';
     var jir = List.generate(6, (index) => _chars[r.nextInt(_chars.length)]).join();
     return jir;
+  }
+
+  void createXMLDocument(XmlBuilder builder, BillModel racun) {
+    
+    
+    builder.processing('xml', 'version="1.0" encoding="utf-8"');
+    builder.element('RacunZahtjev', nest: () {
+      builder.attribute('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance");
+      builder.attribute('xmlns:xsd', "http://www.w3.org/2001/XMLSchema");
+      builder.element('VrstaZahtjeva', nest: "0");
+      builder.element('NoviObjekat', nest: () {
+        builder.element('StavkeRacuna', nest: (){
+          double ukupaniznos = 0;
+          for (BillItem item in racun.items){
+          builder.element('RacunStavka', nest: (){
+            builder.element('artikal', nest: (){
+              builder.element('Sifra', nest: "1000");
+              builder.element('Naziv', nest: item.name);
+              builder.element('Cijena', nest: item.unitPrice);
+              builder.element('JM', nest: item.mesuarment);
+              builder.element('Stopa', nest: "E");
+              builder.element('Grupa', nest: "0");
+              builder.element('PLU', nest: "0");
+              ukupaniznos += item.unitPrice * item.quantity;
+            });
+            builder.element('Kolicina', nest: item.quantity.toString());
+            builder.element('Rabat', nest: "0");
+          });
+          }
+          builder.element('VrstePlacanja', nest: (){
+            builder.element('VrstaPlacanja', nest:(){
+              builder.element('Oznaka', nest: "Gotovina");
+              builder.element('Iznos', nest: ukupaniznos.toString() ); //format("{1:0.00}", ukupaniznos.toString()).replaceAll(",", "."));
+            });
+          });
+        });
+      });
+    });
+    
+
   }
 
   Future receiptDialog(int orderId) => showDialog(
