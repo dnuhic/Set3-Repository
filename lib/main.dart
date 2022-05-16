@@ -151,8 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
 
-          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('tables')), label: "Units"),
-          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('orders')), label: "Orders"),
+          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('tables')), label: "Units"),
+          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('orders')), label: "Orders"),
 
         ],
         currentIndex: _selectedIndex,
