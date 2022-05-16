@@ -18,6 +18,10 @@ import '../receipt/model/invoice.dart';
 
 
 class OrderPage extends StatefulWidget {
+  APIServices apiServices;
+  int registerId;
+  int shopId;
+  OrderPage({this.apiServices, this.registerId, this.shopId});
   @override
   State<OrderPage> createState() => _OrderPageState();
 }
@@ -27,7 +31,7 @@ class _OrderPageState extends State<OrderPage> {
 
   // This widget is the root of your application.
   _getOrders() {
-    APIServices.fetchDoneUserOrders(MyApp.getCashRegisterId()).then((response) {
+    widget.apiServices.fetchDoneUserOrders(widget.registerId).then((response) {
       setState(() {
         Iterable list = json.decode(response.body);
         orders = list.map((model) => UserOrderModel.fromJson(model)).toList();

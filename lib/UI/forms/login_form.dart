@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:requests/requests.dart';
+import 'package:tasklist/UI/components/orders/api.services.dart';
 import 'package:tasklist/main.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -13,7 +14,9 @@ import 'loginservice.dart';
 import 'shop.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key key}) : super(key: key);
+  final LoginService loginService;
+  final APIServices apiServices;
+  const LoginForm({Key key, this.loginService, this.apiServices}) : super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -32,12 +35,12 @@ class _LoginFormState extends State<LoginForm> {
   CashRegister selectedRegister;
 
   _getShops() {
-    LoginService.fetchStores().then((response) => setState(() {
+    widget.loginService.fetchStores().then((response) => setState(() {
           Iterable list = json.decode(response.body);
           shops = list.map((model) => Shop.fromJson(model)).toList();
           selectedShop = shops[0];
 
-          LoginService.fetchCashRegistersFromShop(selectedShop.id)
+          widget.loginService.fetchCashRegistersFromShop(selectedShop.id)
               .then((response) {
             setState(() {
               Iterable list = json.decode(response.body);
@@ -109,6 +112,7 @@ class _LoginFormState extends State<LoginForm> {
                     Container(
                         margin: const EdgeInsets.only(left: 16, right: 32),
                         child: DropdownButtonFormField<Shop>(
+                          key: Key("drop-down-shop"),
                           decoration: InputDecoration(
                               // enabledBorder: OutlineInputBorder(
                               //   borderRadius: BorderRadius.circular(12),
@@ -132,7 +136,7 @@ class _LoginFormState extends State<LoginForm> {
                                   ))
                               .toList(),
                           onChanged: (shop) => {
-                            LoginService.fetchCashRegistersFromShop(shop.id)
+                            widget.loginService.fetchCashRegistersFromShop(shop.id)
                                 .then((response) {
                               setState(() {
                                 Iterable list = json.decode(response.body);
@@ -150,6 +154,7 @@ class _LoginFormState extends State<LoginForm> {
                     Container(
                         margin: const EdgeInsets.only(left: 16, right: 32),
                         child: DropdownButtonFormField<CashRegister>(
+                          key: Key("drop-down-cashregister"),
                           decoration: InputDecoration(
                               // enabledBorder: OutlineInputBorder(
                               //   borderRadius: BorderRadius.circular(12),
@@ -183,6 +188,7 @@ class _LoginFormState extends State<LoginForm> {
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
+                  key: Key('login-btn'),
                   onTap: (() async {
                     final shopId = selectedShop.id;
                     final registerId = selectedRegister.id;
@@ -194,7 +200,7 @@ class _LoginFormState extends State<LoginForm> {
                     MyApp.futureRegister = register;
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyHomePage(0)),
+                      MaterialPageRoute(builder: (context) => MyHomePage(0, apiServices: widget.apiServices, registerId: registerId, shopId: shopId,)),
                     );
 
                     /*final email = _email.text;

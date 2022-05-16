@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:tasklist/UI/components/editOrder/edit_order_page.dart';
+import 'package:tasklist/UI/components/orders/api.services.dart';
+import 'package:tasklist/UI/forms/loginservice.dart';
 import 'package:tasklist/edit_order_page.dart';
 import 'package:tasklist/UI/components/orders/orders_page.dart';
 import 'package:tasklist/reciept_page.dart';
@@ -47,13 +49,9 @@ class MyApp extends StatelessWidget {
     return "https://set3-back.azurewebsites.net";
     // return "https://10.0.2.2:7194";
   }
-  static getShopId() {
-    return futureRegister.shopId;
-  }
+  
 
-  static getCashRegisterId() {
-    return futureRegister.registerId;
-  }
+  
 
   static int userId;
 
@@ -69,9 +67,9 @@ class MyApp extends StatelessWidget {
     print(futureRegister.registerId);
     //return MyHomePage(2);
     if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
-      return MyHomePage(0);
+      return MyHomePage(0, apiServices: APIServices(), registerId: futureRegister.registerId, shopId: futureRegister.shopId);
     }
-    return LoginScreen();
+    return LoginScreen(loginService: LoginService(), apiServices: APIServices());
   }
 
   // This widget is the root of your application.
@@ -91,8 +89,10 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   int selectedIndex;
-
-  MyHomePage(this.selectedIndex);
+  APIServices apiServices;
+  int registerId;
+  int shopId;
+  MyHomePage(this.selectedIndex, {this.apiServices, this.registerId, this.shopId});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -144,14 +144,16 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
-          TablePage(),
-          OrderPage(),
+          TablePage(apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId),
+          OrderPage(apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Units"),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
+
+          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('tables')), label: "Units"),
+          BottomNavigationBarItem(icon: Icon(Icons.list), key: Key('orders')), label: "Orders"),
+
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Color(0xfff3c526e),
