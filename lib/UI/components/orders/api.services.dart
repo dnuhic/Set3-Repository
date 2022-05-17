@@ -3,12 +3,53 @@ import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tasklist/UI/components/orders/userordermodel.dart';
+import 'package:tasklist/UI/components/receipt/model/invoice.dart';
 import 'package:tasklist/main.dart';
+import 'package:xml/xml.dart';
 
 import '../createOrder/saved_order_body.dart';
+import 'dart:developer' as developer;
 
 class APIServices {
-  String baseUrl = "https://10.0.2.2:7206";
+  //String baseUrl = "https://10.0.2.2:7206";
+  String tringURL = "http://10.0.2.2:8085";
+
+  // Future getFiscalizationXML () async {
+  //   return await http.get(Uri.parse(tringURL + '/sfr'));
+  // }
+
+  Future sendFiscalizationXML (XmlDocument body) async {
+
+    //developer.log("OVDJE SMO" + body.toString());
+    return await http
+        .post(Uri.parse(tringURL + '/sfr'),
+      headers: <String, String>{
+        'Content-Type': 'text/xml; charset=UTF-8',
+      },
+      body: body.toXmlString());
+  }
+
+  Future fetchData(UserOrderModel order) async {
+
+    //final uri = Uri.parse('https://192.168.1.2:7194/api/ProductUserOrderIntertables/bill', queryParameters)
+
+    final response = await http.post(
+      Uri.parse(
+          MyApp.getBaseUrl() + '/api/ProductUserOrderIntertables/bill'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, int>{
+        "UserOrderId": order.Id,
+        "CurrentUserId": order.UserId,
+        "CashRegisterId": order.CashRegisterId,
+        "ShopId": order.shopID
+      }),
+    );
+
+    return BillModel.fromJson(jsonDecode(response.body));
+  }
 
   Future fetchDoneUserOrders(int id) async {
     return await http

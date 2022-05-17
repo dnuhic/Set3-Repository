@@ -45,6 +45,8 @@ dependencies:
   mocktail: ^0.3.0
   mockito: ^5.1.0
   flutter_tabler_icons: ^1.1.1
+  format: ^1.1.1
+  xml: ^5.3.1
 
 dev_dependencies:
   flutter_test:

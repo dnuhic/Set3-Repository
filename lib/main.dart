@@ -18,6 +18,7 @@ import 'UI/components/tables/tables_page.dart';
 import 'login_page.dart';
 import 'orders_list_page.dart';
 //import 'login_page.dart';
+import 'dart:developer' as developer;
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -46,8 +47,8 @@ class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
-    return "https://set3-back.azurewebsites.net";
-    // return "https://10.0.2.2:7194";
+    //return "https://set3-back.azurewebsites.net";
+    return "https://10.0.2.2:7194";
   }
   
 
@@ -113,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     pageController = PageController(initialPage: widget.selectedIndex);
+
     setState(() {
       if (widget.selectedIndex < 2)
         _selectedIndex = widget.selectedIndex;
@@ -123,9 +125,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    developer.log(widget.shopId.toString());
     return Scaffold(
       backgroundColor: Colors.white,
-
+      
       appBar: AppBar(
         backgroundColor: Color(0xfff3c526e),
         elevation: 0,
