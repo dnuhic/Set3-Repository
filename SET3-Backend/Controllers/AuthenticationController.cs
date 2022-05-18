@@ -100,7 +100,7 @@ namespace SET3_Backend.Controllers
 
             if(!_context.ShopModels.Any())
             {
-                ShopModel shop1 = new ShopModel("Bingo", "Dzemala Bijedica St 160, Sarajevo 71000", 1, false, "Bosanski");
+                ShopModel shop1 = new ShopModel("Bingo", "Dzemala Bijedica St 160 71000 Sarajevo ", 1, false, "Bosanski");
                 _context.ShopModels.Add(shop1);
 
                 ShopModel shop2 = new ShopModel("Konzum", "Hercegovacka ul. 78, 21000, Split, Croatia", 1, false, "Hrvatski");

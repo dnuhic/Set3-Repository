@@ -36,6 +36,7 @@ import AddCategory from './Meni/pages/AddNewCategory/addNewCategory';
 import PdfReportFilters from './Meni/pages/PDFexport/PdfReportFilters'
 import ExcelExportPage from './Meni/pages/ExcelPage/ExcelExport'
 import ExcelImportPage from './Meni/pages/ExcelPage/ExcelImport'
+import Proba from './Meni/pages/ExcelPage/Proba'
 
 function App() {
     return (
@@ -204,7 +205,12 @@ function App() {
                 <Route path="/excelImport" element={<ExcelImportPage />} />
 
             </Routes>
-            
+
+            <Routes>
+
+                <Route path="/proba" element={<Proba />} />
+
+            </Routes>
 
             </Router >
 

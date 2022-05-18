@@ -10,6 +10,7 @@ import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import DatePicker from '@material-ui/lab/DatePicker';
 import DateTimePicker from 'react-datetime-picker';
+import { TextField } from '@material-ui/core';
 
 export default function ExcelImportPage() {
 
@@ -25,13 +26,6 @@ export default function ExcelImportPage() {
         skip: 0,
         take: 10,
     });
-    const _export = React.useRef(null);
-
-    const exportExport = () => {
-        if (_export.current !== null) {
-            _export.current.save(data);
-        }
-    };
 
     const applyFilter = () => {
 
@@ -58,7 +52,46 @@ export default function ExcelImportPage() {
         }
 
         setDataForPage(newData);
+        
 
+    };
+    const downloadTxtFile = (data, columnNameArray) => {
+       /* const data = "p,a,b\n1,2,3";*/
+
+        const csvString = [
+            [
+                "Shop Name",
+                "Shop Address",
+                "Product Name",
+                "Product Category",
+                "Product Price",
+                "Quantity",
+                "Date"
+
+            ],
+            ...data.map(item => [
+                item.shopName,
+                item.shopAdress,
+                item.productName,
+                item.productCategory,
+                item.productPrice,
+                item.quantity,
+                item.dateTime
+            ])
+        ]
+            .map(e => e.join(","))
+            .join("\n");
+
+        console.log(csvString);
+
+        const element = document.createElement("a");
+        const file = new Blob([csvString], {
+            type: "text/plain"
+        });
+        element.href = URL.createObjectURL(file);
+        element.download = "report.csv";
+        document.body.appendChild(element);
+        element.click();
     };
 
     function getCookie(key) {
@@ -124,7 +157,7 @@ export default function ExcelImportPage() {
         setEndDateTime(e);
     }
 
-    return <ExcelExport ref={_export}>
+    return (<>
 
         {data && allShops && dataForPage && allCategories && 
             <Box sx={{
@@ -191,14 +224,14 @@ export default function ExcelImportPage() {
                 Apply filter
             </Button>
                 <div className="mainDiv">
-                    <Button title="Export Excel" onClick={exportExport}>
+                <Button title="Export Excel" onClick={() => downloadTxtFile(dataForPage, ["shopName", "shopAdress", "productName", "productCategory", "productPrice", "quantity","dateTime"])}>
                         Export to Excel
                 </Button>
 
                     <Grid
                         data={dataForPage}
 
-                        ref={_export}
+                        
                         style={{
                             height: '420px'
                         }} >
@@ -219,5 +252,5 @@ export default function ExcelImportPage() {
         }{
             !data && <h1>Loading...</h1>
         }
-    </ExcelExport>;
+    </>);
 };
