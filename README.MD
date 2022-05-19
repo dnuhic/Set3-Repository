@@ -6,3 +6,5 @@
 
 
 ### run "docker-compose up" to start the services, close with CTRL+C and remove with "docker-compose down" afterwards
+
+### or start with ./start.sh , if doesn't work then chmod +x start.sh
