@@ -86,6 +86,9 @@ namespace SET3_Backend.Controllers
             _context.DeliveryModels.Add(deliveryModel);
             await _context.SaveChangesAsync();
 
+           // ExportShopModel export = new ExportShopModel(-1, deliveryModel.ProductId, deliveryModel.Quantity, DateTime.Now, ExportStatus.INPORT.ToString(), -1, -1);
+            //_context.ExportShopModels.Add(export);
+
             return CreatedAtAction("GetDeliveryModel", new { id = deliveryModel.Id }, deliveryModel);
         }
 

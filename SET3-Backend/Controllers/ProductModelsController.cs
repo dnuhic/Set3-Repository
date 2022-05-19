@@ -231,7 +231,7 @@ namespace SET3_Backend.Controllers
 
 
         //BARCODE generating
-        private async Task<ProductModel> InsertBarcode(ProductModel model)
+        public async Task<ProductModel> InsertBarcode(ProductModel model)
         {
             string modelId = model.Id.ToString();
             modelId = modelId.PadLeft(7 - modelId.Length, '0');

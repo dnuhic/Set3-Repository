@@ -37,7 +37,11 @@ namespace SET3_Backend.Controllers
             token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
             if(ValidateToken(token) != null)
-                return await _context.ShopModels.ToListAsync();
+            {
+
+                var nesto =  await _context.ShopModels.ToListAsync();
+                return nesto;
+            }
             return BadRequest("Bad token.");
         }
 
