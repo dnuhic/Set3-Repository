@@ -1,22 +1,12 @@
 version: '3.9'
 
 services:
-  set3-backend:
-    build: ./Set3-Backend/
-    container_name: set3-backend
-    restart: always
-    environment:
-      - MY_ENV=myenv
-    ports:
-      - 7194:7194
   set3-frontend:
     build: ./SET3-Frontend/
     container_name: SET3-Frontend
     environment:
-      - REACT_APP_BACKEND_URL=https://localhost:7194/
+      - REACT_APP_BACKEND_URL=https://set3-back.azurewebsites.net/
     restart: always
-    depends_on:
-      - set3-backend
     ports:
       - 3000:3000
   
