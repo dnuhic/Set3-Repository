@@ -104,7 +104,7 @@ namespace SET3_Backend.Controllers
                 _context.ShopModels.Add(shop1);
 
                 ShopModel shop2 = new ShopModel("Konzum", "Hercegovacka ul. 78 21000 Split Croatia", 1, false, "Hrvatski");
-                _context.ShopModels.Add(shop1);
+                _context.ShopModels.Add(shop2);
             }
 
             if(!_context.CashRegisterModels.Any())
