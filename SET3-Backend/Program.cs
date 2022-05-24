@@ -18,7 +18,7 @@ Log.Logger = new LoggerConfiguration()
 
 // Add services to the container.
 
-builder.Logging.ClearProviders();
+//builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
@@ -64,6 +64,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[] { "https://localhost:3000", "https://set3-front.azurewebsites.net" }).AllowCredentials());
+
 
 app.UseHttpsRedirection();
 
