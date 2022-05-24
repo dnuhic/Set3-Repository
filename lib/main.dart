@@ -38,7 +38,6 @@ void main() {
     MyApp.futureRegister = value;
     runApp(app);
   });
-
 }
 
 class MyApp extends StatelessWidget {
@@ -47,12 +46,9 @@ class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
 
   static getBaseUrl() {
-    //return "https://set3-back.azurewebsites.net";
-    return "https://10.0.2.2:7194";
+    return "https://set3-back.azurewebsites.net";
+    //return "https://10.0.2.2:7194";
   }
-  
-
-  
 
   static int userId;
 
@@ -67,10 +63,16 @@ class MyApp extends StatelessWidget {
     // setRegister();
     print(futureRegister.registerId);
     //return MyHomePage(2);
-    if (futureRegister != null && futureRegister.registerId != 0 && futureRegister.shopId != 0) {
-      return MyHomePage(0, apiServices: APIServices(), registerId: futureRegister.registerId, shopId: futureRegister.shopId);
+    if (futureRegister != null &&
+        futureRegister.registerId != 0 &&
+        futureRegister.shopId != 0) {
+      return MyHomePage(0,
+          apiServices: APIServices(),
+          registerId: futureRegister.registerId,
+          shopId: futureRegister.shopId);
     }
-    return LoginScreen(loginService: LoginService(), apiServices: APIServices());
+    return LoginScreen(
+        loginService: LoginService(), apiServices: APIServices());
   }
 
   // This widget is the root of your application.
@@ -93,7 +95,8 @@ class MyHomePage extends StatefulWidget {
   APIServices apiServices;
   int registerId;
   int shopId;
-  MyHomePage(this.selectedIndex, {this.apiServices, this.registerId, this.shopId});
+  MyHomePage(this.selectedIndex,
+      {this.apiServices, this.registerId, this.shopId});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -128,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     developer.log(widget.shopId.toString());
     return Scaffold(
       backgroundColor: Colors.white,
-      
+
       appBar: AppBar(
         backgroundColor: Color(0xfff3c526e),
         elevation: 0,
@@ -147,22 +150,27 @@ class _MyHomePageState extends State<MyHomePage> {
         physics: NeverScrollableScrollPhysics(),
         controller: pageController,
         children: [
-          TablePage(apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId),
-          OrderPage(apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId),
+          TablePage(
+              apiServices: widget.apiServices,
+              registerId: widget.registerId,
+              shopId: widget.shopId),
+          OrderPage(
+              apiServices: widget.apiServices,
+              registerId: widget.registerId,
+              shopId: widget.shopId),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-
-          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('tables')), label: "Units"),
-          BottomNavigationBarItem(icon: Icon(Icons.list, key: Key('orders')), label: "Orders"),
-
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xfff3c526e),
-        unselectedItemColor: Colors.grey,
-        onTap: onTapped
-      ),
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.list, key: Key('tables')), label: "Units"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.list, key: Key('orders')), label: "Orders"),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Color(0xfff3c526e),
+          unselectedItemColor: Colors.grey,
+          onTap: onTapped),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

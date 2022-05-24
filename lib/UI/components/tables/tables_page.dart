@@ -17,8 +17,6 @@ import '../receipt/api/pdf_api.dart';
 import '../receipt/api/pdf_invoice_api.dart';
 import '../receipt/model/invoice.dart';
 
-
-
 class TablePage extends StatefulWidget {
   APIServices apiServices;
   int registerId;
@@ -60,42 +58,92 @@ class _TablePageState extends State<TablePage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                TextButton(
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                  ),
+                  onPressed: () {
+                    int numberTable = tables.length + 1;
+                    TablePutModel tablePutModel = TablePutModel(
+                        "Unit" + numberTable.toString(), widget.shopId, false);
+
+                    widget.apiServices
+                        .createTable(tablePutModel)
+                        .then((value) => {
+                              print(value.body),
+                              widget.apiServices
+                                  .fetchTablesFromShop(widget.shopId)
+                                  .then((response) => {
+                                        print(response.body),
+                                        setState(() {
+                                          Iterable list =
+                                              json.decode(response.body);
+                                          tables = list
+                                              .map((model) =>
+                                                  TableModel.fromJson(model))
+                                              .toList();
+                                        })
+                                      })
+                            });
+                  },
+                  child: Text('Add new Unit'),
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
-                  child: Text("Units:", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 8, top: 8, bottom: 4),
+                  child: Text("Units:",
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
                 Expanded(
                   child: ListView.builder(
-                      physics: const PageScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(15.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: ListTile(
-                              leading: Container(
-                                padding: EdgeInsets.only(right: 12.0),
-                                decoration: new BoxDecoration(
-                                    border: new Border(
-                                        right: new BorderSide(width: 1.0, color: Colors.grey))),
-                                child: Icon(Icons.storage),
-                              ),
-                              title: Text(tables[index].name),
-                              trailing: displayTotal(tables[index]),
-                              onTap: () {
-                                if(tables[index].taken) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditOrderPage(tables[index].id, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
-                                } else {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => NewOrderPage(tables[index].id, apiServices: widget.apiServices, registerId: widget.registerId, shopId: widget.shopId,)));
-                                }
-                              },
-                              // subtitle: displayOccupied(tables[index])
+                    physics: const PageScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(15.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: ListTile(
+                            leading: Container(
+                              padding: EdgeInsets.only(right: 12.0),
+                              decoration: new BoxDecoration(
+                                  border: new Border(
+                                      right: new BorderSide(
+                                          width: 1.0, color: Colors.grey))),
+                              child: Icon(Icons.storage),
                             ),
+                            title: Text(tables[index].name),
+                            trailing: displayTotal(tables[index]),
+                            onTap: () {
+                              if (tables[index].taken) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditOrderPage(
+                                              tables[index].id,
+                                              apiServices: widget.apiServices,
+                                              registerId: widget.registerId,
+                                              shopId: widget.shopId,
+                                            )));
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => NewOrderPage(
+                                              tables[index].id,
+                                              apiServices: widget.apiServices,
+                                              registerId: widget.registerId,
+                                              shopId: widget.shopId,
+                                            )));
+                              }
+                            },
+                            // subtitle: displayOccupied(tables[index])
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
                     itemCount: tables.length,
                   ),
                 ),
@@ -108,11 +156,13 @@ class _TablePageState extends State<TablePage> {
   }
 
   Widget displayOccupied(TableModel table) {
-    if(table.taken)
-      return Text("Occupied", style: TextStyle(fontSize: 12));
-    return Container(height: 0, width: 0,);
+    if (table.taken) return Text("Occupied", style: TextStyle(fontSize: 12));
+    return Container(
+      height: 0,
+      width: 0,
+    );
   }
-  
+
   Widget displayTotal(TableModel table) {
     Column column = Column(
       mainAxisSize: MainAxisSize.max,
@@ -125,13 +175,17 @@ class _TablePageState extends State<TablePage> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 5),
-          child: Text("Total: " + calculateTotal(table).toStringAsFixed(2) + " BAM", style: TextStyle(fontSize: 14, color: Colors.grey)),
+          child: Text(
+              "Total: " + calculateTotal(table).toStringAsFixed(2) + " BAM",
+              style: TextStyle(fontSize: 14, color: Colors.grey)),
         ),
       ],
     );
-    if(table.taken)
-      return column;
-    return Container(height: 0, width: 0,);
+    if (table.taken) return column;
+    return Container(
+      height: 0,
+      width: 0,
+    );
   }
 
   double calculateTotal(TableModel table) {
@@ -178,12 +232,10 @@ class _TablePageState extends State<TablePage> {
   // }
 
   static Future fetchData(UserOrderModel order) async {
-
     //final uri = Uri.parse('https://192.168.1.2:7194/api/ProductUserOrderIntertables/bill', queryParameters)
 
     final response = await http.post(
-      Uri.parse(
-          MyApp.getBaseUrl() + '/api/ProductUserOrderIntertables/bill'),
+      Uri.parse(MyApp.getBaseUrl() + '/api/ProductUserOrderIntertables/bill'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -201,23 +253,23 @@ class _TablePageState extends State<TablePage> {
   }
 
   Future receiptDialog(int orderId) => showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text("Receipt"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text("Order ID: " + orderId.toString()),
-          Text("Products..."),
-          Text("Price..."),
-          TextButton(
-            child: Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ],
-      ),
-    ),
-  );
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Receipt"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Order ID: " + orderId.toString()),
+              Text("Products..."),
+              Text("Price..."),
+              TextButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        ),
+      );
 }
