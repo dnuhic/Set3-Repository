@@ -29,6 +29,50 @@ namespace SET3_Backend.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("finansijskiPrikaz/{dateTime}")]
+        public async Task<ActionResult<ReportModel>> GetFinansijskiPrikaz(DateTime dateTime, int? shopId = null, string productName = null, string categoryName = null) {
+
+            var exporti = await GetExportShopToPdf();
+            var importi = await GetImportShopToPdf();
+
+            List<ExportShopToPdfModel> filtriraniExporti = (List<ExportShopToPdfModel>)exporti.Value;
+            List<ExportShopToPdfModel> filtriraniImporti = (List<ExportShopToPdfModel>)importi.Value;
+            List<ExportShopToPdfModel> filtriraniExportiJucer = (List<ExportShopToPdfModel>)exporti.Value;
+            List<ExportShopToPdfModel> filtriraniImportiJucer = (List<ExportShopToPdfModel>)importi.Value;
+
+            //filer
+            filtriraniExporti = filtriraniExporti.FindAll(i => dateTime.Day == i.DateTime.Day && dateTime.Month == i.DateTime.Month && dateTime.Year == i.DateTime.Year);
+            filtriraniExporti = filtriraniImporti.FindAll(i => dateTime.Day == i.DateTime.Day && dateTime.Month == i.DateTime.Month && dateTime.Year == i.DateTime.Year);
+            filtriraniExportiJucer = filtriraniExportiJucer.FindAll(i => dateTime.Day == (i.DateTime.Day-1) && dateTime.Month == i.DateTime.Month && dateTime.Year == i.DateTime.Year);
+            filtriraniExportiJucer = filtriraniImportiJucer.FindAll(i => dateTime.Day == (i.DateTime.Day-1) && dateTime.Month == i.DateTime.Month && dateTime.Year == i.DateTime.Year);
+
+            if (shopId is not null) {
+                filtriraniExporti = filtriraniExporti.FindAll(i => i.ShopId == shopId);
+                filtriraniImporti = filtriraniImporti.FindAll(i => i.ShopId == shopId);
+                filtriraniExportiJucer = filtriraniExportiJucer.FindAll(i => i.ShopId == shopId);
+                filtriraniImportiJucer = filtriraniImportiJucer.FindAll(i => i.ShopId == shopId);
+            }
+
+            if (productName is not null) {
+                filtriraniExporti = filtriraniExporti.FindAll(i => i.ProductName == productName);
+                filtriraniImporti = filtriraniImporti.FindAll(i => i.ProductName == productName);
+                filtriraniExportiJucer = filtriraniExportiJucer.FindAll(i => i.ProductName == productName);
+                filtriraniImportiJucer = filtriraniImportiJucer.FindAll(i => i.ProductName == productName);
+            }
+
+            if (categoryName is not null) {
+                filtriraniExporti = filtriraniExporti.FindAll(i => i.ProductCategory == categoryName);
+                filtriraniImporti = filtriraniImporti.FindAll(i => i.ProductCategory == categoryName);
+                filtriraniExportiJucer = filtriraniExportiJucer.FindAll(i => i.ProductName == productName);
+                filtriraniImportiJucer = filtriraniImportiJucer.FindAll(i => i.ProductName == productName);
+            }
+
+            //sve filtrirano
+            ReportModel result = new ReportModel(filtriraniExporti, filtriraniImporti, filtriraniExportiJucer, filtriraniImportiJucer);
+
+            return result;
+        }
+
         // GET: api/OrderModels/shoptopdf
         [HttpGet("shoptopdfExport")]
         public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetExportShopToPdf()
@@ -52,11 +96,12 @@ namespace SET3_Backend.Controllers
                 ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
                 model.ProductId = item.ProductId;
                 model.ProductName = productModel.Name;
-                model.ProductPrice = productModel.Price;
+
+                var pdv = _context.CategoryModels.Where(c => c.Name == productModel.CategoryName).FirstOrDefault().Tax;
+
+                model.ProductPrice = (float)(productModel.Price * (1+pdv));
                 model.ProductCategory = productModel.CategoryName;
              
-
-
                 if (item.CashRegisterId != -1)
                 {
                     var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
@@ -130,6 +175,40 @@ namespace SET3_Backend.Controllers
         {
             return await _context.OrderModels.ToListAsync();
         }
+
+        public class ReportModel
+        { 
+            public double prihod { get; set; }
+            public double rashod { get; set; }
+            public double profit { get; set; }
+            public int ukupniPrijem { get; set; }
+            public int ukupniRashod { get; set; }
+            public int porastProfita { get; set; } = 0;
+            public int porastPrihoda { get; set; } = 0;
+            public int porastRashoda { get; set; } = 0;
+
+            public int ostatak { get; set; }
+
+            public ReportModel(List<ExportShopToPdfModel> export, List<ExportShopToPdfModel> import, List<ExportShopToPdfModel> exportJucer, List<ExportShopToPdfModel> importJucer) {
+
+                var prihodJucer = exportJucer.Sum(i => i.ProductPrice * 1.1);
+                var rashodJucer = importJucer.Sum(i => i.ProductPrice);
+                var profitJucer = prihodJucer - rashodJucer;
+                var ukupniPrijemJucer = (int)exportJucer.Sum(i => i.Quantity);
+                var ukupniRashodJucer = (int)importJucer.Sum(i => i.Quantity);
+
+                prihod = export.Sum(i => i.ProductPrice * 1.1);
+                rashod = import.Sum(i => i.ProductPrice);
+                profit = prihod - rashod;
+                ukupniPrijem = (int)export.Sum(i => i.Quantity);
+                ukupniRashod = (int)import.Sum(i => i.Quantity);
+                porastProfita = (int)((profitJucer / profit) * 100);
+                porastPrihoda = (int)((prihodJucer / prihod) * 100);
+                porastRashoda = (int)((rashodJucer / rashod) * 100);
+                ostatak = ukupniRashod - ukupniPrijem;
+            }
+        }
+
 
         public class OrderShopDto
         {

@@ -184,6 +184,19 @@ namespace SET3_Backend.Controllers
         [HttpPost("finish")]
         public async Task<IActionResult> FinishUserOrder([FromBody] UserOrderDto userOrderDto)
         {
+            foreach (var pqDto in userOrderDto.ProductQuantitys)
+            {
+                var export = new ExportShopModel(userOrderDto.ShopId,pqDto.ProductId,pqDto.Quantity,DateTime.Now,"EXPORT",userOrderDto.CashRegisterId,userOrderDto.TableId);
+                _context.ExportShopModels.Add(export);
+
+                var productShopModel = _context.ProductShopIntertables.Where(p => p.ShopId == userOrderDto.ShopId && p.ProductId == pqDto.ProductId).FirstOrDefault();
+                productShopModel.Quantity -= pqDto.Quantity;
+                if (productShopModel.Quantity < 0) productShopModel.Quantity = 0;
+
+                _context.Update(productShopModel);
+                _context.SaveChanges();
+            }
+
             UserOrderModel userOrder = await PostUserOrder(userOrderDto, true);
             return CreatedAtAction("GetUserOrderModel", new { id = userOrder.Id }, userOrder);
         }
