@@ -37,7 +37,7 @@
     "react-dropdown-select": "^4.8.4",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.0",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.3.1",
     "react-table": "^7.7.0",
     "reactstrap": "^9.0.1",
@@ -53,7 +53,7 @@
   "name": "set3-frontend",
   "private": true,
   "scripts": {
-    "start": "set HTTPS=true&&react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

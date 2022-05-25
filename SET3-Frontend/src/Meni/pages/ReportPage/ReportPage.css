@@ -1,0 +1,35 @@
+.page-report-container {
+    padding: 24px 48px;
+}
+
+.grid-layout {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid-layout > .grid-layout__item {
+    width: calc((100% - 24px)/2);
+    margin-right: 24px;
+    margin-top: 24px;
+}
+
+.grid-layout > .grid-layout__item:nth-child(2n) {
+    margin-right: 0;
+}
+
+.chart-container {
+    width: 100%;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 16px;
+}
+
+.chart-layout {
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-label {
+    font-size: 20px;
+    color: #262626;
+}
