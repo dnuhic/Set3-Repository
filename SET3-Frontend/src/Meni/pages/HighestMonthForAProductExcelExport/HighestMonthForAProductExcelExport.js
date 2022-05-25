@@ -13,6 +13,7 @@ export default function ExcelImportPage() {
     ];
 
     const [data, setData] = useState(null);
+    const [data2, setData2] = useState(null);
     
     const [dataForPage, setDataForPage] = useState(null);
     
@@ -60,18 +61,29 @@ export default function ExcelImportPage() {
     const applyFilter = () => {
 
         var newData = data;
-        if (selectedStore != 'Choose a shop')
+        var newData2 = data2;
+;        if (selectedStore != 'Choose a shop')
             newData = data.filter(d => d.shopName == selectedStore);
 
         if (document.getElementById("nazivProdukta").value != '')
             newData = newData.filter(d => d.productName == document.getElementById("nazivProdukta").value);
 
+        if (selectedStore != 'Choose a shop')
+            newData2 = data2.filter(d => d.shopName == selectedStore);
+
+        if (document.getElementById("nazivProdukta").value != '')
+            newData2 = newData2.filter(d => d.productName == document.getElementById("nazivProdukta").value);
+
         var totalSales = 0
        
 
         for (var i = 0; i < newData.length; i++) {
-            totalSales += newData[i].quantity
+            totalSales += newData[i].quantity 
         }
+        for (var i = 0; i < newData2.length; i++) {
+            totalSales += newData2[i].quantity
+        }
+        
 
         var salesPerMonth = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -81,8 +93,6 @@ export default function ExcelImportPage() {
             
                 var datum = new Date (newData[j].dateTime)
               
-                
-
                 if (datum.getMonth() == i) {
                     salesPerMonth[i] += newData[j].quantity
                     console.log(salesPerMonth[i] / totalSales * 100)
@@ -90,6 +100,18 @@ export default function ExcelImportPage() {
                     
                 }
             }
+            for(var j = 0; j < newData2.length; j++) {
+
+                var datum = new Date(newData2[j].dateTime)
+
+                if (datum.getMonth() == i) {
+                    salesPerMonth[i] += newData2[j].quantity
+                    console.log(salesPerMonth[i] / totalSales * 100)
+
+
+                }
+            }
+
             
         }
       //  console.log(dataForPage)
@@ -139,7 +161,7 @@ export default function ExcelImportPage() {
         setDataForChartPage(dataChart) 
         console.log(newDataForPage) */
 
-        console.log(newData);
+        console.log(newDataForPage);
         setDataForPage(newDataForPage);
 
 
@@ -185,9 +207,15 @@ export default function ExcelImportPage() {
     useEffect(async () => {
         
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/shoptopdfExport`);
+       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/shoptopdfImport`);
+       const response2 = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/OrderModels/shoptopdfExport`);
+      
+       
         const dataResponse = await response.json()
+        const dataResponse2 = await response2.json()
         setData(dataResponse)
+        console.log(dataResponse)
+        setData2(dataResponse2)
 
         setDataForPage([{"monthName":"Month name", "totalSales":0, "totalRevenue":0, "percentage":0}])
         console.log(dataResponse);
