@@ -34,6 +34,7 @@ import Order from './Meni/pages/AddNewOrder/AddNewOrder';
 import Orders from './Meni/pages/OrderPage/Orders';
 import AddCategory from './Meni/pages/AddNewCategory/addNewCategory';
 import ExcelExportPage from './Meni/pages/ExcelPage/ExcelExport'
+import HighestMonthExportPage from './Meni/pages/HighestMonthForAProductExcelExport/HighestMonthForAProductExcelExport'
 import ExcelImportPage from './Meni/pages/ExcelPage/ExcelImport'
 import Proba from './Meni/pages/ExcelPage/Proba'
 
@@ -202,6 +203,11 @@ function App() {
             <Routes>
 
                 <Route path="/proba" element={<Proba />} />
+
+            </Routes>
+            <Routes>
+
+                <Route path="/highestMonthExcelExport" element={<HighestMonthExportPage />} />
 
             </Routes>
 

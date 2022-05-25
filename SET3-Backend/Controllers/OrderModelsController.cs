@@ -123,7 +123,6 @@ namespace SET3_Backend.Controllers
             return result;
         }
 
-
         // GET: api/OrderModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrderModels()
