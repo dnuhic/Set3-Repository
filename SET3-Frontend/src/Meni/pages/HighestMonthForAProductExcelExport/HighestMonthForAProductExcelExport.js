@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import '../OrderPage/OrdersStyle.css';
 
@@ -11,7 +11,9 @@ export default function ExcelImportPage() {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
+    const isActive = useRef(false);
 
+    const counter = useRef(0);
     const [data, setData] = useState(null);
     const [data2, setData2] = useState(null);
     
@@ -60,7 +62,7 @@ export default function ExcelImportPage() {
     });
 
     const applyFilter = () => {
-
+        isActive.current = true;
         var newData = data;
         var newData2 = data2;
 ;        if (selectedStore != 'Choose a shop')
@@ -285,7 +287,7 @@ export default function ExcelImportPage() {
                     </div>
                     <select id="role" onChange={handleChange}>
                         <option value="Choose a shop">Choose a shop</option>
-                        {allShops.map(e => <option value={e.name}>{e.name}</option>)}
+                    {allShops.map(e => <option key={counter.current++} value={e.name}>{e.name}</option>)}
                     </select>
                     <div className="row">
                         <div className="col">
@@ -302,7 +304,8 @@ export default function ExcelImportPage() {
                 </div>
                 <Button title="Export Excel" onClick={applyFilter}>
                     Apply filter
-                </Button>
+            </Button>
+            {isActive.current && <>
                 <div className="mainDiv">
                     <Button title="Export Excel" onClick={() => downloadTxtFile(dataForPage, [ "monthName", "totalSales", "totalRevenue", "percentage"])}>
                         Export to Excel
@@ -328,7 +331,8 @@ export default function ExcelImportPage() {
                         />
                     </div>
                 }
-            </div>
+                </div>
+            </>}
             
                 </Box>
             
