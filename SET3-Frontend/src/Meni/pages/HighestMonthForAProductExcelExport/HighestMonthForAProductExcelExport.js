@@ -1,8 +1,8 @@
-import Box from '@mui/material/Box';
+﻿import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
-import React, { useEffect, useState } from 'react';
-import PieChart from "../../components/pieChart.js";
+import React, { useEffect, useState, useRef } from 'react';
+import { PieChart } from 'react-minimal-pie-chart';
 import '../OrderPage/OrdersStyle.css';
 
 
@@ -11,12 +11,34 @@ export default function ExcelImportPage() {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
+    const isActive = useRef(false);
+    /*
+    // mockup podaci za popunjavanje pie-charta
+    var salesPerMonth2 = [10, 10, 10, 5, 10, 15, 10, 10, 10, 5, 10, 10]
+    var totalSales2 = 115
+
+    const mockupData = [
+        { title: `January: ${Math.round(salesPerMonth2[0] / totalSales2 * 100)}%`, value: salesPerMonth2[0], color: '#E38627' },
+        { title: `February: ${Math.round(salesPerMonth2[1] / totalSales2 * 100)}%`, value: salesPerMonth2[1], color: '#C13C37' },
+        { title: `March: ${Math.round(salesPerMonth2[2] / totalSales2 * 100)}%`, value: salesPerMonth2[2], color: '#6A2135' },
+        { title: `April: ${Math.round(salesPerMonth2[3] / totalSales2 * 100)}%`, value: salesPerMonth2[3], color: '#0FA3B1' },
+        { title: `May: ${Math.round(salesPerMonth2[4] / totalSales2 * 100)}%`, value: salesPerMonth2[4], color: '#B5E2FA' },
+        { title: `June: ${Math.round(salesPerMonth2[5] / totalSales2 * 100)}%`, value: salesPerMonth2[5], color: '#F7A072' },
+        { title: `July: ${Math.round(salesPerMonth2[6] / totalSales2 * 100)}%`, value: salesPerMonth2[6], color: '#7E9181' },
+        { title: `August: ${Math.round(salesPerMonth2[7] / totalSales2 * 100)}%`, value: salesPerMonth2[7], color: '#2E3532' },
+        { title: `September: ${Math.round(salesPerMonth2[8] / totalSales2 * 100)}%`, value: salesPerMonth2[8], color: '#4C212A' },
+        { title: `October: ${Math.round(salesPerMonth2[9] / totalSales2 * 100)}%`, value: salesPerMonth2[9], color: '#08A4BD' },
+        { title: `November: ${Math.round(salesPerMonth2[10] / totalSales2 * 100)}%`, value: salesPerMonth2[10], color: '#EA526F' },
+        { title: `December: ${Math.round(salesPerMonth2[11] / totalSales2 * 100)}%`, value: salesPerMonth2[11], color: '#E1CE7A' },
+    ]
+    */
 
     const [data, setData] = useState(null);
     const [data2, setData2] = useState(null);
     
     const [dataForPage, setDataForPage] = useState(null);
-    
+
+    const [noviData, setNoviData] = useState([]);
  
    /* const [dataForChartPage, setDataForChartPage] = useState({
         labels: monthNames,
@@ -58,8 +80,13 @@ export default function ExcelImportPage() {
         take: 10,
     });
 
-    const applyFilter = () => {
+  //  if (noviData.length === 0)
+  //      setNoviData(mockupData);
+ //   else
+  //      console.log("noviData", noviData)
 
+    const applyFilter = () => {
+        isActive.current = true;
         var newData = data;
         var newData2 = data2;
 ;        if (selectedStore != 'Choose a shop')
@@ -126,7 +153,23 @@ export default function ExcelImportPage() {
             })
             
         }
-
+        const newNoviData = [
+            { title: `January: ${Math.round(salesPerMonth[0] / totalSales * 100)}%`, value: salesPerMonth[0], color: '#E38627' },
+            { title: `February: ${Math.round(salesPerMonth[1] / totalSales * 100)}%`, value: salesPerMonth[1], color: '#C13C37' },
+            { title: `March: ${Math.round(salesPerMonth[2] / totalSales * 100)}%`, value: salesPerMonth[2], color: '#6A2135' },
+            { title: `April: ${Math.round(salesPerMonth[3] / totalSales * 100)}%`, value: salesPerMonth[3], color: '#E38627' },
+            { title: `May: ${Math.round(salesPerMonth[4] / totalSales * 100)}%`, value: salesPerMonth[4], color: '#C13C37' },
+            { title: `June: ${Math.round(salesPerMonth[5] / totalSales * 100)}%`, value: salesPerMonth[5], color: '#6A2135' },
+            { title: `July: ${Math.round(salesPerMonth[6] / totalSales * 100)}%`, value: salesPerMonth[6], color: '#E38627' },
+            { title: `August: ${Math.round(salesPerMonth[7] / totalSales * 100)}%`, value: salesPerMonth[7], color: '#C13C37' },
+            { title: `September: ${Math.round(salesPerMonth[8] / totalSales * 100)}%`, value: salesPerMonth[8], color: '#6A2135' },
+            { title: `October: ${Math.round(salesPerMonth[9] / totalSales * 100)}%`, value: salesPerMonth[9], color: '#E38627' },
+            { title: `November: ${Math.round(salesPerMonth[10] / totalSales * 100)}%`, value: salesPerMonth[10], color: '#C13C37' },
+            { title: `December: ${Math.round(salesPerMonth[11] / totalSales * 100)}%`, value: salesPerMonth[11], color: '#6A2135' },
+        ]
+        /*
+        popunjavanje novih podataka kada u lokalnoj bazi postoje podaci
+        */
      /*   const [dataChart, setDataChart] = {
             labels: monthNames,
             datasets: [
@@ -164,6 +207,7 @@ export default function ExcelImportPage() {
         console.log(newDataForPage);
         setDataForPage(newDataForPage);
 
+        setNoviData(newNoviData)
 
     };
     const downloadTxtFile = (data, columnNameArray) => {
@@ -280,12 +324,13 @@ export default function ExcelImportPage() {
                             />
                         </div>
                     </div>
-                    
+
                 </div>
                 <Button title="Export Excel" onClick={applyFilter}>
                     Apply filter
                 </Button>
-                <div className="mainDiv">
+                {isActive.current && <>  
+            <div className="mainDiv">
                     <Button title="Export Excel" onClick={() => downloadTxtFile(dataForPage, [ "monthName", "totalSales", "totalRevenue", "percentage"])}>
                         Export to Excel
                     </Button>
@@ -305,7 +350,12 @@ export default function ExcelImportPage() {
                 </Grid>
             
             </div>
-            
+            <div>
+                <PieChart viewBox={[10, 10]} radius={25}
+                    data={noviData}
+                />
+            </div>
+            </>}
                 </Box>
             
         }{
