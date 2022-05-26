@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Grid, GridColumn } from '@progress/kendo-react-grid';
 import React, { useEffect, useState } from 'react';
-import PieChart from "../../components/pieChart.js";
+import { PieChart } from 'react-minimal-pie-chart';
 import '../OrderPage/OrdersStyle.css';
 
 
@@ -16,6 +16,7 @@ export default function ExcelImportPage() {
     const [data2, setData2] = useState(null);
     
     const [dataForPage, setDataForPage] = useState(null);
+    const [noviData, setNoviData] = useState([]);
     
  
    /* const [dataForChartPage, setDataForChartPage] = useState({
@@ -126,6 +127,23 @@ export default function ExcelImportPage() {
             })
             
         }
+
+        const newNoviData = [
+            { title: `January: ${Math.round(salesPerMonth[0] / totalSales * 100)}%`, value: salesPerMonth[0], color: '#E38627' },
+            { title: `February: ${Math.round(salesPerMonth[1] / totalSales * 100)}%`, value: salesPerMonth[1], color: '#C13C37' },
+            { title: `March: ${Math.round(salesPerMonth[2] / totalSales * 100)}%`, value: salesPerMonth[2], color: '#6A2135' },
+            { title: `April: ${Math.round(salesPerMonth[3] / totalSales * 100)}%`, value: salesPerMonth[3], color: '#D2691E' },
+            { title: `May: ${Math.round(salesPerMonth[4] / totalSales * 100)}%`, value: salesPerMonth[4], color: '#DC143C' },
+            { title: `June: ${Math.round(salesPerMonth[5] / totalSales * 100)}%`, value: salesPerMonth[5], color: '#9932CC' },
+            { title: `July: ${Math.round(salesPerMonth[6] / totalSales * 100)}%`, value: salesPerMonth[6], color: '#FF7F50' },
+            { title: `August: ${Math.round(salesPerMonth[7] / totalSales * 100)}%`, value: salesPerMonth[7], color: '#008B8B' },
+            { title: `September: ${Math.round(salesPerMonth[8] / totalSales * 100)}%`, value: salesPerMonth[8], color: '#483D8B' },
+            { title: `October: ${Math.round(salesPerMonth[9] / totalSales * 100)}%`, value: salesPerMonth[9], color: '#6495ED' },
+            { title: `November: ${Math.round(salesPerMonth[10] / totalSales * 100)}%`, value: salesPerMonth[10], color: '#006400' },
+            { title: `December: ${Math.round(salesPerMonth[11] / totalSales * 100)}%`, value: salesPerMonth[11], color: '#FFD700' },
+        ]
+
+        setNoviData(newNoviData)
 
      /*   const [dataChart, setDataChart] = {
             labels: monthNames,
@@ -303,7 +321,13 @@ export default function ExcelImportPage() {
                     <GridColumn field="totalRevenue" title="Total Revenue" width="250px"  />
                     <GridColumn field="percentage" title="Percentage (%)"  />
                 </Grid>
-            
+                {noviData && noviData.length &&
+                    <div>
+                        <PieChart viewBox={[10, 10]} radius={25}
+                            data={noviData}
+                        />
+                    </div>
+                }
             </div>
             
                 </Box>
