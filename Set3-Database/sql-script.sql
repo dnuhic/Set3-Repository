@@ -10,6 +10,13 @@ CREATE TABLE "ActionModels" (
     "actionType" INTEGER NOT NULL
 );
 
+CREATE TABLE "BrRac" (
+    "IdRac" TEXT NOT NULL CONSTRAINT "PK_BrRac" PRIMARY KEY,
+    "BrOznRac" TEXT NOT NULL,
+    "OznPosPr" TEXT NOT NULL,
+    "OznNapUr" TEXT NOT NULL
+);
+
 CREATE TABLE "CashRegisterModels" (
     "Id" INTEGER NOT NULL CONSTRAINT "PK_CashRegisterModels" PRIMARY KEY AUTOINCREMENT,
     "ShopId" INTEGER NOT NULL,
@@ -30,6 +37,17 @@ CREATE TABLE "DeliveryModels" (
     "Date" TEXT NOT NULL,
     "Quantity" REAL NOT NULL,
     "ProductId" INTEGER NOT NULL
+);
+
+CREATE TABLE "ExportShopModels" (
+    "Id" INTEGER NOT NULL CONSTRAINT "PK_ExportShopModels" PRIMARY KEY AUTOINCREMENT,
+    "ShopId" INTEGER NOT NULL,
+    "ProductId" INTEGER NOT NULL,
+    "Quantity" REAL NOT NULL,
+    "DateTime" TEXT NOT NULL,
+    "Status" TEXT NOT NULL,
+    "CashRegisterId" INTEGER NOT NULL,
+    "TableId" INTEGER NOT NULL
 );
 
 CREATE TABLE "MeasuringUnits" (
@@ -129,6 +147,26 @@ CREATE TABLE "UserOrderModels" (
     "TableId" INTEGER NOT NULL
 );
 
+CREATE TABLE "Zaglavlje" (
+    "IdZag" TEXT NOT NULL CONSTRAINT "PK_Zaglavlje" PRIMARY KEY,
+    "IdPoruke" TEXT NOT NULL,
+    "DatumVrijeme" TEXT NOT NULL
+);
+
+CREATE TABLE "Racun" (
+    "IdRacun" TEXT NOT NULL CONSTRAINT "PK_Racun" PRIMARY KEY,
+    "OIB" TEXT NOT NULL,
+    "USustPdv" INTEGER NULL,
+    "DatVrijeme" TEXT NOT NULL,
+    "OznSlijed" TEXT NOT NULL,
+    "brojRacunaIdRac" TEXT NOT NULL,
+    "IznosUkupno" REAL NOT NULL,
+    "NacinPlac" TEXT NOT NULL,
+    "OibOper" TEXT NOT NULL,
+    "ZastKod" TEXT NOT NULL,
+    CONSTRAINT "FK_Racun_BrRac_brojRacunaIdRac" FOREIGN KEY ("brojRacunaIdRac") REFERENCES "BrRac" ("IdRac") ON DELETE CASCADE
+);
+
 CREATE TABLE "LoggingModels" (
     "Id" INTEGER NOT NULL CONSTRAINT "PK_LoggingModels" PRIMARY KEY AUTOINCREMENT,
     "Date" TEXT NOT NULL,
@@ -139,12 +177,38 @@ CREATE TABLE "LoggingModels" (
     CONSTRAINT "FK_LoggingModels_UserModels_UserModelId" FOREIGN KEY ("UserModelId") REFERENCES "UserModels" ("Id") ON DELETE CASCADE
 );
 
+CREATE TABLE "FiscalBillModels" (
+    "IdFiscal" TEXT NOT NULL CONSTRAINT "PK_FiscalBillModels" PRIMARY KEY,
+    "ZaglavljeIdZag" TEXT NOT NULL,
+    "RacunIdRacun" TEXT NOT NULL,
+    "JIR" TEXT NOT NULL,
+    CONSTRAINT "FK_FiscalBillModels_Racun_RacunIdRacun" FOREIGN KEY ("RacunIdRacun") REFERENCES "Racun" ("IdRacun") ON DELETE CASCADE,
+    CONSTRAINT "FK_FiscalBillModels_Zaglavlje_ZaglavljeIdZag" FOREIGN KEY ("ZaglavljeIdZag") REFERENCES "Zaglavlje" ("IdZag") ON DELETE CASCADE
+);
+
+CREATE TABLE "Porez" (
+    "IdPorez" TEXT NOT NULL CONSTRAINT "PK_Porez" PRIMARY KEY,
+    "Stopa" REAL NOT NULL,
+    "Osnovica" REAL NOT NULL,
+    "Iznos" REAL NOT NULL,
+    "RacunIdRacun" TEXT NULL,
+    CONSTRAINT "FK_Porez_Racun_RacunIdRacun" FOREIGN KEY ("RacunIdRacun") REFERENCES "Racun" ("IdRacun")
+);
+
+CREATE INDEX "IX_FiscalBillModels_RacunIdRacun" ON "FiscalBillModels" ("RacunIdRacun");
+
+CREATE INDEX "IX_FiscalBillModels_ZaglavljeIdZag" ON "FiscalBillModels" ("ZaglavljeIdZag");
+
 CREATE INDEX "IX_LoggingModels_ActionId" ON "LoggingModels" ("ActionId");
 
 CREATE INDEX "IX_LoggingModels_UserModelId" ON "LoggingModels" ("UserModelId");
 
+CREATE INDEX "IX_Porez_RacunIdRacun" ON "Porez" ("RacunIdRacun");
+
+CREATE INDEX "IX_Racun_brojRacunaIdRac" ON "Racun" ("brojRacunaIdRac");
+
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20220510181259_initial', '6.0.4');
+VALUES ('20220527232524_initial', '6.0.4');
 
 INSERT INTO "CategoryModels" VALUES (1, "Food", 0.17);
 

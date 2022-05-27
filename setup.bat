@@ -10,19 +10,9 @@ cd Set3-Database
 start DatabaseScript.exe
 cd ..
 
-cd cert
-set SETUP_DIR=%cd%
-cd ..
 cd Set3-Frontend
 
-set crt=SSL_CRT_FILE=%SETUP_DIR%\set3-frontend.pem
-set key=SSL_KEY_FILE=%SETUP_DIR%\set3-frontend.key
-
-echo %crt%
-echo %key%
 type nul > .env.development.local
-echo %crt% >> .env.development.local
-echo %key% >> .env.development.local
 
 call refreshenv
 

@@ -94,6 +94,20 @@ function CashboxPage(props) {
 							</div>
 						</div>
 					</div>
+
+						<div className="row">
+							<div className="col">
+								<div className="form-control">
+									Type of receipt:
+
+								</div>
+							</div>
+							<div className="col">
+								<div className="form-control">
+									{store.receiptType}
+								</div>
+							</div>
+						</div>
 					<h1> Cash registers for the store </h1>
 					<List sampleData={allCashRegisters} />
 					</>}
