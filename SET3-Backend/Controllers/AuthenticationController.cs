@@ -402,6 +402,12 @@ namespace SET3_Backend.Controllers
             
             return new TFAModel(user.TFA);
         }
+        [HttpGet("testConnection")]
+        public async Task<ActionResult> testConnection()
+        {
+            return Ok();
+        }
+
 
         [EnableCors("CorsPolicy")]
         [HttpPost("getusertoken")]

@@ -10,6 +10,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
+builder.WebHost.UseUrls("https://0.0.0.0:7194", "https://localhost:7194");
 
 builder.WebHost.UseUrls("https://0.0.0.0:7194", "https://localhost:7194");
 Log.Logger = new LoggerConfiguration()
@@ -65,6 +66,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[] { "https://localhost:3000", "https://set3-front.azurewebsites.net" }).AllowCredentials());
+
 
 app.UseHttpsRedirection();
 
