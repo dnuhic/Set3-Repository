@@ -15,5 +15,13 @@ namespace SET3_Backend.Models
         // new atribute for receipt
         public string ReceiptType { get; set; }
 
+        public ShopModel(string name, string adress, int stockId, bool deleted, string receiptType)
+        {
+            Name = name;
+            Adress = adress;
+            StockId = stockId;
+            Deleted = deleted;
+            ReceiptType = receiptType;
+        }
     }
 }

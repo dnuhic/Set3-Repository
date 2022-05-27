@@ -10,10 +10,12 @@ import Box from '@mui/material/Box';
 const EditShopComponent = () => {
     // Dobavljanje poslovnice iz baze i postavljanje inicijalnih vrijednosti
     // podaci iz baze:
+    const receiptTypes = ['Bosanski', 'Hrvatski'];
     const [shop, setShop] = useState(null);
     const navigate = useNavigate()
     const [stocks, setStocks] = useState([]);
-    const [defaultStock, setDefaultStock] = useState({id : 1, name : ""});
+    const [defaultStock, setDefaultStock] = useState({ id: 1, name: "" });
+    const [defaultReceiptType, setDefaultReceiptType] = useState(null);
     //kase?? - dodati kase?
 
 
@@ -23,7 +25,7 @@ const EditShopComponent = () => {
     const [Name, setName] = useState("");
     const [Adress, setAddress] = useState("");
     const [Deleted, setDeleted] = useState(false);
-   
+    const [ReceiptType, setReceiptType] = useState(null);
 
     const [updatedShop, setUpdatedShop] = useState(null);
 
@@ -56,6 +58,7 @@ const EditShopComponent = () => {
         setName(dataShop.name);
         setAddress(dataShop.adress);
         setDeleted(dataShop.deleted);
+        setDefaultReceiptType(dataShop.receiptType);
         if (document.getElementById("deleted") != null) {
             if (dataShop.deleted)
                 document.getElementById("deleted").checked = true
@@ -74,6 +77,8 @@ const EditShopComponent = () => {
     const editShop = () => {
         let list = document.getElementById("dropdownMenuButton")
         let stockId = document.getElementById("dropdownMenuButton")[list.selectedIndex].value
+        let list1 = document.getElementById("dropdownMenuButton1")
+        let receiptType = document.getElementById("dropdownMenuButton1")[list1.selectedIndex].value
         let deleted = true
         if (document.getElementById("deleted") == null)
             deleted = false
@@ -84,7 +89,8 @@ const EditShopComponent = () => {
             name: document.getElementById("name").value,
             adress: document.getElementById("address").value,
             stockId: stockId,
-            deleted: deleted
+            deleted: deleted,
+            receiptType: receiptType
         };
         console.log("NEW SHOP: ");
         console.log(newShop);
@@ -98,6 +104,11 @@ const EditShopComponent = () => {
     const handleAdressChange = (event) => {
         setAddress(event.target.value);
     };
+
+    const handleReceiptChange = (event) => {
+        setReceiptType(event.target.value);
+    };
+
     const handleDeletedChange = (event) => {
         let checked = document.getElementById("deleted").checked
         console.log(checked)
@@ -171,13 +182,26 @@ const EditShopComponent = () => {
                     </div>
                    
                     <div class="dropDownLista">
-                        <select  type="button" id="dropdownMenuButton"  aria-haspopup="true" aria-expanded="false">
+                        <select type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" >
                             <option value={defaultStock.id}>{
                                 defaultStock.name
                             }</option>
                             {
                                 stocks.map(stock => {
-                                    return <option class="dropdown-item" href="#" value={stock.id}>{stock.name}</option >;
+                                    return <option className="dropdown-item" href="#" key={stock.id} value={stock.id} data-id={stock.id}>{stock.name}</option>;
+                                })
+                            }
+                        </select>
+                    </div>
+                    <div class="dropDownLista1">
+                        Change the type of receipt:
+                        <select type="button" id="dropdownMenuButton1" aria-haspopup="true" aria-expanded="false" onChange={(e) => handleReceiptChange(e)}>
+                            <option value={defaultReceiptType}>{
+                                defaultReceiptType
+                            }</option>
+                            {
+                                receiptTypes.map(receipt => {
+                                    return <option class="dropdown-item" href="#" value={receipt}>{receipt}</option >;
                                 })
 
                             }

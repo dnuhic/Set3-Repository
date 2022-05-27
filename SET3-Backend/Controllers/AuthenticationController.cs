@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Net.ConnectCode.Barcode;
 using SET3_Backend.Database;
 using SET3_Backend.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -97,8 +98,130 @@ namespace SET3_Backend.Controllers
 
             }
 
+            if(!_context.ShopModels.Any())
+            {
+                ShopModel shop1 = new ShopModel("Bingo", "Dzemala Bijedica St 160 71000 Sarajevo ", 1, false, "Bosanski");
+                _context.ShopModels.Add(shop1);
+
+                ShopModel shop2 = new ShopModel("Konzum", "Hercegovacka ul. 78 21000 Split Croatia", 1, false, "Hrvatski");
+                _context.ShopModels.Add(shop2);
+            }
+
+            if(!_context.CashRegisterModels.Any())
+            {
+                CashRegisterModel cashRegister1 = new CashRegisterModel(1, false, "Register 1", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister1);
+
+                CashRegisterModel cashRegister2 = new CashRegisterModel(1, false, "Register 2", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister2);
+
+                CashRegisterModel cashRegister3 = new CashRegisterModel(1, false, "Register 3", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister3);
+
+                CashRegisterModel cashRegister4 = new CashRegisterModel(1, false, "Register 4", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister4);
+
+                CashRegisterModel cashRegister5 = new CashRegisterModel(1, false, "Register 5", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister5);
+
+                CashRegisterModel cashRegister6 = new CashRegisterModel(2, false, "Register 1", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister6);
+
+                CashRegisterModel cashRegister7 = new CashRegisterModel(2, false, "Register 2", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister7);
+
+                CashRegisterModel cashRegister8 = new CashRegisterModel(2, false, "Register 3", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister8);
+
+                CashRegisterModel cashRegister9 = new CashRegisterModel(2, false, "Register 4", "Description", false);
+                _context.CashRegisterModels.Add(cashRegister9);
+
+            }
+
+            if(!_context.TableModels.Any())
+            {
+                TableModel table1 = new TableModel("Unit 1", 1, false);
+                _context.TableModels.Add(table1);
+
+                TableModel table2 = new TableModel("Unit 2", 1, false);
+                _context.TableModels.Add(table2);
+
+                TableModel table3 = new TableModel("Unit 3", 1, false);
+                _context.TableModels.Add(table3);
+
+                TableModel table4 = new TableModel("Unit 4", 1, false);
+                _context.TableModels.Add(table4);
+
+                TableModel table5 = new TableModel("Unit 5", 1, false);
+                _context.TableModels.Add(table5);
+
+                TableModel table6 = new TableModel("Unit 1", 2, false);
+                _context.TableModels.Add(table6);
+
+                TableModel table7 = new TableModel("Unit 2", 2, false);
+                _context.TableModels.Add(table7);
+
+                TableModel table8 = new TableModel("Unit 3", 2, false);
+                _context.TableModels.Add(table8);
+
+                TableModel table9 = new TableModel("Unit 4", 2, false);
+                _context.TableModels.Add(table9);
+
+            }
+
+            if(!_context.ProductModels.Any())
+            {
+                ProductModel product1 = new ProductModel(1, "Banana", CategoryType.Food.ToString(), false, 0, "", "", 2.5f, MeasuringUnitName.Kilograms.ToString());
+                product1 = await InsertBarcode(product1);
+                _context.ProductModels.Add(product1);
+
+                ProductModel product2 = new ProductModel(1, "Tide", CategoryType.Hygiene.ToString(), false, 0, "", "", 5f, MeasuringUnitName.Liters.ToString());
+                product1 = await InsertBarcode(product2);
+                _context.ProductModels.Add(product2);
+
+                ProductModel product3 = new ProductModel(1, "White shirt", CategoryType.Clothes.ToString(), false, 0, "", "", 15f, MeasuringUnitName.Units.ToString());
+                product1 = await InsertBarcode(product3);
+                _context.ProductModels.Add(product3);
+
+                ProductModel product4 = new ProductModel(1, "Chocolate", CategoryType.Food.ToString(), false, 0, "", "", 2f, MeasuringUnitName.Units.ToString());
+                product1 = await InsertBarcode(product4);
+                _context.ProductModels.Add(product4);
+
+                ProductModel product5 = new ProductModel(1, "Soap", CategoryType.Hygiene.ToString(), false, 0, "", "", 3f, MeasuringUnitName.Units.ToString());
+                product1 = await InsertBarcode(product5);
+                _context.ProductModels.Add(product5);
+            }
+
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        //BARCODE generating
+        public async Task<ProductModel> InsertBarcode(ProductModel model)
+        {
+            string modelId = model.Id.ToString();
+            modelId = modelId.PadLeft(7 - modelId.Length, '0');
+            var category = model.CategoryName.ToUpper().ToCharArray();
+            int sum = 0;
+            foreach (char c in category)
+                sum += ((int)c) - 65;
+            string sumStr = sum.ToString();
+            sumStr = sumStr.PadLeft(7 - sumStr.Length, '0');
+            BarcodeFonts bec = new BarcodeFonts();
+            bec.BarcodeType = BarcodeFonts.BarcodeEnum.Code128Auto;
+            int num = await numberOfBarcodes(modelId + sumStr);
+            bec.Data = modelId + sumStr + num.ToString();
+            bec.encode();
+
+            model.Barcode = bec.EncodedData;
+            model.BarcodeText = bec.HumanText;
+            return model;
+        }
+
+        private async Task<int> numberOfBarcodes(string barcode)
+        {
+            var bar = barcode.Substring(0, barcode.Length - 2);
+            return await _context.ProductModels.CountAsync(t => t.Barcode.Substring(0, barcode.Length - 2) == bar);
         }
 
         //metoda napravljena samo za svrhu testiranja!!!
