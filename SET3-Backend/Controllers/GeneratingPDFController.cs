@@ -27,13 +27,24 @@ namespace SET3_Backend.Controllers
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<ActionResult> CreateDocument()
+        public async Task<ActionResult> CreateProductReportDocument()
         {
             //Create a new PDF document
             PdfDocument doc = new PdfDocument();
             //Naslovna
+            PdfPage naslovna = doc.Pages.Add();
+            PdfGraphics graphicsnaslovna = naslovna.Graphics;
+            //Load the image as stream.
+            FileStream imageStreamnaslovna = new FileStream("Materials/Logo2.png", FileMode.Open, FileAccess.Read);
+            PdfBitmap imagenaslovna = new PdfBitmap(imageStreamnaslovna);
+            //Draw the image
+            graphicsnaslovna.DrawImage(imagenaslovna, new RectangleF(0, -50, 500, 500));
 
+            PdfFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 25);
 
+            //Draw the text.
+
+            graphicsnaslovna.DrawString("Product report for Bingo shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(100, 450));
 
 
 
@@ -47,19 +58,12 @@ namespace SET3_Backend.Controllers
             //Create a DataTable
             DataTable dataTable = new DataTable();
             //Add columns to the DataTable
-            /*
             dataTable.Columns.Add("Name");
             dataTable.Columns.Add("Category Name");
             dataTable.Columns.Add("Quantity");
             dataTable.Columns.Add("Measuring Unit");
             dataTable.Columns.Add("Price");
-            */
-            dataTable.Columns.Add("ProductID");
-            dataTable.Columns.Add("ProductName");
-            dataTable.Columns.Add("Quantity");
-            dataTable.Columns.Add("UnitPrice");
-            dataTable.Columns.Add("Discount");
-            dataTable.Columns.Add("Price");
+
             //Add rows to the DataTable
             dataTable.Rows.Add(new object[] { "CA-1098", "Queso Cabrales", "12", "14", "1", "167" });
             dataTable.Rows.Add(new object[] { "LJ-0192-M", "Singaporean Hokkien Fried Mee", "10", "20", "3", "197" });
