@@ -190,7 +190,7 @@ export default function ExcelImportPage() {
         const requestOptionsShop = {
             method: 'GET'
         };
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF`, requestOptionsShop);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF/${selectedStore}`, requestOptionsShop);
         console.log(response);
     };
     const downloadTxtFile = (data, columnNameArray) => {
@@ -317,7 +317,7 @@ export default function ExcelImportPage() {
                     <Button title="Export Excel" onClick={() => downloadTxtFile(dataForPage, [ "monthName", "totalSales", "totalRevenue", "percentage"])}>
                         Export to Excel
                     </Button>
-                    <form action={`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF`} method="GET">
+                    <form action={`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF/${selectedStore}`} method="GET">
                         <Button type="submit">
                             Export PDF
                         </Button>

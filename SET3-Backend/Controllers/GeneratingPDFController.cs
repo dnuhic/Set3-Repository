@@ -7,7 +7,6 @@ using SET3_Backend.Database;
 using Syncfusion.Pdf.Grid;
 using Microsoft.AspNetCore.Hosting;
 using System.Data;
-
 namespace SET3_Backend.Controllers
 {
     [Route("api/[controller]")]
@@ -26,9 +25,10 @@ namespace SET3_Backend.Controllers
             _context = context;
             _configuration = configuration;
         }
-        [HttpGet]
-        public async Task<ActionResult> CreateProductReportDocument()
+        [HttpGet("{shopName}")]
+        public async Task<ActionResult> CreateProductReportDocument(string shopName)
         {
+            
             //Create a new PDF document
             PdfDocument doc = new PdfDocument();
             //Naslovna
@@ -38,14 +38,15 @@ namespace SET3_Backend.Controllers
             FileStream imageStreamnaslovna = new FileStream("Materials/Logo2.png", FileMode.Open, FileAccess.Read);
             PdfBitmap imagenaslovna = new PdfBitmap(imageStreamnaslovna);
             //Draw the image
-            graphicsnaslovna.DrawImage(imagenaslovna, new RectangleF(0, -50, 500, 500));
+            graphicsnaslovna.DrawImage(imagenaslovna, new RectangleF(15, -50, 500, 500));
 
             PdfFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 25);
 
             //Draw the text.
+            graphicsnaslovna.DrawString("Product report for Bingo shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(110, 450));
 
-            graphicsnaslovna.DrawString("Product report for Bingo shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(100, 450));
-
+            PdfFont font2 = new PdfStandardFont(PdfFontFamily.TimesRoman, 15);
+            graphicsnaslovna.DrawString("Sarajevo, " + DateTime.Now, font2, PdfBrushes.Black, new Syncfusion.Drawing.PointF(150, 725));
 
 
 
@@ -53,36 +54,55 @@ namespace SET3_Backend.Controllers
 
             //Add a page
             PdfPage page = doc.Pages.Add();
+            PdfGraphics graphicsprvastr = page.Graphics;
+            graphicsprvastr.DrawString("List of all products in shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
             //Create a PdfGrid
+
             PdfGrid pdfGrid = new PdfGrid();
             //Create a DataTable
             DataTable dataTable = new DataTable();
             //Add columns to the DataTable
+           
             dataTable.Columns.Add("Name");
             dataTable.Columns.Add("Category Name");
             dataTable.Columns.Add("Quantity");
             dataTable.Columns.Add("Measuring Unit");
             dataTable.Columns.Add("Price");
 
-            //Add rows to the DataTable
-            dataTable.Rows.Add(new object[] { "CA-1098", "Queso Cabrales", "12", "14", "1", "167" });
-            dataTable.Rows.Add(new object[] { "LJ-0192-M", "Singaporean Hokkien Fried Mee", "10", "20", "3", "197" });
-            dataTable.Rows.Add(new object[] { "SO-B909-M", "Mozzarella di Giovanni", "15", "65", "10", "956" });
+            var productList = _context.ShopModels
+                .Where(shop => shop.Name == shopName)
+                .Join(_context.ProductShopIntertables,
+                        shop => shop.Id,
+                        interTable => interTable.ShopId,
+                        (shop, interTable) => interTable.ProductId)
+                .Join(_context.ProductModels,
+                        productId => productId,
+                        product => product.Id,
+                        (productId, product) => product)
+                .ToList();
+
+            foreach (var product in productList)
+                dataTable
+                .Rows
+                .Add(new object[] { product.Name, product.CategoryName, product.Quantity.ToString(), product.MeasuringUnit, product.Price.ToString() });
             //Assign data source
             pdfGrid.DataSource = dataTable;
             //Draw grid to the page of PDF document
-            pdfGrid.Draw(page, new PointF(10, 10));
+            pdfGrid.Draw(page, new PointF(0, 50));
 
             //Slika charta za tabelu iznad
-
-            PdfPage page2 = doc.Pages.Add();
             //Create PDF graphics for the page
-            PdfGraphics graphics = page2.Graphics;
+            PdfGraphics graphics = page.Graphics;
             //Load the image as stream.
-            FileStream imageStream = new FileStream("Materials/Logo.png", FileMode.Open, FileAccess.Read);
+            FileStream imageStream = new FileStream("Materials/Piechart.jpg", FileMode.Open, FileAccess.Read);
             PdfBitmap image = new PdfBitmap(imageStream);
             //Draw the image
-            graphics.DrawImage(image, new RectangleF(0, 200, 500, 500));
+            graphics.DrawImage(image, new RectangleF(50, 150, 400, 300));
+
+            FileStream imageStream2 = new FileStream("Materials/Barchart.jpg", FileMode.Open, FileAccess.Read);
+            PdfBitmap image2 = new PdfBitmap(imageStream2);
+            //Draw the image
+            graphics.DrawImage(image2, new RectangleF(50, 435, 400, 300));
             //Save the PDF document to stream
 
             //Spasavanje dokumenta
