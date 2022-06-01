@@ -43,7 +43,7 @@ namespace SET3_Backend.Controllers
             PdfFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 25);
 
             //Draw the text.
-            graphicsnaslovna.DrawString("Product report for Bingo shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(110, 450));
+            graphicsnaslovna.DrawString("Product report for " + shopName, font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(125, 450));
 
             PdfFont font2 = new PdfStandardFont(PdfFontFamily.TimesRoman, 15);
             graphicsnaslovna.DrawString("Sarajevo, " + DateTime.Now, font2, PdfBrushes.Black, new Syncfusion.Drawing.PointF(150, 725));
@@ -65,7 +65,7 @@ namespace SET3_Backend.Controllers
            
             dataTable.Columns.Add("Name");
             dataTable.Columns.Add("Category Name");
-            dataTable.Columns.Add("Quantity");
+            dataTable.Columns.Add("Quantity available");
             dataTable.Columns.Add("Measuring Unit");
             dataTable.Columns.Add("Price");
 
@@ -89,6 +89,64 @@ namespace SET3_Backend.Controllers
             pdfGrid.DataSource = dataTable;
             //Draw grid to the page of PDF document
             pdfGrid.Draw(page, new PointF(0, 50));
+
+
+            PdfPage page2 = doc.Pages.Add();
+            PdfGraphics graphicsdrugastrana = page2.Graphics;
+            graphicsdrugastrana.DrawString("List of sold products in shop", font, PdfBrushes.Black, new Syncfusion.Drawing.PointF(0, 0));
+            PdfGrid pdfGrid2 = new PdfGrid();
+            //Create a DataTable
+            DataTable dataTable2 = new DataTable();
+            //Add columns to the DataTable
+            dataTable2.Columns.Add("Name");
+            dataTable2.Columns.Add("Category Name");
+            dataTable2.Columns.Add("Quantity sold");
+            dataTable2.Columns.Add("Price (BAM)");
+            dataTable2.Columns.Add("Taxless revenue (BAM)");
+            dataTable2.Columns.Add("Total tax (BAM)");
+            dataTable2.Columns.Add("Product revenue (BAM)");
+            dataTable2.Columns.Add("Color");
+
+
+            var orderList = _context.ShopModels
+            .Where(shop => shop.Name == shopName)
+            .Join(_context.OrderModels,
+                        shop => shop.Id,
+                        order => order.ShopId,
+                        (shop, order) => order)
+                .ToList();
+           
+            RectangleF rectangle = new RectangleF(10, 200, 300, 300);
+            //Initialize the pen for drawing pie
+            PdfPen pen = new PdfPen(PdfBrushes.Black, 2f);
+            //Set the line join style of the pen
+            pen.LineJoin = PdfLineJoin.Round;
+            float brojac = 0;
+            int ukupnasuma = 0;
+            var i = 0;
+            foreach (var product in productList)
+            {
+                var ordersProduct = orderList.FindAll(o => o.ProductId == product.Id);
+                int quantitySold = Convert.ToInt32(ordersProduct.Select(op => op.Quantity).Sum());
+                ukupnasuma += quantitySold;
+
+            }
+            var boja = 0;
+            foreach (var product in productList)
+            {
+                var ordersProduct = orderList.FindAll(o => o.ProductId == product.Id);
+                var quantitySold = ordersProduct.Select(op => op.Quantity).Sum();
+                dataTable2.
+                    Rows.
+                    Add(new object[] { product.Name, product.CategoryName, ordersProduct.Select(op => op.Quantity).Sum(), product.Price, quantitySold * product.Price, (quantitySold * product.Price * 0.2), quantitySold * product.Price * 1.2,  });
+            }
+            //Assign data source
+            pdfGrid.DataSource = dataTable2;
+
+            //Draw grid to the page of PDF document
+            pdfGrid.Draw(page2, new PointF(0, 50));
+            //Draw the pie on PDF document
+
 
             //Slika charta za tabelu iznad
             //Create PDF graphics for the page
@@ -115,7 +173,7 @@ namespace SET3_Backend.Controllers
             //Defining the ContentType for pdf file.
             string contentType = "application/pdf";
             //Define the file name.
-            string fileName = "Proba.pdf";
+            string fileName = shopName + " Shop Report.pdf";
             //Creates a FileContentResult object by using the file contents, content type, and file name.
             return File(stream, contentType, fileName);
         }
