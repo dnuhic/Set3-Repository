@@ -319,7 +319,7 @@ export default function ExcelImportPage() {
                     </Button>
                     <form action={`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF/${selectedStore}`} method="GET">
                         <Button type="submit">
-                            Export PDF
+                            Export PDF Report
                         </Button>
                     </form>
                     <Grid
