@@ -186,6 +186,13 @@ export default function ExcelImportPage() {
 
 
     };
+    const showPDF = async () => {
+        const requestOptionsShop = {
+            method: 'GET'
+        };
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF/${selectedStore}`, requestOptionsShop);
+        console.log(response);
+    };
     const downloadTxtFile = (data, columnNameArray) => {
         /* const data = "p,a,b\n1,2,3";*/
 
@@ -310,7 +317,11 @@ export default function ExcelImportPage() {
                     <Button title="Export Excel" onClick={() => downloadTxtFile(dataForPage, [ "monthName", "totalSales", "totalRevenue", "percentage"])}>
                         Export to Excel
                     </Button>
-
+                    <form action={`${process.env.REACT_APP_BACKEND_URL}api/GeneratingPDF/${selectedStore}`} method="GET">
+                        <Button type="submit">
+                            Export PDF Report
+                        </Button>
+                    </form>
                     <Grid
                         data={dataForPage}
 
@@ -332,6 +343,7 @@ export default function ExcelImportPage() {
                     </div>
                 }
                 </div>
+
             </>}
             
                 </Box>
