@@ -4,7 +4,9 @@
     margin: auto;
     width: 100%;
 }
-
+form{
+    padding: 0px;
+}
     .mainDiv button {
         background-color: transparent;
     }

@@ -29,6 +29,100 @@ namespace SET3_Backend.Controllers
             _configuration = configuration;
         }
 
+        // GET: api/OrderModels/shoptopdf
+        [HttpGet("shoptopdfExport")]
+        public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetExportShopToPdf()
+        {
+            List<ExportShopToPdfModel> result = new List<ExportShopToPdfModel>();
+            var export = await _context.ExportShopModels.ToListAsync();
+            export = export.FindAll(x => x.Status == "EXPORT");
+            foreach (var item in export)
+            {
+                ExportShopToPdfModel model = new ExportShopToPdfModel();
+
+                model.Quantity = item.Quantity;
+                model.Status = item.Status;
+                model.DateTime = item.DateTime;
+
+                ShopModel shopModel = await _context.ShopModels.FindAsync(item.ShopId);
+                model.ShopId = item.ShopId;
+                model.ShopName = shopModel.Name;
+                model.ShopAdress = shopModel.Adress;
+
+                ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
+                model.ProductId = item.ProductId;
+                model.ProductName = productModel.Name;
+                model.ProductPrice = productModel.Price;
+                model.ProductCategory = productModel.CategoryName;
+             
+
+
+                if (item.CashRegisterId != -1)
+                {
+                    var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
+                    model.CashRegisterId = item.CashRegisterId;
+                    model.CashRegisterName = cashRegister.Name;
+                }
+
+                if (item.TableId != -1)
+                {
+                    var tableModel = await _context.TableModels.FindAsync(item.TableId);
+                    model.TableId = item.TableId;
+                    model.TableName = tableModel.Name;
+                }
+
+                result.Add(model);
+            }
+
+            return result;
+        }
+        [HttpGet("shoptopdfImport")]
+        public async Task<ActionResult<IEnumerable<ExportShopToPdfModel>>> GetImportShopToPdf()
+        {
+            List<ExportShopToPdfModel> result = new List<ExportShopToPdfModel>();
+            var export = await _context.ExportShopModels.ToListAsync();
+            export = export.FindAll(x => x.Status == "INPORT");
+            foreach (var item in export)
+            {
+                ExportShopToPdfModel model = new ExportShopToPdfModel();
+
+                model.Quantity = item.Quantity;
+                model.Status = item.Status;
+                model.DateTime = item.DateTime;
+
+                ShopModel shopModel = await _context.ShopModels.FindAsync(item.ShopId);
+                model.ShopId = item.ShopId;
+                model.ShopName = shopModel.Name;
+                model.ShopAdress = shopModel.Adress;
+
+                ProductModel productModel = await _context.ProductModels.FindAsync(item.ProductId);
+                model.ProductId = item.ProductId;
+                model.ProductName = productModel.Name;
+                model.ProductPrice = productModel.Price;
+                model.ProductCategory = productModel.CategoryName;
+
+
+
+                if (item.CashRegisterId != -1)
+                {
+                    var cashRegister = await _context.CashRegisterModels.FindAsync(item.CashRegisterId);
+                    model.CashRegisterId = item.CashRegisterId;
+                    model.CashRegisterName = cashRegister.Name;
+                }
+
+                if (item.TableId != -1)
+                {
+                    var tableModel = await _context.TableModels.FindAsync(item.TableId);
+                    model.TableId = item.TableId;
+                    model.TableName = tableModel.Name;
+                }
+
+                result.Add(model);
+            }
+
+            return result;
+        }
+
         // GET: api/OrderModels
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderModel>>> GetOrderModels()
@@ -40,15 +134,16 @@ namespace SET3_Backend.Controllers
         {
             public int OrderId { get; set; }
             public DateTime Date { get; set; }
-            public int Quantity { get; set; }
+            public double Quantity { get; set; }
             public string ProductName { get; set; }
             public string CategoryName { get; set; }
             public float Price { get; set; }
             public string ShopName { get; set; }
-            public float Total { get; set; }
+            public double Total { get; set; }
+            public string UnitOfMeasurement { get; set; }
 
-            public OrderShopDto(int orderId, DateTime date, int quantity, string productName, 
-                string categoryName, float price, string shopName)
+            public OrderShopDto(int orderId, DateTime date, double quantity, string productName, string categoryName, 
+                float price, string shopName, string unitOfMeasurement)
             {
                 OrderId = orderId;
                 Date = date;
@@ -58,7 +153,23 @@ namespace SET3_Backend.Controllers
                 Price = price;
                 ShopName = shopName;
                 Total = Quantity * Price;
+                UnitOfMeasurement = unitOfMeasurement;
             }
+
+            /*public OrderShopDto(int orderId, DateTime date, double quantity, string productName, 
+                string categoryName, float price, string shopName, string )
+            {
+                OrderId = orderId;
+                Date = date;
+                Quantity = quantity;
+                ProductName = productName;
+                CategoryName = categoryName;
+                Price = price;
+                ShopName = shopName;
+                Total = Quantity * Price;
+            }*/
+
+
         }
 
         [HttpGet("orderInfo"), Authorize(Roles = "Admin,StockAdmin")]
@@ -77,7 +188,7 @@ namespace SET3_Backend.Controllers
                         throw new InvalidDataException();
                     }
                     orderShopDtoList.Add(new OrderShopDto(order.Id, order.Date, order.Quantity,
-                        product.Name, product.CategoryName, product.Price, shop.Name));
+                        product.Name, product.CategoryName, product.Price, shop.Name, product.MeasuringUnit));
                 });
                 return Ok(orderShopDtoList);
             } catch (InvalidDataException ex)
@@ -146,7 +257,7 @@ namespace SET3_Backend.Controllers
         {
             public int ShopId { get; set; }
             public List<int> ProductIds { get; set; }
-            public List<int> Quantities { get; set; }
+            public List<double> Quantities { get; set; }
         }
 
         //POST: api/OrderModels/order/{shopId}
@@ -187,8 +298,9 @@ namespace SET3_Backend.Controllers
 
                 for(int i = 0; i < quantities.Count; i++)
                 {
+                    if (quantities[i] == 0) continue;
                     //validacija: je li kolicina u skladistu manja od kolicine koja se trazi
-                    if(_context.ProductModels.Find(products[i]).Quantity < quantities[i])
+                    if(_context.ProductModels.Find(products[i]).Quantity.CompareTo(quantities[i]) < 0)
                     {
                         return BadRequest(badRequest); 
                     }
@@ -216,7 +328,10 @@ namespace SET3_Backend.Controllers
 
                     _context.OrderModels.Add(newOrder);
                     orderModels.Add(newOrder);
-               
+
+                    ExportShopModel export = new ExportShopModel(shopId, product.Id, quantities[i], DateTime.Now, ExportStatus.INPORT.ToString(), -1, -1);
+                    _context.ExportShopModels.Add(export);
+
                 }
                 await _context.SaveChangesAsync();
                 return orderModels;

@@ -126,6 +126,9 @@ function NavigationBar() {
                             <NavDropdown.Item href={'/shops'}>Shops</NavDropdown.Item>
                             <NavDropdown.Item href={'/addShop'}>Add new shop</NavDropdown.Item>
                             <NavDropdown.Item href={'/addCashRegister'}>Add new register</NavDropdown.Item>
+                            <NavDropdown.Item href={'/excelExport'}>Export products to excel</NavDropdown.Item>
+                            <NavDropdown.Item href={'/excelImport'}>Import products to excel</NavDropdown.Item>
+                            <NavDropdown.Item href={'/highestMonthExcelExport'}>Highest month for a product export</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>}
 

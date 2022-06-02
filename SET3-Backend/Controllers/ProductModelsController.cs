@@ -170,10 +170,12 @@ namespace SET3_Backend.Controllers
             if (ValidateToken(token) != null)
             {
                
-                _context.ProductModels.Add(productModel);
-                await _context.SaveChangesAsync();
+                
+                //await _context.SaveChangesAsync();
                 productModel = await InsertBarcode(productModel);
-                await Task.Run(() => _context.ProductModels.Update(productModel));
+                _context.ProductModels.Add(productModel);
+                //await Task.Run(() => _context.ProductModels.Update(productModel));
+                //_context.ProductModels.Update(productModel);
                 await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProductModel", new { id = productModel.Id }, productModel);
@@ -229,7 +231,7 @@ namespace SET3_Backend.Controllers
 
 
         //BARCODE generating
-        private async Task<ProductModel> InsertBarcode(ProductModel model)
+        public async Task<ProductModel> InsertBarcode(ProductModel model)
         {
             string modelId = model.Id.ToString();
             modelId = modelId.PadLeft(7 - modelId.Length, '0');

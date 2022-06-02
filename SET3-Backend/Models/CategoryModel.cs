@@ -8,9 +8,12 @@ namespace SET3_Backend.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public CategoryModel(string name)
+        public double Tax { get; set; }
+
+        public CategoryModel(string name, double tax)
         {
             Name = name;
+            Tax = tax;
         }
     }
 

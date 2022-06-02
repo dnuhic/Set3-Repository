@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import { useNavigate } from "react-router-dom";
 import { ListItemAvatar, Avatar } from '@mui/material';
 import StoreIcon from '@mui/icons-material/Store';
+import InfoIcon from '@mui/icons-material/Info';
 import ResponseCheckModule from "../ErrorPage/ResponseCheckModule"
 
 import { useState, useEffect } from 'react';
@@ -22,7 +23,7 @@ function StoreListItem(props) {
     return (
             <MuiListItem
                 sx={{
-                    padding: 0,
+                    padding: 2,
                     maxHeight: '2000px',
                 }}
             key={props.store.id}>
@@ -31,7 +32,12 @@ function StoreListItem(props) {
                     <StoreIcon />
                 </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={`${props.store.name}`} onClick={handleStoreClick} style={{cursor: "pointer"}}/>
+            <ListItemText primary={`${props.store.name}`}  />
+            <ListItemAvatar>
+                <Avatar>
+                    <InfoIcon onClick={handleStoreClick} style={{ cursor: "pointer" }}/>
+                </Avatar>
+            </ListItemAvatar>
         </MuiListItem>
     )
 }

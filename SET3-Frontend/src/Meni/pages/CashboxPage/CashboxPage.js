@@ -28,8 +28,9 @@ function CashboxPage(props) {
 			credentials: 'same-origin'
 		};
 		const responseC = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/CashRegisterModels`, requestOptions);
-		ResponseCheckModule.unauthorizedResponseCheck(responseC, navigate)
+		//ResponseCheckModule.unauthorizedResponseCheck(responseC, navigate)
 		const c = await responseC.json();
+		console.log(c);
 
 		const responseS = await fetch(`${process.env.REACT_APP_BACKEND_URL}ShopModels/${id}`, requestOptions);
 		ResponseCheckModule.unauthorizedResponseCheck(responseS, navigate)
@@ -93,6 +94,20 @@ function CashboxPage(props) {
 							</div>
 						</div>
 					</div>
+
+						<div className="row">
+							<div className="col">
+								<div className="form-control">
+									Type of receipt:
+
+								</div>
+							</div>
+							<div className="col">
+								<div className="form-control">
+									{store.receiptType}
+								</div>
+							</div>
+						</div>
 					<h1> Cash registers for the store </h1>
 					<List sampleData={allCashRegisters} />
 					</>}

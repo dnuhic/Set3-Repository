@@ -37,7 +37,11 @@ namespace SET3_Backend.Controllers
             token = token.ToString().Substring(token.ToString().IndexOf(" ") + 1);
 
             if(ValidateToken(token) != null)
-                return await _context.ShopModels.ToListAsync();
+            {
+
+                var nesto =  await _context.ShopModels.ToListAsync();
+                return nesto;
+            }
             return BadRequest("Bad token.");
         }
 
@@ -60,6 +64,19 @@ namespace SET3_Backend.Controllers
                 return shopModel;
             }
             return BadRequest("Bad token");
+        }
+
+        [HttpGet("hrvatskaFiskalizacija/{id}")]
+        public async Task<bool> HratskaFiskalizacija(int id)
+        {
+                var shopModel = await _context.ShopModels.FindAsync(id);
+
+                if (shopModel == null)
+                {
+                    return false;
+                }
+
+                return shopModel.ReceiptType.Equals("Hrvatski");
         }
 
         // PUT: ShopModels/5
@@ -144,7 +161,7 @@ namespace SET3_Backend.Controllers
             public int Id { get; set; }
         }
 
-        [HttpPost("deleteShop"), Authorize(Roles = "ShopAdmin,Admin")] //
+        [HttpPost("deleteShop/{id}"), Authorize(Roles = "ShopAdmin,Admin")] //
         public async Task<ActionResult<ShopModel>> TagAsDeleted(int id)
         {
 

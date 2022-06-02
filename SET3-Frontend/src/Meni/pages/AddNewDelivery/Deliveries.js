@@ -40,13 +40,33 @@ export default function Deliveries() {
 
     useEffect(getData, [])
 
+    /*const validateQuantity = () => {
+        products.map(product => {
+            const kol = parseFloat(document.getElementById("id" + data.id).value)
+            if (product.measuringUnit === 'Units' && (q % 1) != 0) {
+                alert('Quantity in units must be integer')
+                
+            }
+        })
+    }*/
+
     const handleSubmit = () => {
         if (products != null) {
             var postojiJedna = false;
+            var neispravanUnit = false;
             const niz = [];
             var today = new Date();
+
+            products.forEach(product => {
+                const kol = parseFloat(document.getElementById("id" + product.id).value)
+                if (product.measuringUnit === 'Units' && (kol % 1) != 0) {
+                    //alert('Quantity in units must be integer')
+                    neispravanUnit = true;
+                    return
+                }
+            })
             products.map(data => {
-                const q = parseInt(document.getElementById("id" + data.id).value);
+                const q = parseFloat(document.getElementById("id" + data.id).value);
                 if (q > 1000 || q < 0) {
                     postojiJedna = true;
                     return;
@@ -69,7 +89,12 @@ export default function Deliveries() {
                 alert('Value of quantity can not be smaller than 0, or greater than 1000');
                 
                 return;
-            } else {
+            }
+            else if (neispravanUnit) {
+                alert('Quantity in units must be integer');
+                return;
+            }
+            else {
                 setDeliveries(niz);
             }
 
@@ -169,6 +194,7 @@ export default function Deliveries() {
                                         sx={{ m: 1, width: '10ch', marginRight: '50px' }}
                                     />
                                 </ListItemIcon>
+                                <ListItemText className="col-4" primaryTypographyProps={{ fontSize: '17px' }} primary={product.measuringUnit} />
                                 <ListItemText className="col-4" primaryTypographyProps={{ fontSize: '17px' }} primary={product.name} />
                                 <ListItemText className="col-2" primaryTypographyProps={{ fontSize: '17px' }} primary={product.categoryName} />
                             </ListItemButton>

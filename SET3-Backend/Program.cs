@@ -20,7 +20,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
-
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 //Load dependency injection
 builder.Services.AddBackendServices(builder.Configuration);
@@ -63,7 +63,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[] { "https://localhost:3000", "https://set3front.azurewebsites.net" }).AllowCredentials());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins(new string[] { "https://localhost:3000", "https://set3-front.azurewebsites.net" }).AllowCredentials());
 
 app.UseHttpsRedirection();
 
