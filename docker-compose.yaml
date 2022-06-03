@@ -20,7 +20,7 @@ services:
             REACT_APP_BACKEND_URL: $REACT_APP_BACKEND_URL
         ports:
             - $DOTNET_LOCAL_PORT:$DOTNET_DOCKER_PORT
-        command: ["dotnet", "ef", "database update"]
+        command: ["dotnet", "ef", "database update", "&&", "wget", "http://localhost:7194/createFirstData" ]
         stdin_open: true
         tty: true
     react_frontend:
