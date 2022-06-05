@@ -14,7 +14,8 @@ namespace SET3_Backend
             {
                 //Treba dodati connection string na bazu umjesto 'dbConnString'
                 //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-                var dbConnString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=LokalnaBaza;";
+                //var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;User=set3admin;Password=prir0da#aj;";
+                var dbConnString = @"Server=mssqlserver,1433;Database=Set3Baza;User=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
                 options.UseSqlServer(dbConnString,
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
@@ -26,7 +27,7 @@ namespace SET3_Backend
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins(new string[] { "https://localhost:3000" , "https://set3-front.azurewebsites.net"});
+                    .WithOrigins(new string[] { "http://localhost:3000" , "https://set3-front.azurewebsites.net"});
                 }));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));

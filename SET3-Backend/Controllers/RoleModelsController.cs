@@ -31,6 +31,8 @@ namespace SET3_Backend.Controllers
             return await _context.RoleModels.ToListAsync();
         }
 
+
+
         // GET: api/RoleModels/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RoleModel>> GetRoleModel(int id)
@@ -43,6 +45,12 @@ namespace SET3_Backend.Controllers
             }
 
             return roleModel;
+        }
+
+         [HttpPut("idegas")]
+        public async Task<IActionResult> Nesto()
+        {
+            return NoContent();
         }
 
         // PUT: api/RoleModels/5
