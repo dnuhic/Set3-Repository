@@ -7,7 +7,9 @@ if [ -x "$(command -v docker)" ]; then
     echo "Docker installed"    
 else
     echo "Installing docker..."
-    sudo apt-get install docker-engine -y
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    sudo systemctl start docker
 fi
 
 if [ -x "$(command -v docker-compose)" ]; then
