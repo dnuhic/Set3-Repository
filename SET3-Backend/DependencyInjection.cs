@@ -15,7 +15,7 @@ namespace SET3_Backend
                 //Treba dodati connection string na bazu umjesto 'dbConnString'
                 //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
                 //var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;User=set3admin;Password=prir0da#aj;";
-                var dbConnString = @"Server=mssqlserver,1433;Inizial Catalog=Set3Baza;User ID=SA;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                var dbConnString = @"Data Source=localhost,1433;Initial Catalog=Set3Baza;User ID=SA;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
                 options.UseSqlServer(dbConnString,
                     dboContextOptions => dboContextOptions.EnableRetryOnFailure(2));
             });
@@ -32,6 +32,7 @@ namespace SET3_Backend
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.AddTransient<IMailService, Services.MailService>();
+
             //Ovdje se dodaju servisi za dependency injection
 
             return services;

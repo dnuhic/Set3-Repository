@@ -25,5 +25,13 @@ services:
             - $DOTNET_LOCAL_PORT:$DOTNET_DOCKER_PORT
         stdin_open: true
         tty: true
+    react_frontend:
+        depends_on:
+            - dotnet_backend
+        build: ./SET3-Frontend
+        restart: unless-stopped
+        env_file: ./.env
+        ports:
+            - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
 volumes: 
     sql_data_volume:
