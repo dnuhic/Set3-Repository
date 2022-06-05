@@ -12,6 +12,11 @@ namespace SET3_Backend.Models
         {
             MeasuringUnitName = measuringUnitName;
         }
+
+        public MeasuringUnit(int id, string measuringUnitName) : this(measuringUnitName)
+        {
+            Id = id;
+        }
     }
 
     public enum MeasuringUnitName

@@ -12,5 +12,9 @@ namespace SET3_Backend.Models
         {
             Name = name;
         }
+
+        public StockModel(int id, string name) : this(name){
+            Id = id;
+        }
     }
 }

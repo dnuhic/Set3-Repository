@@ -14,5 +14,10 @@ namespace SET3_Backend.Models
         {
             Question = question;
         }
+
+        public SecurityQuestionModel(int id, string question) : this(question)
+        {
+            Id = id;
+        }
     }
 }

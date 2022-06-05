@@ -23,5 +23,10 @@ namespace SET3_Backend.Models
             Deleted = deleted;
             ReceiptType = receiptType;
         }
+
+        public ShopModel(int id, string name, string adress, int stockId, bool deleted, string receiptType): this(name, adress, stockId, deleted, receiptType)
+        {
+            Id = id;
+        }
     }
 }

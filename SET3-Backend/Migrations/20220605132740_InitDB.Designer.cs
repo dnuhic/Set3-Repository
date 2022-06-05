@@ -12,7 +12,7 @@ using SET3_Backend.Database;
 namespace SET3_Backend.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220605121720_InitDB")]
+    [Migration("20220605132740_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,89 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CashRegisterModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 1",
+                            ShopId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 2",
+                            ShopId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 3",
+                            ShopId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 4",
+                            ShopId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 5",
+                            ShopId = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 1",
+                            ShopId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 2",
+                            ShopId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 3",
+                            ShopId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Deleted = false,
+                            Description = "Description",
+                            Installed = false,
+                            Name = "Register 4",
+                            ShopId = 2
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.CategoryModel", b =>
@@ -110,6 +193,26 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CategoryModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Food",
+                            Tax = 0.17000000000000001
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Hygiene",
+                            Tax = 0.17000000000000001
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Clothes",
+                            Tax = 0.17000000000000001
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.DeliveryModel", b =>
@@ -239,6 +342,38 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MeasuringUnits");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MeasuringUnitName = "Units"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            MeasuringUnitName = "Grams"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MeasuringUnitName = "Kilograms"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MeasuringUnitName = "Milliliters"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            MeasuringUnitName = "Liters"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            MeasuringUnitName = "Jars"
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.OrderModel", b =>
@@ -333,6 +468,73 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Barcode = "",
+                            BarcodeText = "",
+                            CategoryName = "Food",
+                            Deleted = false,
+                            MeasuringUnit = "Kilograms",
+                            Name = "Banana",
+                            Price = 2.5f,
+                            Quantity = 0.0,
+                            StockId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Barcode = "",
+                            BarcodeText = "",
+                            CategoryName = "Hygiene",
+                            Deleted = false,
+                            MeasuringUnit = "Liters",
+                            Name = "Tide",
+                            Price = 5f,
+                            Quantity = 0.0,
+                            StockId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Barcode = "",
+                            BarcodeText = "",
+                            CategoryName = "Clothes",
+                            Deleted = false,
+                            MeasuringUnit = "Units",
+                            Name = "White shirt",
+                            Price = 15f,
+                            Quantity = 0.0,
+                            StockId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Barcode = "",
+                            BarcodeText = "",
+                            CategoryName = "Food",
+                            Deleted = false,
+                            MeasuringUnit = "Units",
+                            Name = "Chocolate",
+                            Price = 2f,
+                            Quantity = 0.0,
+                            StockId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Barcode = "",
+                            BarcodeText = "",
+                            CategoryName = "Hygiene",
+                            Deleted = false,
+                            MeasuringUnit = "Units",
+                            Name = "Soap",
+                            Price = 3f,
+                            Quantity = 0.0,
+                            StockId = 1
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.ProductShopIntertable", b =>
@@ -448,6 +650,40 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoleModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DeleteAccess = false,
+                            ReadAccess = true,
+                            RoleName = "User",
+                            WriteAccess = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DeleteAccess = true,
+                            ReadAccess = true,
+                            RoleName = "Admin",
+                            WriteAccess = true
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DeleteAccess = true,
+                            ReadAccess = true,
+                            RoleName = "ShopAdmin",
+                            WriteAccess = true
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DeleteAccess = true,
+                            ReadAccess = true,
+                            RoleName = "StockAdmin",
+                            WriteAccess = true
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.SecurityQuestionModel", b =>
@@ -465,6 +701,33 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecurityQuestionModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Question = "What is your favourite animal?"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Question = "What is your favourite color?"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Question = "What is your mothers name?"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Question = "What is your dream destination?"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Question = "What is your dream car?"
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.ShopModel", b =>
@@ -496,6 +759,26 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShopModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Adress = "Dzemala Bijedica St 160 71000 Sarajevo ",
+                            Deleted = false,
+                            Name = "Bingo",
+                            ReceiptType = "Bosanski",
+                            StockId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Adress = "Hercegovacka ul. 78 21000 Split Croatia",
+                            Deleted = false,
+                            Name = "Konzum",
+                            ReceiptType = "Hrvatski",
+                            StockId = 1
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.StockModel", b =>
@@ -513,6 +796,13 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StockModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Warehouse"
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.TableModel", b =>
@@ -536,6 +826,71 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TableModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Unit 1",
+                            ShopId = 1,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Unit 2",
+                            ShopId = 1,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Unit 3",
+                            ShopId = 1,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Unit 4",
+                            ShopId = 1,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Unit 5",
+                            ShopId = 1,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Unit 1",
+                            ShopId = 2,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Unit 2",
+                            ShopId = 2,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Unit 3",
+                            ShopId = 2,
+                            Taken = false
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Unit 4",
+                            ShopId = 2,
+                            Taken = false
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.UserModel", b =>
@@ -583,6 +938,47 @@ namespace SET3_Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserModels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Answer = "Odgovor",
+                            Deleted = false,
+                            Email = "admin@gmail.com",
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            Password = "^?H??(qQ??o??)'s`=\rj???*?rB?",
+                            QuestionId = 1,
+                            RoleName = "Admin",
+                            TFA = ""
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Answer = "Odgovor",
+                            Deleted = false,
+                            Email = "shopAdmin@gmail.com",
+                            FirstName = "Shop",
+                            LastName = "Admin",
+                            Password = "^?H??(qQ??o??)'s`=\rj???*?rB?",
+                            QuestionId = 1,
+                            RoleName = "ShopAdmin",
+                            TFA = ""
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Answer = "Odgovor",
+                            Deleted = false,
+                            Email = "stockAdmin@gmail.com",
+                            FirstName = "Stock",
+                            LastName = "Admin",
+                            Password = "^?H??(qQ??o??)'s`=\rj???*?rB?",
+                            QuestionId = 1,
+                            RoleName = "StockAdmin",
+                            TFA = ""
+                        });
                 });
 
             modelBuilder.Entity("SET3_Backend.Models.UserOrderModel", b =>

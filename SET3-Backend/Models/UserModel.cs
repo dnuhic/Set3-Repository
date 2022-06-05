@@ -32,6 +32,10 @@ namespace SET3_Backend.Models
             RoleName = roleName;
             TFA = tFA;
         }
+        public UserModel(int id, string email, string firstName, string lastName, string password, int questionId, string answer, bool deleted, string roleName, string tFA) : this(email, firstName, lastName, password, questionId, answer, deleted, roleName, tFA)
+        {
+            Id = id;
+        }
     }
 }
         

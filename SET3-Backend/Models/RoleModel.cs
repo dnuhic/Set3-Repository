@@ -18,6 +18,11 @@ namespace SET3_Backend.Models
             WriteAccess = writeAccess;
             DeleteAccess = deleteAccess;
         }
+
+        public RoleModel(int id, string roleName, bool readAccess, bool writeAccess, bool deleteAccess) : this(roleName, readAccess, writeAccess, deleteAccess)
+        {
+            Id = id;
+        }
     }
 
     public enum RoleType

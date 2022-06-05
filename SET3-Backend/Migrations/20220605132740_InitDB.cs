@@ -407,6 +407,127 @@ namespace SET3_Backend.Migrations
                         principalColumn: "IdRacun");
                 });
 
+            migrationBuilder.InsertData(
+                table: "CashRegisterModels",
+                columns: new[] { "Id", "Deleted", "Description", "Installed", "Name", "ShopId" },
+                values: new object[,]
+                {
+                    { 1, false, "Description", false, "Register 1", 1 },
+                    { 2, false, "Description", false, "Register 2", 1 },
+                    { 3, false, "Description", false, "Register 3", 1 },
+                    { 4, false, "Description", false, "Register 4", 1 },
+                    { 5, false, "Description", false, "Register 5", 1 },
+                    { 6, false, "Description", false, "Register 1", 2 },
+                    { 7, false, "Description", false, "Register 2", 2 },
+                    { 8, false, "Description", false, "Register 3", 2 },
+                    { 9, false, "Description", false, "Register 4", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "CategoryModels",
+                columns: new[] { "Id", "Name", "Tax" },
+                values: new object[,]
+                {
+                    { 1, "Food", 0.17000000000000001 },
+                    { 2, "Hygiene", 0.17000000000000001 },
+                    { 3, "Clothes", 0.17000000000000001 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MeasuringUnits",
+                columns: new[] { "Id", "MeasuringUnitName" },
+                values: new object[,]
+                {
+                    { 1, "Units" },
+                    { 2, "Grams" },
+                    { 3, "Kilograms" },
+                    { 4, "Milliliters" },
+                    { 5, "Liters" },
+                    { 6, "Jars" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductModels",
+                columns: new[] { "Id", "Barcode", "BarcodeText", "CategoryName", "Deleted", "MeasuringUnit", "Name", "Price", "Quantity", "StockId" },
+                values: new object[,]
+                {
+                    { 1, "", "", "Food", false, "Kilograms", "Banana", 2.5f, 0.0, 1 },
+                    { 2, "", "", "Hygiene", false, "Liters", "Tide", 5f, 0.0, 1 },
+                    { 3, "", "", "Clothes", false, "Units", "White shirt", 15f, 0.0, 1 },
+                    { 4, "", "", "Food", false, "Units", "Chocolate", 2f, 0.0, 1 },
+                    { 5, "", "", "Hygiene", false, "Units", "Soap", 3f, 0.0, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RoleModels",
+                columns: new[] { "Id", "DeleteAccess", "ReadAccess", "RoleName", "WriteAccess" },
+                values: new object[,]
+                {
+                    { 1, false, true, "User", false },
+                    { 2, true, true, "Admin", true },
+                    { 3, true, true, "ShopAdmin", true },
+                    { 4, true, true, "StockAdmin", true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SecurityQuestionModels",
+                columns: new[] { "Id", "Question" },
+                values: new object[,]
+                {
+                    { 1, "What is your favourite animal?" },
+                    { 2, "What is your favourite color?" },
+                    { 3, "What is your mothers name?" },
+                    { 4, "What is your dream destination?" },
+                    { 5, "What is your dream car?" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ShopModels",
+                columns: new[] { "Id", "Adress", "Deleted", "Name", "ReceiptType", "StockId" },
+                values: new object[,]
+                {
+                    { 1, "Dzemala Bijedica St 160 71000 Sarajevo ", false, "Bingo", "Bosanski", 1 },
+                    { 2, "Hercegovacka ul. 78 21000 Split Croatia", false, "Konzum", "Hrvatski", 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StockModels",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Warehouse" });
+
+            migrationBuilder.InsertData(
+                table: "TableModels",
+                columns: new[] { "Id", "Name", "ShopId", "Taken" },
+                values: new object[,]
+                {
+                    { 1, "Unit 1", 1, false },
+                    { 2, "Unit 2", 1, false },
+                    { 3, "Unit 3", 1, false },
+                    { 4, "Unit 4", 1, false },
+                    { 5, "Unit 5", 1, false },
+                    { 6, "Unit 1", 2, false },
+                    { 7, "Unit 2", 2, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TableModels",
+                columns: new[] { "Id", "Name", "ShopId", "Taken" },
+                values: new object[,]
+                {
+                    { 8, "Unit 3", 2, false },
+                    { 9, "Unit 4", 2, false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserModels",
+                columns: new[] { "Id", "Answer", "Deleted", "Email", "FirstName", "LastName", "Password", "QuestionId", "RoleName", "TFA" },
+                values: new object[,]
+                {
+                    { 1, "Odgovor", false, "admin@gmail.com", "Admin", "Admin", "^?H??(qQ??o??)'s`=\rj???*?rB?", 1, "Admin", "" },
+                    { 2, "Odgovor", false, "shopAdmin@gmail.com", "Shop", "Admin", "^?H??(qQ??o??)'s`=\rj???*?rB?", 1, "ShopAdmin", "" },
+                    { 3, "Odgovor", false, "stockAdmin@gmail.com", "Stock", "Admin", "^?H??(qQ??o??)'s`=\rj???*?rB?", 1, "StockAdmin", "" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_FiscalBillModels_RacunIdRacun",
                 table: "FiscalBillModels",

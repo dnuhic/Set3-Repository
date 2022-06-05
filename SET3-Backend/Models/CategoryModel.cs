@@ -15,6 +15,10 @@ namespace SET3_Backend.Models
             Name = name;
             Tax = tax;
         }
+
+        public CategoryModel(int id, string name, double tax) : this(name, tax){
+            Id = id;
+        }
     }
 
     public enum CategoryType

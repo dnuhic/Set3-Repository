@@ -6,6 +6,13 @@ namespace SET3_Backend.Database
 {
     public class Context : DbContext
     {
+        //setup na inicijalizaciji
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                base.OnModelCreating(modelBuilder);
+                new DbInitializer(modelBuilder).Seed();
+            }
+
         //Tabele u bazi
         public virtual DbSet<ActionModel> ActionModels { get; set; }
         public virtual DbSet<LoggingModel> LoggingModels { get; set; }

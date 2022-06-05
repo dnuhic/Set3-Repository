@@ -20,5 +20,9 @@ namespace SET3_Backend.Models
             ShopId = shopId;
             Taken = taken;
         }
+
+        public TableModel(int id, string name, int shopId, bool taken) : this(name, shopId, taken){
+            Id = id;
+        }
     }
 }

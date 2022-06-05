@@ -32,6 +32,11 @@ namespace SET3_Backend.Models
             Price = price;
             MeasuringUnit = measuringUnit;
         }
+
+        public ProductModel(int id, int stockId, string name, string categoryName, bool deleted, double quantity, string barcode, string barcodeText, float price, string measuringUnit) : this(stockId, name, categoryName, deleted, quantity, barcode, barcodeText, price, measuringUnit){
+            Id = id;
+        }
+
     }
 
 

@@ -22,5 +22,9 @@ namespace SET3_Backend.Models
             Description = description;
             Installed = installed;
         }
+
+        public CashRegisterModel(int id, int shopId, bool deleted, string name, string description, bool installed) : this(shopId, deleted, name, description, installed){
+            Id = id;
+        }
     }
 }
