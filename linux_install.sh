@@ -18,4 +18,5 @@ else
 	sudo chmod +x /usr/local/bin/docker-compose
 fi
 
+sudo docker-compose build
 sudo docker-compose up
