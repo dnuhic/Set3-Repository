@@ -12,6 +12,13 @@ IF -x "(docker --version)" (
     START /w "" "Docker Desktop Installer.exe" install
 )
 
+IF -x "(docker-compose --version)" (
+    ECHO "Docker-compose installed"    
+) ELSE (
+    ECHO "Installing docker..."
+    START /w "" "Docker Desktop Installer.exe" install
+)
+
 START docker-compose up
 :comment
 PAUSE
