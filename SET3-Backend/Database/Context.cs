@@ -54,7 +54,7 @@ namespace SET3_Backend.Database
             //var dbConnString = @"Server=set3.database.windows.net;Initial Catalog=Set3Baza;Persist Security Info=False;User ID=set3admin;Password=prir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             //var dbConnString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=LokalnaBaza;User=set3admin;Password=prir0da#aj;";
             // ovaj string je za rad iz kontenjera
-            var dbConnString = @"Data Source=mssqlserver,1433;Initial Catalog=Set3Baza;User ID=SA;Password=prir0da#ajprir0da#aj;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
+            var dbConnString = @"Data Source=mssqlserver,1433;Initial Catalog=Set3Baza;User ID=SA;Password=prir0da4ajprir0da4aj.A;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
             optionsBuilder.UseSqlServer(dbConnString);
 
             // za globalnu konekciju
