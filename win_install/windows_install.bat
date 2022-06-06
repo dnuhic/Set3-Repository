@@ -1,24 +1,32 @@
 @ECHO OFF
-::TODO
-GOTO comment
+setlocal
+cd /d %~dp0
+
 ECHO "Starting server setup"
 
 ECHO "Checking for docker enviroment..."
 
-IF -x "(docker --version)" (
-    ECHO "Docker installed"    
-) ELSE (
-    ECHO "Installing docker..."
-    START /w "" "Docker Desktop Installer.exe" install
-)
+cd tmp
+call refresh.bat
+cd ..
 
-IF -x "(docker-compose --version)" (
-    ECHO "Docker-compose installed"    
-) ELSE (
-    ECHO "Installing docker..."
-    START /w "" "Docker Desktop Installer.exe" install
-)
 
-START docker-compose up
-:comment
+set DOCK_VER=null
+docker -v >tmp.txt
+set /p DOCK_VER=<tmp.txt
+del tmp.txt
+echo %DOCK_VER%
+::IF %DOCK_VER% == null (
+ECHO "Enable Hyper V"
+DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+ECHO "Installing docker..."
+START /WAIT DockerInstaller.exe
+::) ELSE (
+::	echo "Docker is already installed. Proceeding ..."
+::)
+echo "ovdje"
+call refreshenv
+call docker-compose version
+call docker-compose up -d
+
 PAUSE
