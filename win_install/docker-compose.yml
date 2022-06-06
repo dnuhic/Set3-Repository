@@ -1,16 +1,18 @@
 version: "3.9"
 services:
   mssql:
-      image: mcr.microsoft.com/mssql/server
-      container_name: mssqlserver
-      restart: unless-stopped
-      env_file:
+        image: mcr.microsoft.com/mssql/server
+        container_name: mssqlserver
+        restart: unless-stopped
+        env_file:
           - ./.env
-      environment:
+        environment:
           SA_PASSWORD: $DB_PASSWORD
           ACCEPT_EULA: "Y"
-      ports:
+        ports:
           - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+        volumes:
+            - db:/var/lib/mssql
   dotnet_backend:
       depends_on:
           - mssql
@@ -31,3 +33,5 @@ services:
       env_file: ./.env
       ports:
           - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+volumes:
+    db:

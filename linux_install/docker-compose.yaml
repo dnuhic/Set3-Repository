@@ -1,33 +1,37 @@
-version: "3.8"
+version: "3.9"
 services:
-    mssql:
+  mssql:
         image: mcr.microsoft.com/mssql/server
         container_name: mssqlserver
         restart: unless-stopped
         env_file:
-            - ./.env
+          - ./.env
         environment:
-            SA_PASSWORD: $DB_PASSWORD
-            ACCEPT_EULA: "Y"
+          SA_PASSWORD: $DB_PASSWORD
+          ACCEPT_EULA: "Y"
         ports:
-            - $DB_LOCAL_PORT:$DB_DOCKER_PORT
-    dotnet_backend:
-        depends_on:
-            - mssql
-        build: ../SET3-Backend
-        restart: unless-stopped
-        env_file: ./.env
-        environment: 
-            REACT_APP_BACKEND_URL: $REACT_APP_BACKEND_URL
-        ports:
-            - $DOTNET_LOCAL_PORT:$DOTNET_DOCKER_PORT
-        stdin_open: true
-        tty: true
-    react_frontend:
-        depends_on:
-            - dotnet_backend
-        build: ../SET3-Frontend
-        restart: unless-stopped
-        env_file: ./.env
-        ports:
-            - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+          - $DB_LOCAL_PORT:$DB_DOCKER_PORT
+        volumes:
+            - db:/var/lib/mssql
+  dotnet_backend:
+      depends_on:
+          - mssql
+      build: ../SET3-Backend
+      restart: unless-stopped
+      env_file: ./.env
+      environment: 
+          REACT_APP_BACKEND_URL: $REACT_APP_BACKEND_URL
+      ports:
+          - $DOTNET_LOCAL_PORT:$DOTNET_DOCKER_PORT
+      stdin_open: true
+      tty: true
+  react_frontend:
+      depends_on:
+          - dotnet_backend
+      build: ../SET3-Frontend
+      restart: unless-stopped
+      env_file: ./.env
+      ports:
+          - $REACT_LOCAL_PORT:$REACT_DOCKER_PORT
+volumes:
+    db:

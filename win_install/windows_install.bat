@@ -27,6 +27,6 @@ START /WAIT DockerInstaller.exe
 echo "ovdje"
 call refreshenv
 call docker-compose version
-call docker-compose up -d
+call docker-compose up --build
 
 PAUSE
