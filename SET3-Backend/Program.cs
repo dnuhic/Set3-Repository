@@ -22,7 +22,7 @@ Log.Logger = new LoggerConfiguration()
 
 // Add services to the container.
 
-builder.Logging.ClearProviders();
+// builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();

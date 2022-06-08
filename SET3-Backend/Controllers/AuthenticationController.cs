@@ -196,6 +196,12 @@ namespace SET3_Backend.Controllers
             return Ok();
         }
 
+        [HttpGet("testConnection")]
+        public async Task<ActionResult> testConnection()
+        {
+            return Ok();
+        }
+
         //BARCODE generating
         public async Task<ProductModel> InsertBarcode(ProductModel model)
         {
