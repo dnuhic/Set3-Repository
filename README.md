@@ -9,7 +9,7 @@ The application also supports notifications of user activities (for example: exe
 
 **Visit our application**
 
-https://set3front.azurewebsites.net/
+https://set3-frontend.azurewebsites.net/
 
 Deployed by - [Omerović Muhamed](https://github.com/momerovic4)  
 
